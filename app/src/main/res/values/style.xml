@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Customize font style-->
+    <style name="Display" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lexend_bold</item>
+        <item name="android:textSize">@dimen/font_display</item>
+    </style>
+
+    <style name="Heading1" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lexend_bold</item>
+        <item name="android:textSize">@dimen/font_heading1</item>
+    </style>
+
+    <style name="Heading2" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lexend_bold</item>
+        <item name="android:textSize">@dimen/font_heading2</item>
+    </style>
+
+    <style name="Title" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lexend_bold</item>
+        <item name="android:textSize">@dimen/font_title</item>
+    </style>
+
+    <style name="Body" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lexend_medium</item>
+        <item name="android:textSize">@dimen/font_body</item>
+    </style>
+
+    <style name="Label" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lexend_bold</item>
+        <item name="android:textSize">@dimen/font_label</item>
+    </style>
+
+    <style name="Caption" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lexend_semibold</item>
+        <item name="android:textSize">@dimen/font_caption</item>
+    </style>
+</resources>
