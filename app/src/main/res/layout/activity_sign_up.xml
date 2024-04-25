@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.SignUpActivity"
+    tools:context=".activities.auth.SignUpActivity"
     android:background="@color/neutral0"
     android:paddingLeft="@dimen/spacing_12dp"
     android:paddingRight="@dimen/spacing_12dp"
@@ -38,21 +38,28 @@
                 android:textSize="@dimen/font_heading1"
                 android:textStyle="bold" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/firstNameTxt"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/neutral2"
                 android:hint="Nhập họ"
-                android:paddingLeft="@dimen/spacing_12dp"
-                android:paddingTop="@dimen/spacing_16dp"
-                android:paddingRight="@dimen/spacing_12dp"
-                android:paddingBottom="@dimen/spacing_16dp"
-                android:textColor="@color/neutral3"
                 android:textColorHint="@color/neutral3"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:cornerRadius="@dimen/border_radius_10dp" />
+                app:errorEnabled="true"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/firstNameTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/neutral2"
+                    android:paddingLeft="@dimen/spacing_12dp"
+                    android:paddingTop="@dimen/spacing_16dp"
+                    android:paddingRight="@dimen/spacing_12dp"
+                    android:paddingBottom="@dimen/spacing_16dp"
+                    android:textColor="@color/neutral3"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="@dimen/border_radius_10dp" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -69,21 +76,28 @@
                 android:textSize="@dimen/font_heading1"
                 android:textStyle="bold" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/lastNameTxt"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lastNameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/neutral2"
                 android:hint="Nhập tên"
-                android:paddingLeft="@dimen/spacing_12dp"
-                android:paddingTop="@dimen/spacing_16dp"
-                android:paddingRight="@dimen/spacing_12dp"
-                android:paddingBottom="@dimen/spacing_16dp"
-                android:textColor="@color/neutral3"
                 android:textColorHint="@color/neutral3"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:cornerRadius="@dimen/border_radius_10dp" />
+                app:errorEnabled="true"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/lastNameTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/neutral2"
+                    android:paddingLeft="@dimen/spacing_12dp"
+                    android:paddingTop="@dimen/spacing_16dp"
+                    android:paddingRight="@dimen/spacing_12dp"
+                    android:paddingBottom="@dimen/spacing_16dp"
+                    android:textColor="@color/neutral3"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="@dimen/border_radius_10dp" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
@@ -107,21 +121,30 @@
             android:textSize="@dimen/font_heading1"
             android:textStyle="bold" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/emailTxt"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/neutral2"
             android:hint="Nhập email của bạn"
-            android:paddingLeft="@dimen/spacing_12dp"
-            android:paddingTop="@dimen/spacing_16dp"
-            android:paddingRight="@dimen/spacing_12dp"
-            android:paddingBottom="@dimen/spacing_16dp"
-            android:textColor="@color/neutral3"
             android:textColorHint="@color/neutral3"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:cornerRadius="@dimen/border_radius_10dp" />
+            app:errorEnabled="true"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/neutral2"
+
+                android:paddingLeft="@dimen/spacing_12dp"
+                android:paddingTop="@dimen/spacing_16dp"
+                android:paddingRight="@dimen/spacing_12dp"
+                android:paddingBottom="@dimen/spacing_16dp"
+                android:textColor="@color/neutral3"
+
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="@dimen/border_radius_10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/ln3"
@@ -144,21 +167,29 @@
             android:textSize="@dimen/font_heading1"
             android:textStyle="bold" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/phoneNumberTxt"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/phoneNumberLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/neutral2"
             android:hint="Nhập số điện thoại của bạn"
-            android:paddingLeft="@dimen/spacing_12dp"
-            android:paddingTop="@dimen/spacing_16dp"
-            android:paddingRight="@dimen/spacing_12dp"
-            android:paddingBottom="@dimen/spacing_16dp"
-            android:textColor="@color/neutral3"
             android:textColorHint="@color/neutral3"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:cornerRadius="@dimen/border_radius_10dp" />
+            app:errorEnabled="true"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/phoneNumberTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/neutral2"
+                android:paddingLeft="@dimen/spacing_12dp"
+                android:paddingTop="@dimen/spacing_16dp"
+                android:paddingRight="@dimen/spacing_12dp"
+                android:paddingBottom="@dimen/spacing_16dp"
+                android:textColor="@color/neutral3"
+
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="@dimen/border_radius_10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/ln4"
@@ -181,12 +212,15 @@
             android:textSize="@dimen/font_heading1"
             android:textStyle="bold" />
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="password_toggle"
             android:hint="Nhập mật khẩu của bạn"
             app:hintAnimationEnabled="false"
             android:textColorHint="@color/neutral3"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -216,6 +250,55 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ln4"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Nhập Lại Mật khẩu"
+            android:textColor="@color/neutral5"
+            android:textSize="@dimen/font_heading1"
+            android:textStyle="bold" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordAgainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="password_toggle"
+            android:hint="Nhập lại mật khẩu của bạn"
+            app:hintAnimationEnabled="false"
+            android:textColorHint="@color/neutral3"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordAgainTxt"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/neutral2"
+                android:paddingLeft="@dimen/spacing_12dp"
+                android:paddingTop="@dimen/spacing_16dp"
+                android:paddingRight="@dimen/spacing_12dp"
+                android:paddingBottom="@dimen/spacing_16dp"
+                android:textColor="@color/neutral3"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="@dimen/border_radius_10dp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ln6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/spacing_16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ln5"
         >
 
         <TextView
@@ -266,10 +349,10 @@
         android:textSize="@dimen/font_heading1"
         android:backgroundTint="@color/primary"
         android:textColor="@color/neutral5"
-        android:layout_marginTop="@dimen/spacing_24dp"
+        android:layout_marginTop="@dimen/spacing_16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ln5"
+        app:layout_constraintTop_toBottomOf="@id/ln6"
         />
     <LinearLayout
         android:layout_width="match_parent"
@@ -291,6 +374,7 @@
             android:layout_marginEnd="4sp"
             />
         <TextView
+            android:id="@+id/loginText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Đăng nhập"
@@ -299,6 +383,16 @@
             android:textSize="16dp"
             />
     </LinearLayout>
+    <FrameLayout
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

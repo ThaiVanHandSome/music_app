@@ -1,4 +1,4 @@
-package com.example.music_app.activities;
+package com.example.music_app.activities.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 

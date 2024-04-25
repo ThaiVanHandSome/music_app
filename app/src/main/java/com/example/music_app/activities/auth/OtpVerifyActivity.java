@@ -1,10 +1,11 @@
-package com.example.music_app.activities;
+package com.example.music_app.activities.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.music_app.R;
-import com.example.music_app.models.RegisterResponse;
+import com.example.music_app.models.OtpResponse;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
 import com.google.android.material.button.MaterialButton;
@@ -24,15 +25,10 @@ import retrofit2.Response;
 public class OtpVerifyActivity extends AppCompatActivity {
 
     private MaterialButton btnVerify;
-
     private EditText otp1Txt, otp2Txt, otp3Txt, otp4Txt, otp5Txt, otp6Txt;
-
     private ProgressBar progressBar;
-
     private TextView countdownTxt;
-
     private APIService apiService;
-
     private int countdownDurtion = 15 * 60 * 1000;
 
     @Override
@@ -83,22 +79,36 @@ public class OtpVerifyActivity extends AppCompatActivity {
 
     private void verify() {
         String token = otp1Txt.getText().toString() + otp2Txt.getText().toString() + otp3Txt.getText().toString() + otp4Txt.getText().toString() + otp5Txt.getText().toString() + otp6Txt.getText().toString();
+        Intent intent = getIntent();
+        String type = intent.getStringExtra("type");
+        String email = intent.getStringExtra("email");
+        Log.d("email", email);
+
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.verifyOtp(token).enqueue(new Callback<RegisterResponse>() {
+        apiService.verifyOtp(token, type).enqueue(new Callback<OtpResponse>() {
             @Override
-            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+            public void onResponse(Call<OtpResponse> call, Response<OtpResponse> response) {
                 progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(OtpVerifyActivity.this, response.message(), Toast.LENGTH_SHORT).show();
-                assert response.body() != null;
-                if(response.body().isSuccess()) {
-                    Intent intent = new Intent(OtpVerifyActivity.this, SignUpActivity.class);
-                    startActivity(intent);
+                Toast.makeText(OtpVerifyActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                OtpResponse res = response.body();
+                if(res == null) {
+                    return;
+                }
+                if(res.isSuccess()) {
+                    Intent intent1 = new Intent();
+                    if(res.getType().equals("confirm")) {
+                        intent1 = new Intent(OtpVerifyActivity.this, LoginActivity.class);
+                    } else if(res.getType().equals("forgot")) {
+                        intent1 = new Intent(OtpVerifyActivity.this, ResetPasswordActivity.class);
+                        intent1.putExtra("email", email);
+                    }
+                    startActivity(intent1);
                     finish();
                 }
             }
 
             @Override
-            public void onFailure(Call<RegisterResponse> call, Throwable t) {
+            public void onFailure(Call<OtpResponse> call, Throwable t) {
                 Toast.makeText(OtpVerifyActivity.this, "Call API Error", Toast.LENGTH_SHORT).show();
             }
         });

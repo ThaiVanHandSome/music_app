@@ -12,6 +12,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -26,9 +27,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {
+        exclude("androidsupportmultidexversion.txt")
+    }
 }
 
 dependencies {
+    implementation ("com.android.support:multidex:1.0.3")
     implementation ("com.cloudinary:cloudinary-android:2.5.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -36,7 +42,6 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:3.12.0")
     implementation("com.github.bumptech.glide:glide:4.14.2")
     implementation("com.android.volley:volley:1.2.1")
-    implementation("com.github.bumptech.glide:glide:4.14.2")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")

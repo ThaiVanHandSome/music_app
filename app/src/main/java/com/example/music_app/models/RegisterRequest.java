@@ -1,6 +1,6 @@
 package com.example.music_app.models;
 
-public class RegisterModel {
+public class RegisterRequest {
     private String email;
     private String password;
     private String firstName;
