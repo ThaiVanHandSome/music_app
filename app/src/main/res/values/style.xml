@@ -1,38 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Customize font style-->
-    <style name="Display" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/lexend_bold</item>
-        <item name="android:textSize">@dimen/font_display</item>
+    <style name="Display" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="fontFamily">@font/lexend_bold</item>
+        <item name="android:letterSpacing">0</item>
+        <!--<item name="android:textSize">@dimen/font_display</item>-->
     </style>
 
-    <style name="Heading1" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/lexend_bold</item>
-        <item name="android:textSize">@dimen/font_heading1</item>
+    <style name="Heading1" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="fontFamily">@font/lexend_bold</item>
+        <item name="android:letterSpacing">0</item>
+        <!--<item name="android:textSize">@dimen/font_heading1</item>-->
     </style>
 
-    <style name="Heading2" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/lexend_bold</item>
-        <item name="android:textSize">@dimen/font_heading2</item>
+    <style name="Heading2" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="fontFamily">@font/lexend_bold</item>
+        <item name="android:letterSpacing">0</item>
+        <!--<item name="android:textSize">@dimen/font_heading2</item>-->
     </style>
 
-    <style name="Title" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/lexend_bold</item>
-        <item name="android:textSize">@dimen/font_title</item>
+    <style name="Title" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/lexend_bold</item>
+        <item name="android:letterSpacing">0</item>
+        <!--<item name="android:textSize">@dimen/font_title</item>-->
     </style>
 
-    <style name="Body" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/lexend_medium</item>
-        <item name="android:textSize">@dimen/font_body</item>
+    <style name="Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/lexend_medium</item>
+        <item name="android:letterSpacing">0</item>
+        <!--<item name="android:textSize">@dimen/font_body</item>-->
     </style>
 
-    <style name="Label" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/lexend_bold</item>
-        <item name="android:textSize">@dimen/font_label</item>
+    <style name="Label" parent="TextAppearance.Material3.LabelMedium">
+        <item name="fontFamily">@font/lexend_bold</item>
+        <item name="android:letterSpacing">0</item>
+        <!--<item name="android:textSize">@dimen/font_label</item>-->
     </style>
 
     <style name="Caption" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/lexend_semibold</item>
         <item name="android:textSize">@dimen/font_caption</item>
     </style>
+
+    <!--Custom button style-->
+    <style name="PrimaryFilledButton" parent="Title">
+        <item name="android:textColor">@color/neutral5</item>
+        <item name="android:backgroundTint">@color/primary</item>
+    </style>
+
+    <style name="NeutralFilledButton" parent="Title">
+        <item name="android:textColor">@color/neutral0</item>
+        <item name="android:backgroundTint">@color/neutral5</item>
+    </style>
+
+    <style name="TextButton" parent="Title">
+        <item name="android:textColor">@color/neutral5</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+    </style>
+
+    <!--Custom bottom navigation view style-->
+    <!--<style name="DarkBottomNavigationView" parent="Widget.Material3.BottomNavigationView">
+        <item name="android:background">@drawable/background_gradient</item>
+        <item name="itemIconSize">@dimen/icon_32dp</item>
+        <item name="itemIconTint">@color/navigation_color_selector</item>
+        <item name="itemTextColor">@color/navigation_color_selector</item>
+        <item name="itemActiveIndicatorStyle">@color/navigation_ripple_color_selector</item>
+        <item name="itemTextAppearanceActive">@style/Label</item>
+        <item name="itemTextAppearanceInactive">@style/Label</item>
+    </style>-->
+
+    <!-- Custom tab layout -->
+    <style name="TabLayout" parent="Widget.Material3.TabLayout">
+        <item name="tabTextAppearance">@style/Label</item>
+    </style>
+
+
 </resources>

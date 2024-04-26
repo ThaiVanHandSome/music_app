@@ -1,5 +1,4 @@
 package com.example.music_app.retrofit;
-
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
