@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">music_app</string>
-    <string name="display_text">Hello World!</string>
+
+    <!-- Menu items for bottom navigation bar -->
+    <string name="menu_item_home">Trang chủ</string>
+    <string name="menu_item_search">Tìm kiếm</string>
+    <string name="menu_item_library">Thư viện</string>
+
+    <!-- Menu item for tab layout in Library -->
+    <string name="menu_item_my_playlist">Danh sách phát của tôi</string>
+    <string name="menu_item_my_favourite">Bài hát yêu thích</string>
+
+
+    <string name="label_add_new_playlist">Tạo danh sách phát mới</string>
+    <string name="label_add_new_favourite">Thêm bài hát yêu thích</string>
+    <string name="label_songs">%d bài hát</string>
+
 </resources>

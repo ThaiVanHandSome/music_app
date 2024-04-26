@@ -29,11 +29,12 @@
     <!-- Use for image size -->
     <dimen name="image_300dp">300dp</dimen>
     <dimen name="image_120dp">120dp</dimen>
+    <dimen name="image_56dp">56dp</dimen>
     <dimen name="image_48dp">48dp</dimen>
     <dimen name="image_32dp">32dp</dimen>
 
     <!-- Use for button size -->
-    <dimen name="button_height_40dp">40dp</dimen>
+    <dimen name="button_height_56dp">56dp</dimen>
     <dimen name="button_height_32dp">32dp</dimen>
     <dimen name="button_width_120dp">120dp</dimen>
 
@@ -55,5 +56,8 @@
     <!-- Use for other components -->
     <dimen name="fliter_height">32dp</dimen>
     <dimen name="input_field_height">44dp</dimen>
+    <dimen name="card_height_48dp">48dp</dimen>
+    <dimen name="card_height_56dp">56dp</dimen>
+    <dimen name="card_height_72dp">72dp</dimen>
 
 </resources>
