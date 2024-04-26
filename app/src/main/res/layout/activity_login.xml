@@ -191,6 +191,20 @@
             android:textSize="16dp"
             />
     </LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGetOtp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get OTP"
+        android:textStyle="bold"
+        android:textSize="@dimen/font_heading1"
+        android:backgroundTint="@color/primary"
+        android:visibility="invisible"
+        android:textColor="@color/neutral5"
+        android:layout_marginTop="@dimen/spacing_20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ln4"/>
     <FrameLayout
         android:id="@+id/overlay"
         android:layout_width="match_parent"

@@ -6,6 +6,7 @@ import com.example.music_app.models.LoginResponse;
 import com.example.music_app.models.OtpResponse;
 import com.example.music_app.models.RegisterRequest;
 import com.example.music_app.models.RegisterResponse;
+import com.example.music_app.models.ResponseMessage;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -25,8 +26,8 @@ public interface APIService {
     Call<OtpResponse> verifyOtp(@Query("token") String token, @Query("type") String type);
 
     @POST("auth/send-email")
-    Call<RegisterResponse> sendOtp(@Body ForgotPassword forgotPassword);
+    Call<ResponseMessage> sendOtp(@Body ForgotPassword forgotPassword);
 
     @PATCH("user/forgot-password")
-    Call<RegisterResponse> changePassword(@Body LoginRequest loginRequest);
+    Call<ResponseMessage> changePassword(@Body LoginRequest loginRequest);
 }
