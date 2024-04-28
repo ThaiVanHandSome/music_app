@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
@@ -18,8 +19,11 @@ import com.example.music_app.MainActivity;
 import com.example.music_app.R;
 import com.example.music_app.internals.SharePrefManagerAccount;
 import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.LoginRequest;
 import com.example.music_app.models.LoginResponse;
+import com.example.music_app.models.RegisterResponse;
+import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.User;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
@@ -37,13 +41,13 @@ public class LoginActivity extends AppCompatActivity {
     private TextView signUpText, forgotPasswordText;
     private TextInputEditText emailTxt, passwordTxt;
     private TextInputLayout emailLayout, passwordLayout;
-    private MaterialButton btnLogin;
+    private MaterialButton btnLogin, btnGetOtp;
     private ProgressBar progressBar;
     private CheckBox checkBoxRemember;
     private FrameLayout overlay;
     private Validate validate = new Validate();
     private APIService apiService;
-
+    private String email = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,17 +73,23 @@ public class LoginActivity extends AppCompatActivity {
                 req.setEmail(emailTxt.getText().toString());
                 req.setPassword(passwordTxt.getText().toString());
                 if(checkSuccess()) {
-                    overlay.setBackgroundColor(Color.argb(89, 0, 0, 0));
-                    overlay.setVisibility(View.VISIBLE);
-                    overlay.setFocusable(true);
-                    overlay.setClickable(true);
-                    progressBar.setVisibility(View.VISIBLE);
+                    openOverlay();
                     if(checkBoxRemember.isChecked()) {
                         SharePrefManagerAccount.getInstance(getApplicationContext()).remember(req);
                     } else {
                         SharePrefManagerAccount.getInstance(getApplicationContext()).clear();
                     }
                     login(req);
+                }
+            }
+        });
+
+        btnGetOtp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(email.length() != 0) {
+                    openOverlay();
+                    sendOtp();
                 }
             }
         });
@@ -93,6 +103,52 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         handleEvent();
+    }
+
+    private void hideOverlay() {
+        overlay.setVisibility(View.INVISIBLE);
+        overlay.setFocusable(false);
+        overlay.setClickable(false);
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void openOverlay() {
+        overlay.setBackgroundColor(Color.argb(89, 0, 0, 0));
+        overlay.setVisibility(View.VISIBLE);
+        overlay.setFocusable(true);
+        overlay.setClickable(true);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void sendOtp() {
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        ForgotPassword forgotPassword = new ForgotPassword();
+        forgotPassword.setEmail(email);
+        apiService.sendOtp(forgotPassword).enqueue(new Callback<ResponseMessage>() {
+            @Override
+            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                hideOverlay();
+                ResponseMessage res = new ResponseMessage();
+                res = response.body();
+                if(res == null) {
+                    Toast.makeText(LoginActivity.this, "Encounter Error!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                System.out.println(res.getMessage());
+                Toast.makeText(LoginActivity.this, res.getMessage(), Toast.LENGTH_SHORT).show();
+                if(res.isSuccess()) {
+                    Intent intent = new Intent(LoginActivity.this, OtpVerifyActivity.class);
+                    intent.putExtra("type", "confirm");
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                hideOverlay();
+                Toast.makeText(LoginActivity.this, "Call API Error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void fillText() {
@@ -110,10 +166,7 @@ public class LoginActivity extends AppCompatActivity {
         apiService.authenticate(req).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                progressBar.setVisibility(View.INVISIBLE);
-                overlay.setVisibility(View.INVISIBLE);
-                overlay.setFocusable(false);
-                overlay.setClickable(false);
+                hideOverlay();
                 LoginResponse res = response.body();
                 if(res == null) {
                     Toast.makeText(LoginActivity.this, "Username Or Password Wrong!", Toast.LENGTH_SHORT).show();
@@ -135,14 +188,15 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                 }
                 Toast.makeText(LoginActivity.this, res.getMessage(), Toast.LENGTH_SHORT).show();
+                if(res.getType() != null && res.getType().equals("confirm")) {
+                    btnGetOtp.setVisibility(View.VISIBLE);
+                    email = res.getEmail();
+                }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                overlay.setVisibility(View.INVISIBLE);
-                overlay.setFocusable(false);
-                overlay.setClickable(false);
-                progressBar.setVisibility(View.INVISIBLE);
+                hideOverlay();
                 Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -216,5 +270,6 @@ public class LoginActivity extends AppCompatActivity {
         checkBoxRemember = (CheckBox) findViewById(R.id.checkBoxRemember);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         overlay = (FrameLayout) findViewById(R.id.overlay);
+        btnGetOtp = (MaterialButton) findViewById(R.id.btnGetOtp);
     }
 }
