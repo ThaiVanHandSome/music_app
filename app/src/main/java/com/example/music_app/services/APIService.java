@@ -7,6 +7,7 @@ import com.example.music_app.models.OtpResponse;
 import com.example.music_app.models.PlaylistResponse;
 import com.example.music_app.models.RegisterRequest;
 import com.example.music_app.models.RegisterResponse;
+import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.SongResponse;
 
 import retrofit2.Call;
@@ -28,12 +29,12 @@ public interface APIService {
     Call<OtpResponse> verifyOtp(@Query("token") String token, @Query("type") String type);
 
     @POST("auth/send-email")
-    Call<RegisterResponse> sendOtp(@Body ForgotPassword forgotPassword);
+    Call<ResponseMessage> sendOtp(@Body ForgotPassword forgotPassword);
 
     @PATCH("user/forgot-password")
-    Call<RegisterResponse> changePassword(@Body LoginRequest loginRequest);
+    Call<ResponseMessage> changePassword(@Body LoginRequest loginRequest);
 
-    @GET("/user/{id_user}/liked-songs")
+    @GET("/user/{id_user}/playlists")
     Call<PlaylistResponse> getPlaylistByIdUser(@Path("id_user") Long id_user);
 
     @GET("/user/{id_user}/liked-songs")

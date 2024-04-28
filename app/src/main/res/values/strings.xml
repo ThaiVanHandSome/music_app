@@ -22,6 +22,7 @@
     <string name="button_login">Đăng nhập</string>
     <string name="button_continue">Tiếp tục</string>
     <string name="button_verify">Xác nhận</string>
+    <string name="button_get_otp">Nhận mã OTP</string>
 
     <string name="label_forget_password">Quên mật khẩu?</string>
     <string name="button_reset_password">Lấy lại mật khẩu</string>
@@ -49,5 +50,6 @@
 
     <string name="radio_choice_male">Nam</string>
     <string name="radio_choice_female">Nữ</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
