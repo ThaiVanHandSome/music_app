@@ -16,7 +16,6 @@
         android:layout_height="wrap_content"
         android:textColor="@color/neutral4"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="@dimen/spacing_8dp"
-        style="@style/Label"/>
+        android:layout_marginStart="@dimen/spacing_8dp" />
 
 </LinearLayout>

@@ -227,10 +227,10 @@ public class LoginActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 String inp = textInput.getText().toString();
                 if(inp.length() == 0) {
-                    textInputLayout.setError("Vui lòng nhập trường này");
+                    textInputLayout.setError(getText(R.string.error_required_field));
                 } else {
                     if(type.equals("email") && !validate.validateEmail(inp)) {
-                        textInputLayout.setError("Vui lòng nhập email chính xác!");
+                            textInputLayout.setError(getText(R.string.error_invalid_email));
                     } else {
                         textInputLayout.setError(null);
                     }
@@ -245,14 +245,14 @@ public class LoginActivity extends AppCompatActivity {
                 if(b) {
                     if(inp.length() != 0) {
                         if(type.equals("email") && !validate.validateEmail(inp)) {
-                            textInputLayout.setError("Vui lòng nhập email chính xác!");
+                            textInputLayout.setError(getText(R.string.error_invalid_email));
                         }
                         return;
                     }
                     textInputLayout.setError(null);
                 } else {
                     if(inp.length() == 0) {
-                        textInputLayout.setError("Vui lòng nhập trường này");
+                        textInputLayout.setError(getText(R.string.error_required_field));
                     }
                 }
             }

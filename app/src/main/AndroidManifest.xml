@@ -12,7 +12,6 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -41,13 +40,13 @@
             android:name=".activities.auth.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.auth.GetStartedActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.auth.SplashActivity"
+            android:name=".activities.LibraryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.auth.GetStartedActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

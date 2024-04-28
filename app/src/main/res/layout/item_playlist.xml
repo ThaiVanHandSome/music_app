@@ -22,7 +22,7 @@
         android:layout_marginBottom="@dimen/spacing_4dp"
         android:text="Playlist Name"
         android:textColor="@color/neutral5"
-        style="@style/Title"/>
+        style="@style/TextAppearance.App.TitleMedium"/>
 
     <TextView
         android:id="@+id/tv_song_count"
@@ -33,7 +33,7 @@
         android:layout_marginBottom="@dimen/spacing_4dp"
         android:text="Song Count"
         android:textColor="@color/neutral3"
-        style="@style/Label"/>
+        style="@style/TextAppearance.App.LabelMedium"/>
 
 
 </LinearLayout>

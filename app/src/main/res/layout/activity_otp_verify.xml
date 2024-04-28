@@ -12,10 +12,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="140dp"
+        android:layout_marginStart="@dimen/spacing_16dp"
+        android:layout_marginEnd="@dimen/spacing_16dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -27,17 +28,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter OTP"
-            android:layout_marginTop="12dp"
-            android:textColor="@color/neutral5"
-            android:textSize="@dimen/font_display"
-            android:textStyle="bold" />
+            android:text="@string/label_enter_otp"
+            android:textColor="@color/neutral4"
+            style="@style/TextAppearance.App.HeadlineSmall"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="6"
             android:layout_marginTop="32dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
@@ -48,9 +46,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/neutral5"
-                android:textSize="30sp"
-                android:gravity="center"
-                android:textStyle="bold" />
+                style="@style/TextAppearance.App.HeadlineLarge"
+                android:gravity="center" />
 
             <EditText
                 android:id="@+id/opt2Txt"
@@ -58,9 +55,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/neutral5"
-                android:textSize="30sp"
-                android:gravity="center"
-                android:textStyle="bold" />
+                style="@style/TextAppearance.App.HeadlineLarge"
+                android:gravity="center" />
 
             <EditText
                 android:id="@+id/opt3Txt"
@@ -68,9 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/neutral5"
-                android:textSize="30sp"
-                android:gravity="center"
-                android:textStyle="bold" />
+                style="@style/TextAppearance.App.HeadlineLarge"
+                android:gravity="center" />
 
             <EditText
                 android:id="@+id/opt4Txt"
@@ -78,9 +73,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/neutral5"
-                android:textSize="30sp"
-                android:gravity="center"
-                android:textStyle="bold" />
+                style="@style/TextAppearance.App.HeadlineLarge"
+                android:gravity="center" />
 
             <EditText
                 android:id="@+id/opt5Txt"
@@ -88,9 +82,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/neutral5"
-                android:textSize="30sp"
-                android:gravity="center"
-                android:textStyle="bold" />
+                style="@style/TextAppearance.App.HeadlineLarge"
+                android:gravity="center" />
 
             <EditText
                 android:id="@+id/opt6Txt"
@@ -98,35 +91,26 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/neutral5"
-                android:textSize="30sp"
-                android:gravity="center"
-                android:textStyle="bold" />
+                style="@style/TextAppearance.App.HeadlineLarge"
+                android:gravity="center" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/countdownTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_16dp"
             android:text="00:00"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#ffff0000"
-            android:layout_marginTop="16dp"
-            />
+            android:textColor="@color/accent_error"
+            style="@style/TextAppearance.App.HeadlineSmall"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVerify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="36dp"
-            android:text="Verify"
-            android:textStyle="bold"
-            android:textColor="@color/neutral5"
-            android:backgroundTint="@color/primary"
-            android:textSize="24sp"
-            />
+            android:layout_marginTop="@dimen/spacing_24dp"
+            android:text="@string/button_verify"
+            style="@style/PrimaryFilledButton" />
     </LinearLayout>
     <ProgressBar
         android:id="@+id/progressBar"

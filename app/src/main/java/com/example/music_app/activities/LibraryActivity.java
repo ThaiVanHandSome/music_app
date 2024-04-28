@@ -13,6 +13,7 @@ import com.example.music_app.databinding.ActivityLibraryBinding;
 import com.google.android.material.tabs.TabLayout;
 
 public class LibraryActivity extends AppCompatActivity {
+
     private ActivityLibraryBinding binding;
     private LibraryViewPager2Adapter adapter;
 
@@ -52,4 +53,5 @@ public class LibraryActivity extends AppCompatActivity {
         });
 
     }
+
 }
