@@ -28,16 +28,14 @@
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="@dimen/spacing_4dp"
             android:maxLines="1"
-            android:ellipsize="end"
-            style="@style/Label"/>
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/tv_item_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/neutral3"
-            android:layout_gravity="center_vertical"
-            style="@style/Caption"/>
+            android:layout_gravity="center_vertical" />
 
     </LinearLayout>
 

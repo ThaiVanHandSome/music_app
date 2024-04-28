@@ -2,8 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/neutral0">
+    android:layout_height="match_parent" >
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -15,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/top_app_bar_height"
             app:title="@string/menu_item_library"
-            app:titleTextAppearance="@style/Heading2"
+            app:titleTextAppearance="@style/TextAppearance.App.HeadlineMedium"
             app:titleTextColor="@color/neutral5"
             android:background="@color/neutral0"/>
 
@@ -24,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/neutral0"
-            app:tabTextAppearance="@style/Label">
+            app:tabTextAppearance="@style/TextAppearance.App.LabelLarge">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -61,8 +60,8 @@
             android:background="@drawable/background_gradient"
             app:itemIconSize="@dimen/icon_32dp"
             app:itemActiveIndicatorStyle="@color/navigation_ripple_color_selector"
-            app:itemTextAppearanceActive="@style/Label"
-            app:itemTextAppearanceInactive="@style/Label"
+            app:itemTextAppearanceActive="@style/TextAppearance.App.LabelLarge"
+            app:itemTextAppearanceInactive="@style/TextAppearance.App.LabelLarge"
             app:menu="@menu/menu_navigation" />
     </FrameLayout>
 

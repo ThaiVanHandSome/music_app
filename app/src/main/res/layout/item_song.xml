@@ -30,7 +30,7 @@
             android:layout_marginBottom="@dimen/spacing_4dp"
             android:maxLines="1"
             android:ellipsize="end"
-            style="@style/Label"/>
+            style="@style/TextAppearance.App.LabelMedium"/>
 
         <TextView
             android:id="@+id/tv_song_artist"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/neutral3"
             android:layout_gravity="center_vertical"
-            style="@style/Caption"/>
+            style="@style/TextAppearance.App.LabelSmall"/>
 
     </LinearLayout>
 
