@@ -114,7 +114,13 @@
                 android:text="@string/button_signup"
                 android:textColor="@color/primary" />
         </LinearLayout>
-
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGetOtp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_24dp"
+            android:text="@string/button_get_otp"
+            style="@style/PrimaryFilledButton"/>
     </LinearLayout>
 
     <FrameLayout

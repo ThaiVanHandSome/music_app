@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">CisnW</string>
     <string name="app_description">Âm nhạc dành cho mọi người</string>
+    <string name="hello_blank_fragment">""</string>
 
     <!-- Menu items for bottom navigation bar -->
     <string name="menu_item_home">Trang chủ</string>
@@ -22,6 +23,7 @@
     <string name="button_login">Đăng nhập</string>
     <string name="button_continue">Tiếp tục</string>
     <string name="button_verify">Xác nhận</string>
+    <string name="button_get_otp">Get Otp</string>
 
     <string name="label_forget_password">Quên mật khẩu?</string>
     <string name="button_reset_password">Lấy lại mật khẩu</string>
