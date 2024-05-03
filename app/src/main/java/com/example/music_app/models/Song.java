@@ -18,12 +18,24 @@ public class Song {
     private String resource;
     @SerializedName("image")
     private String image;
-    @SerializedName("playlistSongs")
-    private List<PlaylistSong> playlistSongs;
-    @SerializedName("songLikeds")
-    private List<SongLiked> songLikeds;
-    @SerializedName("songComments")
-    private List<SongComment> songComments;
+    @SerializedName("artistId")
+    private Long artistId;
+    @SerializedName("artistName")
+    private String artistName;
+
+    public Song() {
+    }
+
+    public Song(Long idSong, String name, int views, List<Integer> dayCreated, String resource, String image, Long artistId, String artistName) {
+        this.idSong = idSong;
+        this.name = name;
+        this.views = views;
+        this.dayCreated = dayCreated;
+        this.resource = resource;
+        this.image = image;
+        this.artistId = artistId;
+        this.artistName = artistName;
+    }
 
     public Long getIdSong() {
         return idSong;
@@ -80,27 +92,20 @@ public class Song {
         this.image = image;
     }
 
-    public List<PlaylistSong> getPlaylistSongs() {
-        return playlistSongs;
+    public Long getArtistId() {
+        return artistId;
     }
 
-    public void setPlaylistSongs(List<PlaylistSong> playlistSongs) {
-        this.playlistSongs = playlistSongs;
+    public void setArtistId(Long artistId) {
+        this.artistId = artistId;
     }
 
-    public List<SongLiked> getSongLikeds() {
-        return songLikeds;
+    public String getArtistName() {
+        return artistName;
     }
 
-    public void setSongLikeds(List<SongLiked> songLikeds) {
-        this.songLikeds = songLikeds;
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
     }
 
-    public List<SongComment> getSongComments() {
-        return songComments;
-    }
-
-    public void setSongComments(List<SongComment> songComments) {
-        this.songComments = songComments;
-    }
 }

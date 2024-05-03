@@ -11,4 +11,5 @@
     <color name="accent_error">#FFA7A9</color>
     <color name="black">#000000</color>
     <color name="overlay">#00000059</color>
+    <color name="dynamic">#0038AA</color>
 </resources>

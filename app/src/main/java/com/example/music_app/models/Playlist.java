@@ -7,33 +7,45 @@ import java.util.List;
 
 public class Playlist {
     @SerializedName("idPlaylist")
-    private Long idPlaylist;
+    private int idPlaylist;
+
+    @SerializedName("idUser")
+    private Long idUser;
     @SerializedName("name")
     private String name;
     @SerializedName("dayCreated")
     private List<Integer> dayCreated;
     @SerializedName("image")
     private String image;
-    @SerializedName("playlistSongs")
-    private List<PlaylistSong> playlistSongs;
+    @SerializedName("songs")
+    private List<Song> songs;
 
     public Playlist() {
     }
 
-    public Playlist(Long idPlaylist, String name, List<Integer> dayCreated, String image, List<PlaylistSong> playlistSongs) {
+    public Playlist(int idPlaylist, Long idUser, String name, List<Integer> dayCreated, String image, List<Song> songs) {
         this.idPlaylist = idPlaylist;
+        this.idUser = idUser;
         this.name = name;
         this.dayCreated = dayCreated;
         this.image = image;
-        this.playlistSongs = playlistSongs;
+        this.songs = songs;
     }
 
-    public Long getIdPlaylist() {
+    public int getIdPlaylist() {
         return idPlaylist;
     }
 
-    public void setIdPlaylist(Long idPlaylist) {
+    public void setIdPlaylist(int idPlaylist) {
         this.idPlaylist = idPlaylist;
+    }
+
+    public Long getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(Long idUser) {
+        this.idUser = idUser;
     }
 
     public String getName() {
@@ -67,12 +79,15 @@ public class Playlist {
         this.image = image;
     }
 
-
-    public List<PlaylistSong> getPlaylistSongs() {
-        return playlistSongs;
+    public List<Song> getSongs() {
+        return songs;
     }
 
-    public void setPlaylistSongs(List<PlaylistSong> playlistSongs) {
-        this.playlistSongs = playlistSongs;
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
+    }
+
+    public int getSongCount() {
+        return songs == null ? 0 : songs.size();
     }
 }

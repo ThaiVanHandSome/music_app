@@ -1,5 +1,6 @@
 package com.example.music_app.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,12 +11,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.music_app.R;
+import com.example.music_app.activities.CreatePlaylistActivity;
+import com.example.music_app.activities.TopicActivity;
 import com.example.music_app.adapters.PlaylistAdapter;
 import com.example.music_app.databinding.FragmentUserPlaylistBinding;
+import com.example.music_app.decorations.BottomOffsetDecoration;
+import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.ListPlaylistResponse;
 import com.example.music_app.models.Playlist;
-import com.example.music_app.models.PlaylistResponse;
+import com.example.music_app.models.User;
 import com.example.music_app.services.APIService;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.google.gson.Gson;
@@ -32,6 +40,10 @@ public class UserPlaylistFragment extends Fragment {
     RecyclerView recyclerView;
     PlaylistAdapter adapter;
     List<Playlist> playlists = new ArrayList<>();
+
+    LinearLayout linearLayoutAddToLibrary;
+
+    User user = SharePrefManagerUser.getInstance(this.getContext()).getUser();
     public UserPlaylistFragment() {
         // Required empty public constructor
     }
@@ -49,36 +61,49 @@ public class UserPlaylistFragment extends Fragment {
         // Set text for tvAddToLibrary in include layout
         binding.linearLayoutAddToLibary.tvAddToLibrary.setText(R.string.label_add_new_playlist);
 
+        // Set onClickListener for linearLayoutAddToLibrary
+        linearLayoutAddToLibrary = binding.linearLayoutAddToLibary.getRoot();
+        linearLayoutAddToLibrary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(getContext(), getString(R.string.label_add_new_playlist), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), CreatePlaylistActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // Bind recyclerView and adapter
         recyclerView = binding.rvUserPlaylist;
-        adapter = new PlaylistAdapter(getContext(), playlists);
+        adapter = new PlaylistAdapter(getContext(), playlists, null);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerView.addItemDecoration(new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset)));
         getPlaylistByIdUser();
         return binding.getRoot();
     }
 
     private void getPlaylistByIdUser() {
         APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        //TODO: get idUser later
-        apiService.getPlaylistByIdUser(1L).enqueue(new Callback<PlaylistResponse>() {
+        apiService.getPlaylistByIdUser(user.getId()).enqueue(new Callback<ListPlaylistResponse>() {
             @Override
-            public void onResponse(Call<PlaylistResponse> call, Response<PlaylistResponse> response) {
+            public void onResponse(Call<ListPlaylistResponse> call, Response<ListPlaylistResponse> response) {
                 if (response.isSuccessful()) {
                     playlists.addAll(response.body().getData());
-                    Log.d("APIService", "JSON response: " + new Gson().toJson(response.body()));
-                    Log.d("APIService", "getPlaylistByIdUser: " + playlists.size());
-                    adapter = new PlaylistAdapter(getContext(), playlists);
+                    adapter = new PlaylistAdapter(getContext(), playlists, new PlaylistAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Playlist playlist) {
+                            Intent intent = new Intent(getContext(), TopicActivity.class);
+                            intent.putExtra("SelectedPlaylist", playlist.getIdPlaylist());
+                            startActivity(intent);
+                        }
+                    });
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-                } else {
-                    Log.d("RetrofitError", String.valueOf(response.code() + ": " + response.errorBody()));
                 }
             }
 
             @Override
-            public void onFailure(Call<PlaylistResponse> call, Throwable t) {
-                Log.d("RetrofitError", t.getMessage());
+            public void onFailure(Call<ListPlaylistResponse> call, Throwable t) {
             }
         });
     }
