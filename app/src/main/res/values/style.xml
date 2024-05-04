@@ -103,6 +103,18 @@
         <item name="android:textColor">@color/neutral5</item>
         <item name="android:backgroundTint">@android:color/transparent</item>
     </style>
+
+    <style name="OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textAppearance">@style/TextAppearance.App.TitleMedium</item>
+        <item name="boxStrokeColor">@color/neutral4</item>
+        <item name="android:textColor">@color/neutral5</item>
+    </style>
+
+    <style name="ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="android:textAppearance">@style/TextAppearance.App.TitleMedium</item>
+        <item name="android:backgroundTint">@color/primary</item>
+        <item name="android:layout_marginBottom">@dimen/spacing_24dp</item>
+    </style>
     
 
     <!-- Custom text input field -->

@@ -48,8 +48,7 @@
             android:id="@+id/library_view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/spacing_8dp"
-            android:paddingBottom="@dimen/spacing_40dp"/>
+            android:layout_margin="@dimen/spacing_8dp" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/navigation"
@@ -57,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:paddingTop="@dimen/spacing_64dp"
-            android:background="@drawable/background_gradient"
+            android:background="@drawable/navigation_background_gradient"
             app:itemIconSize="@dimen/icon_32dp"
             app:itemActiveIndicatorStyle="@color/navigation_ripple_color_selector"
             app:itemTextAppearanceActive="@style/TextAppearance.App.LabelLarge"

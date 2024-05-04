@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class PlaylistResponse {
+public class ListPlaylistResponse {
     @SerializedName("success")
     private Boolean success;
     @SerializedName("error")
@@ -12,12 +12,12 @@ public class PlaylistResponse {
     @SerializedName("message")
     private String message;
     @SerializedName("data")
-    private Playlist data;
+    private List<Playlist> data;
 
-    public PlaylistResponse() {
+    public ListPlaylistResponse() {
     }
 
-    public PlaylistResponse(Boolean success, Boolean error, String message, Playlist data) {
+    public ListPlaylistResponse(Boolean success, Boolean error, String message, List<Playlist> data) {
         this.success = success;
         this.error = error;
         this.message = message;
@@ -48,11 +48,11 @@ public class PlaylistResponse {
         this.message = message;
     }
 
-    public Playlist getData() {
+    public List<Playlist> getData() {
         return data;
     }
 
-    public void setData(Playlist data) {
+    public void setData(List<Playlist> data) {
         this.data = data;
     }
 }
