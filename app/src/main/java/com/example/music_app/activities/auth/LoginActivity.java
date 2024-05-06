@@ -73,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                 LoginRequest req = new LoginRequest();
                 req.setEmail(emailTxt.getText().toString());
                 req.setPassword(passwordTxt.getText().toString());
+                req.setRole("USER");
                 if(checkSuccess()) {
                     openOverlay();
                     if(checkBoxRemember.isChecked()) {
