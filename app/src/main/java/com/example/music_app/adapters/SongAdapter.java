@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
+import com.example.music_app.fragments.BottomSheetDialog;
 import com.example.music_app.models.Song;
 import com.google.android.material.button.MaterialButton;
 
@@ -45,6 +46,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             @Override
             public void onClick(View view) {
                 //TODO: open bottom sheet dialog
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+                bottomSheetDialog.show(((androidx.fragment.app.FragmentActivity) context)
+                        .getSupportFragmentManager(), "ModalBottomSheet");
+                bottomSheetDialog.setContent(song.getImage(), song.getName(), song.getArtistName());
+
             }
         });
     }

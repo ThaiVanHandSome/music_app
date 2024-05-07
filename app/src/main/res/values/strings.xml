@@ -6,6 +6,8 @@
     <string name="menu_item_home">Trang chủ</string>
     <string name="menu_item_search">Tìm kiếm</string>
     <string name="menu_item_library">Thư viện</string>
+    <string name="menu_item_favourite">Thêm vào yêu thích</string>
+    <string name="menu_item_playlist">Thêm vào danh sách phát</string>
 
     <!-- Menu item for tab layout in Library -->
     <string name="menu_item_my_playlist">Danh sách phát của tôi</string>

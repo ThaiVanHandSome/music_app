@@ -55,12 +55,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:paddingTop="@dimen/spacing_64dp"
-            android:background="@drawable/navigation_background_gradient"
+            android:paddingTop="@dimen/spacing_40dp"
+            android:background="@drawable/navigation"
             app:itemIconSize="@dimen/icon_32dp"
             app:itemActiveIndicatorStyle="@color/navigation_ripple_color_selector"
             app:itemTextAppearanceActive="@style/TextAppearance.App.LabelLarge"
             app:itemTextAppearanceInactive="@style/TextAppearance.App.LabelLarge"
+            app:itemIconTint="@color/navigation_icon_tint_selector"
+            app:itemTextColor="@color/navigation_label_tint_selector"
             app:menu="@menu/menu_navigation" />
     </FrameLayout>
 
