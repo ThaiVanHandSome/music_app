@@ -9,6 +9,7 @@ import com.example.music_app.models.PlaylistRequest;
 import com.example.music_app.models.PlaylistResponse;
 import com.example.music_app.models.RegisterRequest;
 import com.example.music_app.models.RegisterResponse;
+import com.example.music_app.models.ResetPasswordRequest;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.SongLikedRequest;
 import com.example.music_app.models.SongResponse;
@@ -36,7 +37,7 @@ public interface APIService {
     Call<ResponseMessage> sendOtp(@Body ForgotPassword forgotPassword);
 
     @PATCH("user/forgot-password")
-    Call<ResponseMessage> changePassword(@Body LoginRequest loginRequest);
+    Call<ResponseMessage> changePassword(@Body ResetPasswordRequest resetPasswordRequest);
 
     @GET("user/{id_user}/playlists")
     Call<ListPlaylistResponse> getPlaylistByIdUser(@Path("id_user") int id_user);

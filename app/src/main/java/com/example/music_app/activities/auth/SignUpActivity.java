@@ -85,7 +85,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private boolean checkSuccess() {
-        return firstNameLayout.getError() == null && lastNameLayout.getError() == null && phoneNumberLayout.getError() == null && passwordLayout.getError() == null && emailLayout.getError() == null;
+        return firstNameLayout.getError() == null && lastNameLayout.getError() == null && phoneNumberLayout.getError() == null && passwordLayout.getError() == null && emailLayout.getError() == null && passwordAgainLayout.getError() == null;
     }
 
     private void setEvent(TextInputLayout textInputLayout, TextInputEditText textInput, String type) {
