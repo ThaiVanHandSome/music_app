@@ -42,13 +42,10 @@ public interface APIService {
     @GET("user/{id_user}/playlists")
     Call<ListPlaylistResponse> getPlaylistByIdUser(@Path("id_user") int id_user);
 
-<<<<<<< HEAD
+
     @GET("/user/{id_user}/liked-songs")
     Call<SongResponse> getSongLikedByIdUser(@Path("id_user") Long id_user);
 
-    @GET("/songs")
-    Call<SongResponse> getAllSongs();
-=======
     @GET("user/{id_user}/liked-songs")
     Call<SongResponse> getSongLikedByIdUser(@Path("id_user") int id_user);
 
@@ -69,5 +66,4 @@ public interface APIService {
 
     @POST("songLiked/songs")
     Call<ResponseMessage> addSongsToFavourite(@Body SongLikedRequest songLikedRequest);
->>>>>>> 7b27bf260940ff88b3569df0ca368d268d89b8cc
 }
