@@ -67,6 +67,16 @@
             android:text="@string/button_login"
             style="@style/PrimaryFilledButton"/>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLoginWithGoogle"
+            style="@style/NeutralFilledButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_google"
+            android:drawablePadding="8dp"
+            android:layout_marginTop="@dimen/spacing_24dp"
+            android:text="Đăng nhập với google" />
+
         <LinearLayout
             android:id="@+id/ln3"
             android:layout_width="match_parent"

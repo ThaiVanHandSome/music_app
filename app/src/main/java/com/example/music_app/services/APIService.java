@@ -42,6 +42,10 @@ public interface APIService {
     @GET("user/{id_user}/playlists")
     Call<ListPlaylistResponse> getPlaylistByIdUser(@Path("id_user") int id_user);
 
+
+    @GET("/user/{id_user}/liked-songs")
+    Call<SongResponse> getSongLikedByIdUser(@Path("id_user") Long id_user);
+
     @GET("user/{id_user}/liked-songs")
     Call<SongResponse> getSongLikedByIdUser(@Path("id_user") int id_user);
 
