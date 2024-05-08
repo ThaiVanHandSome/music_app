@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.music_app.MainActivity;
 import com.example.music_app.R;
+import com.example.music_app.activities.LibraryActivity;
 import com.example.music_app.internals.SharePrefManagerAccount;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.models.ForgotPassword;
@@ -72,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                 LoginRequest req = new LoginRequest();
                 req.setEmail(emailTxt.getText().toString());
                 req.setPassword(passwordTxt.getText().toString());
+                req.setRole("USER");
                 if(checkSuccess()) {
                     openOverlay();
                     if(checkBoxRemember.isChecked()) {
@@ -183,7 +185,7 @@ public class LoginActivity extends AppCompatActivity {
                     user.setAccessToken(res.getAccessToken());
                     user.setRefreshToken(res.getRefreshToken());
                     SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, LibraryActivity.class);
                     startActivity(intent);
                     finish();
                 }

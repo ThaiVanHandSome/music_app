@@ -1,6 +1,8 @@
 package com.example.music_app.models;
 
 public class RegisterRequest {
+
+    private String nickName;
     private String email;
     private String password;
     private String firstName;
@@ -8,6 +10,16 @@ public class RegisterRequest {
     private String phoneNumber;
 
     private int gender;
+
+    public RegisterRequest() {
+        firstName = "";
+        lastName = "";
+        nickName = "";
+        phoneNumber = "";
+        email = "";
+        password = "";
+        gender = 1;
+    }
 
     public String getEmail() {
         return email;

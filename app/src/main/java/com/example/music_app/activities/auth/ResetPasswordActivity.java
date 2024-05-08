@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.music_app.R;
 import com.example.music_app.models.LoginRequest;
 import com.example.music_app.models.RegisterResponse;
+import com.example.music_app.models.ResetPasswordRequest;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
@@ -65,7 +66,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     private void changePassword() {
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        LoginRequest req = new LoginRequest();
+        ResetPasswordRequest req = new ResetPasswordRequest();
         Intent intent = getIntent();
         String email = intent.getStringExtra("email");
         Log.d("email", email);

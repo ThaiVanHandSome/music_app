@@ -40,8 +40,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
                 .load(song.getImage())
                 .into(holder.songImage);
         holder.songTitle.setText(song.getName());
-        //TODO: change database, add Artist to Song, set artist name
-        holder.artistName.setText(song.getName());
+        holder.artistName.setText(song.getArtistName());
         holder.songActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

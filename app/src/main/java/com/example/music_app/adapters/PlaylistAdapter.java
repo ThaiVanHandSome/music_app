@@ -20,15 +20,18 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     private final Context context;
     private final List<Playlist> playlists;
 
-    public PlaylistAdapter(Context context, List<Playlist> playlists) {
+    private final OnItemClickListener listener;
+
+    public PlaylistAdapter(Context context, List<Playlist> playlists, OnItemClickListener listener) {
         this.context = context;
         this.playlists = playlists;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_playlist, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_playlist, parent, false);
         return new PlaylistViewHolder(view);
     }
 
@@ -39,9 +42,16 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
                 .load(playlist.getImage())
                 .into(holder.playlistImage);
         holder.playlistName.setText(playlist.getName());
-        String playlistSongCount = context.getString(R.string.label_songs, playlist.getPlaylistSongs().size());
-        holder.playlistSongCount.setText(playlistSongCount);
+        holder.playlistSongCount.setText(context.getString(R.string.label_songs, playlist.getSongCount()));
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onItemClick(playlist);
+                }
+            }
+        });
     }
 
     @Override
@@ -59,5 +69,9 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
             playlistName = itemView.findViewById(R.id.tv_user_playlist);
             playlistSongCount = itemView.findViewById(R.id.tv_song_count);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Playlist playlist);
     }
 }

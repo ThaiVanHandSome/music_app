@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">CisnW</string>
     <string name="app_description">Âm nhạc dành cho mọi người</string>
-    <string name="hello_blank_fragment">""</string>
 
     <!-- Menu items for bottom navigation bar -->
     <string name="menu_item_home">Trang chủ</string>
@@ -12,18 +11,22 @@
     <string name="menu_item_my_playlist">Danh sách phát của tôi</string>
     <string name="menu_item_my_favourite">Bài hát yêu thích</string>
 
-
     <string name="label_add_new_playlist">Tạo danh sách phát mới</string>
     <string name="label_add_new_favourite">Thêm bài hát yêu thích</string>
     <string name="label_songs">%d bài hát</string>
     <string name="label_enter_otp">Nhập mã OTP</string>
+    <string name="label_recomendation">Gợi ý cho bạn</string>
+    <string name="label_clear_choices">Xóa lựa chọn</string>
 
     <!-- Button label -->
     <string name="button_signup">Đăng ký</string>
     <string name="button_login">Đăng nhập</string>
     <string name="button_continue">Tiếp tục</string>
     <string name="button_verify">Xác nhận</string>
-    <string name="button_get_otp">Get Otp</string>
+    <string name="button_get_otp">Nhận mã OTP</string>
+    <string name="button_create">Tạo</string>
+    <string name="button_add">Thêm</string>
+    <string name="button_delete_playlist">Xóa danh sách phát</string>
 
     <string name="label_forget_password">Quên mật khẩu?</string>
     <string name="button_reset_password">Lấy lại mật khẩu</string>
@@ -51,5 +54,11 @@
 
     <string name="radio_choice_male">Nam</string>
     <string name="radio_choice_female">Nữ</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="playlist_name_placeholder">Danh sách phát mới</string>
+    <string name="toast_added_song_to_favourite">Thêm bài hát vào yêu thích thành công!</string>
+    <string name="toast_created_playlist">Tạo danh sách phát thành công!</string>
+    <string name="toast_deleted_playlist">Xóa danh sách phát thành công!</string>
 
 </resources>
