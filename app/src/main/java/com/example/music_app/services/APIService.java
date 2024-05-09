@@ -32,7 +32,7 @@ public interface APIService {
     Call<LoginResponse> authenticate(@Body LoginRequest loginRequest);
 
     @POST("auth/authenticate-oauth")
-    Call<LoginResponse> authenticateOAuth(@Body OAuthLogin oAuthLogin);
+    Call<LoginResponse> authenticateOAuth(@Body RegisterRequest registerRequest);
 
     @GET("auth/register/confirm")
     Call<OtpResponse> verifyOtp(@Query("token") String token, @Query("type") String type);

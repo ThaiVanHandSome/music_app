@@ -34,6 +34,7 @@ import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.LoginRequest;
 import com.example.music_app.models.LoginResponse;
 import com.example.music_app.models.OAuthLogin;
+import com.example.music_app.models.RegisterRequest;
 import com.example.music_app.models.RegisterResponse;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.User;
@@ -183,13 +184,13 @@ public class LoginActivity extends AppCompatActivity {
     });
 
     private void loginOAuth(String email, String name, String image) {
-        OAuthLogin oAuthLogin = new OAuthLogin();
-        oAuthLogin.setName(name);
-        oAuthLogin.setEmail(email);
-        oAuthLogin.setImage(image);
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setLastName(name);
+        registerRequest.setEmail(email);
+        registerRequest.setAvatar(image);
 
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.authenticateOAuth(oAuthLogin).enqueue(new Callback<LoginResponse>() {
+        apiService.authenticateOAuth(registerRequest).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 LoginResponse res = response.body();
