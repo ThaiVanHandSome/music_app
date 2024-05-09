@@ -4,6 +4,7 @@ import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.ListPlaylistResponse;
 import com.example.music_app.models.LoginRequest;
 import com.example.music_app.models.LoginResponse;
+import com.example.music_app.models.OAuthLogin;
 import com.example.music_app.models.OtpResponse;
 import com.example.music_app.models.PlaylistRequest;
 import com.example.music_app.models.PlaylistResponse;
@@ -29,6 +30,9 @@ public interface APIService {
 
     @POST("auth/authenticate")
     Call<LoginResponse> authenticate(@Body LoginRequest loginRequest);
+
+    @POST("auth/authenticate-oauth")
+    Call<LoginResponse> authenticateOAuth(@Body OAuthLogin oAuthLogin);
 
     @GET("auth/register/confirm")
     Call<OtpResponse> verifyOtp(@Query("token") String token, @Query("type") String type);

@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.credentials.CredentialManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -32,6 +33,7 @@ import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.LoginRequest;
 import com.example.music_app.models.LoginResponse;
+import com.example.music_app.models.OAuthLogin;
 import com.example.music_app.models.RegisterResponse;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.User;
@@ -164,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.d("LoginWithGoogle", auth.getCurrentUser().getDisplayName());
                                 Log.d("LoginWithGoogle", auth.getCurrentUser().getEmail());
                                 Log.d("LoginWithGoogle", String.valueOf(auth.getCurrentUser().getPhotoUrl()));
-                                Toast.makeText(LoginActivity.this, "Signed in successfully", Toast.LENGTH_SHORT).show();
+                                loginOAuth(auth.getCurrentUser().getEmail(), auth.getCurrentUser().getDisplayName(), String.valueOf(auth.getCurrentUser().getPhotoUrl()));
                             }
                             else {
                                 Toast.makeText(LoginActivity.this, "Failed to sign in" + task.getException(), Toast.LENGTH_SHORT).show();
@@ -179,6 +181,47 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     });
+
+    private void loginOAuth(String email, String name, String image) {
+        OAuthLogin oAuthLogin = new OAuthLogin();
+        oAuthLogin.setName(name);
+        oAuthLogin.setEmail(email);
+        oAuthLogin.setImage(image);
+
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        apiService.authenticateOAuth(oAuthLogin).enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                LoginResponse res = response.body();
+                if(res == null) {
+                    return;
+                }
+                if(res.isSuccess()) {
+                    User user = new User();
+                    user.setFirstName(res.getFirstName());
+                    user.setLastName(res.getLastName());
+                    user.setAvatar(res.getAvatar());
+                    user.setEmail(res.getEmail());
+                    user.setGender(res.getGender());
+                    user.setId(res.getId());
+                    user.setAccessToken(res.getAccessToken());
+                    user.setRefreshToken(res.getRefreshToken());
+                    Log.d("token", res.getAccessToken());
+                    SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);
+                    Intent intent = new Intent(LoginActivity.this, LibraryActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                Toast.makeText(LoginActivity.this, res.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void hideOverlay() {
         overlay.setVisibility(View.INVISIBLE);
         overlay.setFocusable(false);
