@@ -198,6 +198,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 if(res.isSuccess()) {
+                    Log.d("LoginToken", res.getAccessToken());
                     User user = new User();
                     user.setFirstName(res.getFirstName());
                     user.setLastName(res.getLastName());
@@ -207,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
                     user.setId(res.getId());
                     user.setAccessToken(res.getAccessToken());
                     user.setRefreshToken(res.getRefreshToken());
-                    Log.d("token", res.getAccessToken());
+                    Log.d("`LoginToken`", res.getAccessToken());
                     SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);
                     Intent intent = new Intent(LoginActivity.this, LibraryActivity.class);
                     startActivity(intent);
