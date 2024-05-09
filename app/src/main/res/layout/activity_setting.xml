@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.SettingActivity">
+    <include
+        android:id="@+id/appbar_setting"
+        layout="@layout/appbar_with_back_icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/spacing_16dp"
+        android:layout_marginEnd="@dimen/spacing_16dp"
+        app:layout_constraintTop_toBottomOf="@id/appbar_setting"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hệ Thống"
+            android:textColor="@color/neutral5"
+            android:layout_marginBottom="@dimen/spacing_16dp"/>
+
+        <TextView
+            style="@style/TextAppearance.App.BodyLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ngôn Ngữ"
+            android:textColor="@color/neutral5"
+            android:layout_marginBottom="@dimen/spacing_16dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/spacing_16dp">
+
+
+
+                <RadioButton
+                    android:id="@+id/RadioButtonTiengViet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="100dp"
+                    android:checked="true"
+                    android:text="Tiếng Việt"
+                    android:textColor="@color/neutral5"/>
+
+
+                <RadioButton
+                    android:id="@+id/date_picker_actions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tiếng Anh"
+                    android:textColor="@color/neutral5" />
+
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/spacing_16dp">
+
+            <TextView
+                style="@style/TextAppearance.App.BodyLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Giao diện tối"
+                android:textColor="@color/neutral5"
+                android:layout_marginEnd="160dp"
+                android:layout_marginBottom="@dimen/spacing_16dp"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/spacing_8dp"
+                android:checked="true"/>
+
+        </LinearLayout>
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tài Khoản"
+            android:textColor="@color/neutral5"
+            android:layout_marginBottom="@dimen/spacing_16dp"/>
+
+        <TextView
+            style="@style/TextAppearance.App.BodyLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Đổi mật khẩu"
+            android:textColor="@color/neutral5"
+            android:layout_marginBottom="@dimen/spacing_16dp"/>
+
+        <TextView
+            style="@style/TextAppearance.App.BodyLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Đăng Xuất"
+            android:textColor="@color/neutral5"
+            android:layout_marginBottom="@dimen/spacing_16dp"/>
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

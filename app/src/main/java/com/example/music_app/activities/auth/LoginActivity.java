@@ -1,10 +1,18 @@
 package com.example.music_app.activities.auth;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.credentials.CredentialManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -15,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.cloudinary.api.exceptions.ApiException;
 import com.example.music_app.MainActivity;
 import com.example.music_app.R;
 import com.example.music_app.activities.LibraryActivity;
@@ -23,15 +33,29 @@ import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.LoginRequest;
 import com.example.music_app.models.LoginResponse;
+import com.example.music_app.models.OAuthLogin;
+import com.example.music_app.models.RegisterRequest;
 import com.example.music_app.models.RegisterResponse;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.User;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
 import com.example.music_app.utils.Validate;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,13 +66,16 @@ public class LoginActivity extends AppCompatActivity {
     private TextView signUpText, forgotPasswordText;
     private TextInputEditText emailTxt, passwordTxt;
     private TextInputLayout emailLayout, passwordLayout;
-    private MaterialButton btnLogin, btnGetOtp;
+    private MaterialButton btnLogin, btnGetOtp, btnLoginWithGoogle;
     private ProgressBar progressBar;
     private CheckBox checkBoxRemember;
     private FrameLayout overlay;
     private Validate validate = new Validate();
     private APIService apiService;
     private String email = "";
+
+    FirebaseAuth auth;
+    GoogleSignInClient googleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +85,14 @@ public class LoginActivity extends AppCompatActivity {
         mapping();
 
         fillText();
+
+        FirebaseApp.initializeApp(this);
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.client_id))
+                        .requestEmail()
+                                .build();
+        googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, options);
+        auth = FirebaseAuth.getInstance();
 
         signUpText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +121,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        btnLoginWithGoogle.setOnClickListener(new View.OnClickListener() {
+            Context context;
+            @Override
+            public void onClick(View v) {
+                Intent intent = googleSignInClient.getSignInIntent();
+                activityResultLauncher.launch(intent);
+            }
+        });
+
         btnGetOtp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,6 +149,78 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         handleEvent();
+    }
+
+    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if(result.getResultCode() == RESULT_OK){
+                Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                try {
+                    GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
+                    AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
+                    auth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>(){
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                auth = FirebaseAuth.getInstance();
+                                Log.d("LoginWithGoogle", auth.getCurrentUser().getDisplayName());
+                                Log.d("LoginWithGoogle", auth.getCurrentUser().getEmail());
+                                Log.d("LoginWithGoogle", String.valueOf(auth.getCurrentUser().getPhotoUrl()));
+                                loginOAuth(auth.getCurrentUser().getEmail(), auth.getCurrentUser().getDisplayName(), String.valueOf(auth.getCurrentUser().getPhotoUrl()));
+                            }
+                            else {
+                                Toast.makeText(LoginActivity.this, "Failed to sign in" + task.getException(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                    });
+                }
+                catch (ApiException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    });
+
+    private void loginOAuth(String email, String name, String image) {
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setLastName(name);
+        registerRequest.setEmail(email);
+        registerRequest.setAvatar(image);
+
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        apiService.authenticateOAuth(registerRequest).enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                LoginResponse res = response.body();
+                if(res == null) {
+                    return;
+                }
+                if(res.isSuccess()) {
+                    User user = new User();
+                    user.setFirstName(res.getFirstName());
+                    user.setLastName(res.getLastName());
+                    user.setAvatar(res.getAvatar());
+                    user.setEmail(res.getEmail());
+                    user.setGender(res.getGender());
+                    user.setId(res.getId());
+                    user.setAccessToken(res.getAccessToken());
+                    user.setRefreshToken(res.getRefreshToken());
+                    Log.d("token", res.getAccessToken());
+                    SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);
+                    Intent intent = new Intent(LoginActivity.this, LibraryActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                Toast.makeText(LoginActivity.this, res.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void hideOverlay() {
@@ -269,6 +385,7 @@ public class LoginActivity extends AppCompatActivity {
         emailLayout = (TextInputLayout) findViewById(R.id.emailLayout);
         passwordLayout = (TextInputLayout) findViewById(R.id.passwordLayout);
         btnLogin = (MaterialButton) findViewById(R.id.btnLogin);
+        btnLoginWithGoogle =(MaterialButton) findViewById(R.id.btnLoginWithGoogle);
         checkBoxRemember = (CheckBox) findViewById(R.id.checkBoxRemember);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         overlay = (FrameLayout) findViewById(R.id.overlay);

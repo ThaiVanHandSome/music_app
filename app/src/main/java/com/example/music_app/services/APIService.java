@@ -4,6 +4,7 @@ import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.ListPlaylistResponse;
 import com.example.music_app.models.LoginRequest;
 import com.example.music_app.models.LoginResponse;
+import com.example.music_app.models.OAuthLogin;
 import com.example.music_app.models.OtpResponse;
 import com.example.music_app.models.PlaylistRequest;
 import com.example.music_app.models.PlaylistResponse;
@@ -30,6 +31,9 @@ public interface APIService {
     @POST("auth/authenticate")
     Call<LoginResponse> authenticate(@Body LoginRequest loginRequest);
 
+    @POST("auth/authenticate-oauth")
+    Call<LoginResponse> authenticateOAuth(@Body RegisterRequest registerRequest);
+
     @GET("auth/register/confirm")
     Call<OtpResponse> verifyOtp(@Query("token") String token, @Query("type") String type);
 
@@ -41,6 +45,10 @@ public interface APIService {
 
     @GET("user/{id_user}/playlists")
     Call<ListPlaylistResponse> getPlaylistByIdUser(@Path("id_user") int id_user);
+
+
+    @GET("/user/{id_user}/liked-songs")
+    Call<SongResponse> getSongLikedByIdUser(@Path("id_user") Long id_user);
 
     @GET("user/{id_user}/liked-songs")
     Call<SongResponse> getSongLikedByIdUser(@Path("id_user") int id_user);
