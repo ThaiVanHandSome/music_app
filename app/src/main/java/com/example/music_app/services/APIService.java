@@ -1,5 +1,6 @@
 package com.example.music_app.services;
 
+import com.example.music_app.models.ChangePasswordRequest;
 import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.ListPlaylistResponse;
 import com.example.music_app.models.LoginRequest;
@@ -14,13 +15,16 @@ import com.example.music_app.models.ResetPasswordRequest;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.SongLikedRequest;
 import com.example.music_app.models.SongResponse;
+import com.example.music_app.models.UpdateProfileRequest;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -70,4 +74,11 @@ public interface APIService {
 
     @POST("songLiked/songs")
     Call<ResponseMessage> addSongsToFavourite(@Body SongLikedRequest songLikedRequest);
+
+    @PATCH("user/{id_user}/change-password")
+    Call<ResponseMessage> changePasswordWithIdUser(@Path("id_user") int id_user, @Body ChangePasswordRequest changePasswordRequest);
+
+
+    @PATCH("user/{id_user}")
+    Call<ResponseMessage> updateProfile(@Path("id_user") int id_user, @Body UpdateProfileRequest updateProfileRequest, @Part MultipartBody.Part imageFile);
 }

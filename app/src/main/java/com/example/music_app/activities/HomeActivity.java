@@ -51,12 +51,12 @@ public class HomeActivity extends AppCompatActivity {
                     Log.e("DataRes", "Code chay vao Res");
                     songList = response.body().getData();
                     Log.e("DataRes", songList.toString());
-//                    songHomeAdapter = new SongHomeAdapter(HomeActivity.this, songList);
-//                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-//                    rvTopThinhHanh.setHasFixedSize(true);
-//                    rvTopThinhHanh.setLayoutManager(layoutManager);
-//                    rvTopThinhHanh.setAdapter(songHomeAdapter);
-//                    songHomeAdapter.notifyDataSetChanged();
+                    songHomeAdapter = new SongHomeAdapter(HomeActivity.this, songList);
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+                    rvTopThinhHanh.setHasFixedSize(true);
+                    rvTopThinhHanh.setLayoutManager(layoutManager);
+                    rvTopThinhHanh.setAdapter(songHomeAdapter);
+                    songHomeAdapter.notifyDataSetChanged();
                 } else {
                     Log.e("DataRes", "No Res");
                 }
