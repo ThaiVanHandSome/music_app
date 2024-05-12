@@ -16,6 +16,7 @@ import com.example.music_app.adapters.ArtistAdapter;
 import com.example.music_app.adapters.NewSongHomeAdapter;
 import com.example.music_app.adapters.SongHomeAdapter;
 import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.SongResponse;
 import com.example.music_app.models.User;
@@ -61,10 +62,8 @@ public class HomeActivity extends AppCompatActivity {
         xtt_topthinhhanh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, HomeSongsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("Keyy", 1);
-                intent.putExtras(bundle);
+                Intent intent = new Intent(HomeActivity.this, TopicActivity.class);
+                intent.putExtra("topic", "trending");
                 startActivity(intent);
             }
         });
@@ -129,9 +128,9 @@ public class HomeActivity extends AppCompatActivity {
     private void GetTopTrend(){
         Log.e("DataRes", "Code chay vao ham get Thinh Hanh");
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<SongResponse>() {
+        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
             @Override
-            public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
+            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
                 if (response.isSuccessful()) {
                     trendSongs = response.body().getData();
                     songHomeAdapter = new SongHomeAdapter(getApplicationContext(), trendSongs);
@@ -146,7 +145,7 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<SongResponse> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
                 Log.d("ErrorReponse", t.getMessage());
             }
 
@@ -154,9 +153,9 @@ public class HomeActivity extends AppCompatActivity {
     }
     private void GetFavoriteSong(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<SongResponse>() {
+        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
             @Override
-            public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
+            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
                 if (response.isSuccessful()) {
                     favoriteSongs = response.body().getData();
                     songHomeAdapter = new SongHomeAdapter(getApplicationContext(), favoriteSongs);
@@ -171,16 +170,16 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<SongResponse> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
                 Log.d("ErrorReponse", t.getMessage());
             }
         });
     }
     private void GetTopArtist(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<SongResponse>() {
+        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
             @Override
-            public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
+            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
                 if (response.isSuccessful()) {
                     NewSongs = response.body().getData();
                     artistAdapter = new ArtistAdapter(getApplicationContext(), NewSongs);
@@ -195,16 +194,16 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<SongResponse> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
                 Log.d("ErrorReponse", t.getMessage());
             }
         });
     }
     private void GetNewSong(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<SongResponse>() {
+        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
             @Override
-            public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
+            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
                 if (response.isSuccessful()) {
                     NewSongs = response.body().getData();
                     newSongHomeAdapter = new NewSongHomeAdapter(getApplicationContext(), NewSongs);
@@ -219,7 +218,7 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<SongResponse> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
                 Log.d("ErrorReponse", t.getMessage());
             }
         });

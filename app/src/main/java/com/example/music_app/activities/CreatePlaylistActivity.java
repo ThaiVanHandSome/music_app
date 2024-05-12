@@ -14,6 +14,7 @@ import com.example.music_app.adapters.SongAddToLibraryAdapter;
 import com.example.music_app.databinding.ActivityCreatePlaylistBinding;
 import com.example.music_app.decorations.BottomOffsetDecoration;
 import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Playlist;
 import com.example.music_app.models.PlaylistRequest;
 import com.example.music_app.models.PlaylistResponse;
@@ -68,9 +69,9 @@ public class CreatePlaylistActivity extends AppCompatActivity {
 
     private void getAllSongs() {
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<SongResponse>() {
+        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
             @Override
-            public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
+            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
                 if (response.isSuccessful()) {
                     songs = response.body().getData();
                     Collections.shuffle(songs);
@@ -80,7 +81,7 @@ public class CreatePlaylistActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<SongResponse> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
 
             }
         });

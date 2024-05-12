@@ -1,31 +1,14 @@
 package com.example.music_app.models;
 
-<<<<<<< HEAD
 import androidx.annotation.Nullable;
 
 import java.time.LocalDate;
-=======
 import com.google.gson.annotations.SerializedName;
 
->>>>>>> b04fcfb10aa465867953c8b1b63fe7e24b27494d
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class Song {
-<<<<<<< HEAD
-    private int idSong;
-    private String name;
-    private int views;
-    private List<Integer> dayCreated;
-    private String resource;
-    private String image;
-
-    public int getIdSong() {
-        return idSong;
-    }
-
-    public void setIdSong(int idSong) {
-=======
     @SerializedName("idSong")
     private Long idSong;
     @SerializedName("name")
@@ -62,7 +45,6 @@ public class Song {
     }
 
     public void setIdSong(Long idSong) {
->>>>>>> b04fcfb10aa465867953c8b1b63fe7e24b27494d
         this.idSong = idSong;
     }
 
@@ -82,10 +64,6 @@ public class Song {
         this.views = views;
     }
 
-<<<<<<< HEAD
-    public List<Integer> getDayCreated() {
-        return dayCreated;
-=======
     public LocalDateTime getDayCreated() {
         LocalDateTime dateTime = LocalDateTime.of(
                 dayCreated.get(0),
@@ -95,7 +73,6 @@ public class Song {
                 dayCreated.get(4),
                 dayCreated.get(5));
         return dateTime;
->>>>>>> b04fcfb10aa465867953c8b1b63fe7e24b27494d
     }
 
     public void setDayCreated(List<Integer> dayCreated) {
@@ -118,8 +95,6 @@ public class Song {
         this.image = image;
     }
 
-<<<<<<< HEAD
-=======
     public Long getArtistId() {
         return artistId;
     }
@@ -135,6 +110,4 @@ public class Song {
     public void setArtistName(String artistName) {
         this.artistName = artistName;
     }
-
->>>>>>> b04fcfb10aa465867953c8b1b63fe7e24b27494d
 }

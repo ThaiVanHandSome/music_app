@@ -14,6 +14,7 @@ import com.example.music_app.adapters.SongAddToLibraryAdapter;
 import com.example.music_app.databinding.ActivityAddFavouriteSongsBinding;
 import com.example.music_app.decorations.BottomOffsetDecoration;
 import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.SongLikedRequest;
@@ -55,9 +56,9 @@ public class AddFavouriteSongsActivity extends AppCompatActivity {
 
     private void getSongNotInFavourite() {
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getNotLikedSongsByIdUser(user.getId()).enqueue(new Callback<SongResponse>() {
+        apiService.getNotLikedSongsByIdUser(user.getId()).enqueue(new Callback<GenericResponse<List<Song>>>() {
             @Override
-            public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
+            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
                 if (response.isSuccessful()) {
                     songs = response.body().getData();
                     Collections.shuffle(songs);
@@ -68,7 +69,7 @@ public class AddFavouriteSongsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<SongResponse> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
 
             }
         });

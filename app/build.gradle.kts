@@ -9,11 +9,8 @@ android {
 
     defaultConfig {
         applicationId = "com.example.music_app"
-<<<<<<< HEAD
-        minSdk = 21
-=======
         minSdk = 26
->>>>>>> b04fcfb10aa465867953c8b1b63fe7e24b27494d
+
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

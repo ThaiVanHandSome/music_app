@@ -11,7 +11,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ArtistHelper {
-    public static void getArtistBySongId(int songId, final ArtistCallback callback) {
+    public static void getArtistBySongId(Long songId, final ArtistCallback callback) {
         APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.getArtistsBySongId(songId).enqueue(new Callback<GenericResponse<List<Artist>>>() {
             @Override
