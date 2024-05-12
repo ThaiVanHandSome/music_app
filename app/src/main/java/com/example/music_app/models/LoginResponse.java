@@ -14,6 +14,15 @@ public class LoginResponse {
     private boolean success;
     private String message;
     private String type;
+    private String provider;
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
 
     public int getId() {
         return id;

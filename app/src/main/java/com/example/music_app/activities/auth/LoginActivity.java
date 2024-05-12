@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cloudinary.api.exceptions.ApiException;
 import com.example.music_app.R;
+import com.example.music_app.activities.HomeActivity;
 import com.example.music_app.activities.LibraryActivity;
 import com.example.music_app.internals.SharePrefManagerAccount;
 import com.example.music_app.internals.SharePrefManagerUser;
@@ -178,6 +179,7 @@ public class LoginActivity extends AppCompatActivity {
     });
 
     private void loginOAuth(String email, String name, String image) {
+        Log.d("LoginToken", "Code chay vo day");
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setLastName(name);
         registerRequest.setEmail(email);
@@ -192,6 +194,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 if(res.isSuccess()) {
+                    Log.d("LoginToken", res.getAccessToken());
                     User user = new User();
                     user.setFirstName(res.getFirstName());
                     user.setLastName(res.getLastName());
@@ -201,9 +204,12 @@ public class LoginActivity extends AppCompatActivity {
                     user.setId(res.getId());
                     user.setAccessToken(res.getAccessToken());
                     user.setRefreshToken(res.getRefreshToken());
-                    Log.d("token", res.getAccessToken());
+                    user.setProvider(res.getProvider());
+                    // Handle data for realtime
+                    Log.d("ProviderLogin", res.getProvider());
+                    Log.d("LoginToken", res.getAccessToken());
                     SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);
-                    Intent intent = new Intent(LoginActivity.this, LibraryActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -294,8 +300,9 @@ public class LoginActivity extends AppCompatActivity {
                     user.setId(res.getId());
                     user.setAccessToken(res.getAccessToken());
                     user.setRefreshToken(res.getRefreshToken());
+                    user.setProvider(res.getProvider());
                     SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);
-                    Intent intent = new Intent(LoginActivity.this, LibraryActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
                 }

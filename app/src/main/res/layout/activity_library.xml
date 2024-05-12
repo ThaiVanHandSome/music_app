@@ -50,20 +50,8 @@
             android:layout_height="match_parent"
             android:layout_margin="@dimen/spacing_8dp" />
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:paddingTop="@dimen/spacing_40dp"
-            android:background="@drawable/navigation"
-            app:itemIconSize="@dimen/icon_32dp"
-            app:itemActiveIndicatorStyle="@color/navigation_ripple_color_selector"
-            app:itemTextAppearanceActive="@style/TextAppearance.App.LabelLarge"
-            app:itemTextAppearanceInactive="@style/TextAppearance.App.LabelLarge"
-            app:itemIconTint="@color/navigation_icon_tint_selector"
-            app:itemTextColor="@color/navigation_label_tint_selector"
-            app:menu="@menu/menu_navigation" />
+        <include layout="@layout/bottom_navigation_bar"
+            android:id="@+id/navigation"/>
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -50,6 +50,7 @@ public class AddFavouriteSongsActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset)));
         getSongNotInFavourite();
         addSongToFavourite();
+        clearCheckedSongsIfNeeded();
     }
 
     private void getSongNotInFavourite() {
@@ -97,6 +98,15 @@ public class AddFavouriteSongsActivity extends AppCompatActivity {
 
                     }
                 });
+            }
+        });
+    }
+
+    private void clearCheckedSongsIfNeeded() {
+        binding.tvClearChoices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.clearAllCheckedSongs();
             }
         });
     }
