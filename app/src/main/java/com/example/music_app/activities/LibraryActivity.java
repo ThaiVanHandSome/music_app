@@ -21,7 +21,7 @@ public class LibraryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityLibraryBinding.inflate(getLayoutInflater());
-        binding.navigation.setSelectedItemId(R.id.menu_item_library);
+        binding.navigation.getRoot().setSelectedItemId(R.id.menu_item_library);
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
         FragmentManager fragmentManager = getSupportFragmentManager();

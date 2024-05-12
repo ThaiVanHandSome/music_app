@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.CreatePlaylistActivity">
+    tools:context=".activities.AddSongToPlaylistActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,18 +15,18 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/ln_recommended_songs"
+            android:id="@+id/ln_your_playlists"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/spacing_24dp"
             android:orientation="horizontal" >
 
             <TextView
-                android:id="@+id/tv_recommendation"
+                android:id="@+id/tv_you_playlists"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/label_recomendation"
+                android:text="@string/label_your_playlist"
                 android:textColor="@color/neutral5"
                 style="@style/TextAppearance.App.TitleMedium"/>
 
@@ -41,7 +41,7 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_recommended_songs"
+            android:id="@+id/rv_your_playlists"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -50,7 +50,7 @@
 
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fab_add_to_favourite"
+        android:id="@+id/fab_add_to_playlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"

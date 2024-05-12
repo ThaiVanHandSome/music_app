@@ -74,7 +74,6 @@ public class UserPlaylistFragment extends Fragment {
 
         // Bind recyclerView and adapter
         recyclerView = binding.rvUserPlaylist;
-        adapter = new PlaylistAdapter(getContext(), playlists, null);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.addItemDecoration(new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset)));
@@ -89,7 +88,8 @@ public class UserPlaylistFragment extends Fragment {
             public void onResponse(Call<ListPlaylistResponse> call, Response<ListPlaylistResponse> response) {
                 if (response.isSuccessful()) {
                     playlists.addAll(response.body().getData());
-                    adapter = new PlaylistAdapter(getContext(), playlists, new PlaylistAdapter.OnItemClickListener() {
+                    adapter = new PlaylistAdapter(getContext(), playlists);
+                    adapter.setOnItemClickListener(new PlaylistAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(Playlist playlist) {
                             Intent intent = new Intent(getContext(), TopicActivity.class);

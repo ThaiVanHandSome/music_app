@@ -1,6 +1,7 @@
 package com.example.music_app.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
+import com.example.music_app.fragments.BottomSheetDialog;
 import com.example.music_app.models.Song;
 import com.google.android.material.button.MaterialButton;
 
@@ -29,7 +31,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     @NonNull
     @Override
     public SongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_song, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_song, parent, false);
         return new SongViewHolder(view);
     }
 
@@ -41,10 +43,15 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
                 .into(holder.songImage);
         holder.songTitle.setText(song.getName());
         holder.artistName.setText(song.getArtistName());
+        Log.d("ArtistName", song.getArtistName());
         holder.songActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: open bottom sheet dialog
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+                bottomSheetDialog.show(((androidx.fragment.app.FragmentActivity) context)
+                        .getSupportFragmentManager(), "ModalBottomSheet");
+                bottomSheetDialog.setContent(song.getIdSong(), song.getImage(), song.getName(), song.getArtistName());
+
             }
         });
     }

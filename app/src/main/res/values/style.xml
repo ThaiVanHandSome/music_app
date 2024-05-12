@@ -130,5 +130,10 @@
         <item name="errorEnabled">true</item>
     </style>
 
+    <style name="BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
+        <item name="colorOnSecondaryContainer">@color/neutral5</item>
+        <item name="colorOnSurface">@color/neutral5</item>
+    </style>
+
 
 </resources>

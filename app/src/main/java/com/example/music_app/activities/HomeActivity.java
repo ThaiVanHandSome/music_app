@@ -1,20 +1,19 @@
 package com.example.music_app.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.music_app.R;
 import com.example.music_app.adapters.ArtistAdapter;
 import com.example.music_app.adapters.NewSongHomeAdapter;
-import com.example.music_app.adapters.SongAddToLibraryAdapter;
 import com.example.music_app.adapters.SongHomeAdapter;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.models.Song;
@@ -22,9 +21,10 @@ import com.example.music_app.models.SongResponse;
 import com.example.music_app.models.User;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -43,6 +43,8 @@ public class HomeActivity extends AppCompatActivity {
     List<User> Artists;
 
     TextView title, xtt_topthinhhanh, xtt_moinguoiyeuthich, xtt_nghesihangdau, xtt_moiramat;
+
+    BottomNavigationView bottomNavigationView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,20 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_item_search:
+                        break;
+                    case R.id.menu_item_library:
+                        Intent intent2 = new Intent(HomeActivity.this, LibraryActivity.class);
+                        startActivity(intent2);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     private void AnhXa() {
@@ -108,6 +124,7 @@ public class HomeActivity extends AppCompatActivity {
         xtt_moinguoiyeuthich = findViewById(R.id.xemtatca_moinguoiyeuthich);
         xtt_nghesihangdau = findViewById(R.id.xemtatca_nghesihangdau);
         xtt_moiramat = findViewById(R.id.xemtatca_moiramat);
+        bottomNavigationView = findViewById(R.id.navigation);
     }
     private void GetTopTrend(){
         Log.e("DataRes", "Code chay vao ham get Thinh Hanh");

@@ -1,7 +1,5 @@
 package com.example.music_app.activities.auth;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,9 +11,9 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.music_app.R;
-import com.example.music_app.models.LoginRequest;
-import com.example.music_app.models.RegisterResponse;
 import com.example.music_app.models.ResetPasswordRequest;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.retrofit.RetrofitClient;
