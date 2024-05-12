@@ -1,4 +1,16 @@
 <resources>
+    <string name="display_text">Hello World!</string>
+
+
+    <!--  Topic Album  -->
+    <string name="trending_title">Top thịnh hành</string>
+    <string name="trending_intro">Khám phá các bài hát được nghe nhiều nhất</string>
+    <string name="favorite_title">Bài hát yêu thích</string>
+    <string name="favorite_intro">Các bài hát được yêu thích nhất</string>
+    <string name="topartist_title">Nghệ sĩ hàng đầu</string>
+    <string name="topartist_intro">Danh sách các nghệ sĩ có mặt trên CisnW</string>
+    <string name="newreleased_title">Mới phát hành</string>
+    <string name="newreleased_intro">Thưởng thức các bài hát chất lượng vừa ra mắt</string>
     <string name="app_name">CisnW</string>
     <string name="app_description">Âm nhạc dành cho mọi người</string>
 
@@ -71,4 +83,5 @@
     <string name="client_id">90467436569-ibtnp170t1rb3fhksb8nhp99b0garii8.apps.googleusercontent.com</string>
     <string name="toast_added_song_to_playlist">Thêm bài hát vào danh sách phát thành công!</string>
     <string name="error_playlist_name_exists">Danh sách phát này đã tồn tại!</string>
+>>>>>>> b04fcfb10aa465867953c8b1b63fe7e24b27494d
 </resources>

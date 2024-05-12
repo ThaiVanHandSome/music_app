@@ -7,6 +7,9 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:allowBackup="true"
@@ -21,6 +24,21 @@
         android:theme="@style/Theme.Music_app"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.TopicActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SongDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.BaseActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".services.ExoService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"/>
         <activity
             android:name=".activities.HomeSongsActivity"
             android:exported="false" />
@@ -93,5 +111,4 @@
             </intent-filter>
         </service>
     </application>
-
 </manifest>

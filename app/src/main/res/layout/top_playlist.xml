@@ -17,6 +17,8 @@
 
     <TextView
         android:id="@+id/tvPlaylistTitle"
+        android:fontFamily="@font/lexend_bold"
+        android:textSize="@dimen/font_heading1"
         style="@style/TextAppearance.App.HeadlineSmall"
         android:textColor="@color/neutral5"
         android:text="Tên Album/Playlist"
@@ -32,8 +34,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/tvPlaylistTitle"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/lexend_medium"
         android:textColor="@color/neutral4"
         android:textAlignment="center"
+        android:textSize="@dimen/font_body"
         android:text="Giới thiệu"/>
 
     <TextView
@@ -45,6 +49,7 @@
         android:fontFamily="@font/lexend_medium"
         android:textColor="@color/neutral3"
         android:textAlignment="center"
+        android:textSize="@dimen/font_body"
         style="@style/TextAppearance.App.LabelMedium"
         android:text="20 bài hát"/>
 

@@ -1,5 +1,8 @@
 package com.example.music_app.services;
 
+import com.example.music_app.models.Artist;
+import com.example.music_app.models.ForgotPassword;
+import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.ChangePasswordRequest;
 import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.ListPlaylistResponse;
@@ -10,6 +13,10 @@ import com.example.music_app.models.PlaylistRequest;
 import com.example.music_app.models.PlaylistResponse;
 import com.example.music_app.models.RegisterRequest;
 import com.example.music_app.models.RegisterResponse;
+import com.example.music_app.models.Song;
+import com.example.music_app.models.SongResponse;
+
+import java.util.List;
 import com.example.music_app.models.ResetPasswordRequest;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.SongLikedRequest;
@@ -46,6 +53,22 @@ public interface APIService {
     Call<ResponseMessage> sendOtp(@Body ForgotPassword forgotPassword);
 
     @PATCH("user/forgot-password")
+    Call<RegisterResponse> changePassword(@Body LoginRequest loginRequest);
+
+
+    // Songs API
+    @GET("song/most-views")
+    Call<GenericResponse<SongResponse>> getMostViewSong(@Query("page") int page, @Query("size") int size);
+
+    @GET("song/most-likes")
+    Call<GenericResponse<SongResponse>> getMostLikeSong(@Query("page") int page, @Query("size") int size);
+
+    @GET("song/new-released")
+    Call<GenericResponse<SongResponse>> getSongNewReleased(@Query("page") int page, @Query("size") int size);
+
+    @GET("song/{songId}/artists")
+    Call<GenericResponse<List<Artist>>> getArtistsBySongId(@Path("songId") int songId);
+
     Call<ResponseMessage> changePassword(@Body ResetPasswordRequest resetPasswordRequest);
 
     @GET("user/{id_user}/playlists")
