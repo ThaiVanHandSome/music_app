@@ -63,7 +63,7 @@
 
 
                 <RadioButton
-                    android:id="@+id/date_picker_actions"
+                    android:id="@+id/RadioButtonTiengAnh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tiếng Anh"
@@ -108,6 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Đổi mật khẩu"
+            android:id="@+id/ChangePasswordTxt"
             android:textColor="@color/neutral5"
             android:layout_marginBottom="@dimen/spacing_16dp"/>
 
@@ -116,6 +117,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Đăng Xuất"
+            android:id="@+id/LogoutTxt"
             android:textColor="@color/neutral5"
             android:layout_marginBottom="@dimen/spacing_16dp"/>
     </LinearLayout>
