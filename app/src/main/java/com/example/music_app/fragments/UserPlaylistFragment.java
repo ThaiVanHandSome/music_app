@@ -36,6 +36,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UserPlaylistFragment extends Fragment {
+
     FragmentUserPlaylistBinding binding;
     RecyclerView recyclerView;
     PlaylistAdapter adapter;
