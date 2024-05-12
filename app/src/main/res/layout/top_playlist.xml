@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/spacing_16dp">
+
+    <ImageView
+        android:id="@+id/imCoverPicture"
+        android:src="@drawable/cover_picture"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvPlaylistTitle"
+        android:fontFamily="@font/lexend_bold"
+        android:textSize="@dimen/font_heading1"
+        android:textColor="@color/neutral5"
+        android:text="Tên Album/Playlist"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/imCoverPicture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"/>
+    
+    <TextView
+        android:id="@+id/tvPlaylistIntro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaylistTitle"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/lexend_medium"
+        android:textColor="@color/neutral4"
+        android:textAlignment="center"
+        android:textSize="@dimen/font_body"
+        android:text="Giới thiệu"/>
+
+    <TextView
+        android:id="@+id/tvPlaylistSongCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaylistIntro"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/lexend_medium"
+        android:textColor="@color/neutral3"
+        android:textAlignment="center"
+        android:textSize="@dimen/font_body"
+        android:text="20 bài hát"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

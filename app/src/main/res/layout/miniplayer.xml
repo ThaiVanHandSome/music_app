@@ -1,27 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="88dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/transparent"
-
-    android:orientation="horizontal">
+    android:padding="8dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="0dp"
         app:cardElevation="0dp"
-        app:cardBackgroundColor="@android:color/transparent"
+        app:cardBackgroundColor="@color/neutral5"
         app:cardCornerRadius="6dp">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/linear_background_angle0"/>
+        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingHorizontal="6dp"
             android:orientation="vertical">
 
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/pbSongProgress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progress="60"
+                app:trackThickness="4dp"
+                app:trackCornerRadius="4dp"
+                app:trackColor="@color/neutral2"
+                app:indicatorColor="@color/neutral4"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -92,8 +103,8 @@
                     style="?attr/materialIconButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    app:icon="@drawable/ic_24dp_outline_more_vert"
-                    app:iconSize="24dp"
+                    app:icon="@drawable/ic_32dp_filled_play"
+                    app:iconSize="32dp"
                     app:iconTint="@color/neutral5"
                     android:layout_gravity="center_vertical"
                     app:layout_constraintDimensionRatio="H,1:1"
@@ -106,4 +117,5 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
 </FrameLayout>

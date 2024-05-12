@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.music_app"
-        minSdk = 19
+        minSdk = 21
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -49,4 +49,17 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // glide-transformations
+    implementation("jp.wasabeef:glide-transformations:4.3.0")
+    // If you want to use the GPU Filters
+    implementation("jp.co.cyberagent.android:gpuimage:2.1.0")
+
+    //Media3 ExoPlayer
+    implementation("androidx.media3:media3-exoplayer:1.3.1")
+    implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
+    implementation("androidx.media3:media3-ui:1.3.1")
+    implementation("androidx.media3:media3-session:1.1.0")
+
+    implementation("androidx.media:media:1.4.3")
 }
