@@ -56,13 +56,13 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bottom_sheet, container, false);
         binding = BottomSheetBinding.bind(view);
-        binding.itemSong.btnSongAction.setVisibility(View.GONE);
+        binding.itemSong.btnSongOption.setVisibility(View.GONE);
 
         if (songId != null && imageUrl != null && songName != null && artistName != null) {
             // Set content for item song
             Glide.with(requireContext())
                     .load(imageUrl)
-                    .into(binding.itemSong.imvSongImage);
+                    .into(binding.itemSong.imSongAvt);
             binding.itemSong.tvSongTitle.setText(songName);
             binding.itemSong.tvSongArtist.setText(artistName);
             apiService = RetrofitClient.getRetrofit().create(APIService.class);

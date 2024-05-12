@@ -2,6 +2,7 @@ package com.example.music_app.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.databinding.FragmentUserFavouriteBinding;
 import com.example.music_app.decorations.BottomOffsetDecoration;
 import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.SongResponse;
 import com.example.music_app.models.User;
@@ -80,18 +82,18 @@ public class UserFavouriteFragment extends Fragment {
     }
 
     private void getSongLikedByIdUser() {
-        apiService.getSongLikedByIdUser(user.getId()).enqueue(new Callback<SongResponse>() {
+        apiService.getSongLikedByIdUser(user.getId()).enqueue(new Callback<GenericResponse<List<Song>>>() {
             @Override
-            public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
+            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
                 if (response.isSuccessful()) {
                     favouriteSongs = response.body().getData();
-                    songAdapter = new SongAdapter(getContext(), favouriteSongs);
+                    songAdapter = new SongAdapter(getContext(), favouriteSongs, null);
                     songRecyclerView.setAdapter(songAdapter);
                 }
             }
 
             @Override
-            public void onFailure(Call<SongResponse> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
             }
         });
     }

@@ -41,6 +41,7 @@ public class ExoService extends Service {
         super.onCreate();
         exoPlayerQueue = ExoPlayerQueue.getInstance();
         exoPlayer = new ExoPlayer.Builder(this).build();
+        createNotificationChannel();
         exoPlayer.addListener(new Player.Listener() {
             @Override
             public void onPlaybackStateChanged(int playbackState) {

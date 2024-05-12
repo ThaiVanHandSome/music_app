@@ -1,56 +1,38 @@
 package com.example.music_app.activities;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.media3.common.MediaMetadata;
-import androidx.media3.exoplayer.ExoPlayer;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.activity.OnBackPressedCallback;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.media3.common.MediaMetadata;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
 import com.example.music_app.adapters.SongAdapter;
+import com.example.music_app.databinding.ActivityTopicBinding;
+import com.example.music_app.decorations.GradientHelper;
 import com.example.music_app.fragments.SongDetailFragment;
 import com.example.music_app.helpers.SongToMediaItemHelper;
 import com.example.music_app.listeners.PaginationScrollListener;
 import com.example.music_app.models.GenericResponse;
+import com.example.music_app.models.Playlist;
+import com.example.music_app.models.PlaylistResponse;
+import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.SongResponse;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
 import com.example.music_app.services.ExoPlayerQueue;
 import com.google.android.material.button.MaterialButton;
-import com.example.music_app.databinding.ActivityTopicBinding;
-import com.example.music_app.decorations.GradientHelper;
-import com.example.music_app.models.Playlist;
-import com.example.music_app.models.PlaylistResponse;
-import com.example.music_app.models.ResponseMessage;
-import com.example.music_app.models.Song;
-import com.example.music_app.retrofit.RetrofitClient;
-import com.example.music_app.services.APIService;
-import com.google.android.material.button.MaterialButton;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -171,7 +153,6 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                 coverPic.setImageResource(R.drawable.new_released);
                 tvPlaylistTitle.setText(R.string.newreleased_title);
                 tvPlaylistIntro.setText(R.string.newreleased_intro);
-
                 fetchSongs(apiService.getSongNewReleased(page, size));
                 rvListSong.setAdapter(songAdapter);
                 break;
@@ -204,6 +185,7 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
             public void handleOnBackPressed() {
                 getSupportFragmentManager().beginTransaction().hide(songDetailFragment).commit();
                 includeMiniPlayer.setVisibility(View.VISIBLE);
+
             }
         });
     }
@@ -347,9 +329,9 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
         playlistSongCount = binding.includedTopPlaylist.tvPlaylistSongCount;
         binding.includedTopPlaylist.tvPlaylistIntro.setVisibility(View.GONE);
         recyclerView = binding.includedListSong.rvListSong;
-        adapter = new SongAdapter(this, songs);
+        adapter = new SongAdapter(this, songs, null);
         recyclerView.setAdapter(adapter);
-
+//---------------------------------------------------
         //Get idPlaylist from intent
         Intent intent = getIntent();
         int idPlaylist = intent.getIntExtra("SelectedPlaylist", 0);
@@ -409,7 +391,7 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
     }
 
     private void loadPlaylistSongs(List<Song> songs) {
-        adapter = new SongAdapter(this, songs);
+        adapter = new SongAdapter(this, songs, null);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter.notifyDataSetChanged();

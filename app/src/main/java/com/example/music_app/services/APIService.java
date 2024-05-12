@@ -67,22 +67,18 @@ public interface APIService {
     Call<GenericResponse<SongResponse>> getSongNewReleased(@Query("page") int page, @Query("size") int size);
 
     @GET("song/{songId}/artists")
-    Call<GenericResponse<List<Artist>>> getArtistsBySongId(@Path("songId") int songId);
+    Call<GenericResponse<List<Artist>>> getArtistsBySongId(@Path("songId") Long songId);
 
     Call<ResponseMessage> changePassword(@Body ResetPasswordRequest resetPasswordRequest);
 
     @GET("user/{id_user}/playlists")
     Call<ListPlaylistResponse> getPlaylistByIdUser(@Path("id_user") int id_user);
 
-
-    @GET("/user/{id_user}/liked-songs")
-    Call<SongResponse> getSongLikedByIdUser(@Path("id_user") Long id_user);
-
     @GET("user/{id_user}/liked-songs")
-    Call<SongResponse> getSongLikedByIdUser(@Path("id_user") int id_user);
+    Call<GenericResponse<List<Song>>> getSongLikedByIdUser(@Path("id_user") int id_user);
 
     @GET("songs")
-    Call<SongResponse> getAllSongs();
+    Call<GenericResponse<List<Song>>> getAllSongs();
 
     @POST("playlist")
     Call<PlaylistResponse> createPlaylist(@Body PlaylistRequest playlistRequest);
@@ -94,7 +90,7 @@ public interface APIService {
     Call<ResponseMessage> deletePlaylist(@Path("id_playlist") int id_playlist);
 
     @GET("user/{id_user}/not-liked-songs")
-    Call<SongResponse> getNotLikedSongsByIdUser(@Path("id_user") int id_user);
+    Call<GenericResponse<List<Song>>> getNotLikedSongsByIdUser(@Path("id_user") int id_user);
 
     @POST("songLiked/songs")
     Call<ResponseMessage> addSongsToFavourite(@Body SongLikedRequest songLikedRequest);
