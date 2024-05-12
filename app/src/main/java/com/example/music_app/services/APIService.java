@@ -22,6 +22,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -78,7 +79,9 @@ public interface APIService {
     @PATCH("user/{id_user}/change-password")
     Call<ResponseMessage> changePasswordWithIdUser(@Path("id_user") int id_user, @Body ChangePasswordRequest changePasswordRequest);
 
-
+    @Multipart
     @PATCH("user/{id_user}")
-    Call<ResponseMessage> updateProfile(@Path("id_user") int id_user, @Body UpdateProfileRequest updateProfileRequest, @Part MultipartBody.Part imageFile);
+    Call<ResponseMessage> updateProfile(@Part @Path("id_user") int id_user,
+                                        @Body UpdateProfileRequest updateProfileRequest,
+                                        @Part MultipartBody.Part imageFile);
 }

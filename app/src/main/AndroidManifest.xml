@@ -22,16 +22,19 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.HomeSongsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SplashActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.NotificationActivity"
+            android:name=".activities.AddFavouriteSongsActivity"
             android:exported="false" />
         <activity
             android:name=".activities.ChangePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.auth.LoginActivity"
+            android:name=".activities.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".activities.auth.GetStartedActivity"
@@ -52,7 +55,7 @@
             android:name=".retrofit.RetrofitClient"
             android:exported="false" />
         <activity
-            android:name=".activities.AddFavouriteSongsActivity"
+            android:name=".activities.NotificationActivity"
             android:exported="false" />
         <activity
             android:name=".activities.CreatePlaylistActivity"
@@ -70,10 +73,10 @@
             android:name=".activities.TopicActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.HomeActivity"
+            android:name=".activities.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ProfileActivity"
+            android:name=".activities.auth.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

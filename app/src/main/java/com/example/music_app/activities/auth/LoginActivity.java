@@ -211,6 +211,7 @@ public class LoginActivity extends AppCompatActivity {
                     user.setAccessToken(res.getAccessToken());
                     user.setRefreshToken(res.getRefreshToken());
                     user.setProvider(res.getProvider());
+                    // Handle data for realtime
                     Log.d("ProviderLogin", res.getProvider());
                     Log.d("LoginToken", res.getAccessToken());
                     SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);
@@ -306,7 +307,6 @@ public class LoginActivity extends AppCompatActivity {
                     user.setAccessToken(res.getAccessToken());
                     user.setRefreshToken(res.getRefreshToken());
                     user.setProvider(res.getProvider());
-                    Log.d("ProviderLogin", res.getProvider());
                     SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
