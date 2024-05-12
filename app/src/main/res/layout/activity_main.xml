@@ -8,10 +8,10 @@
 
     <TextView
         android:id="@+id/textView"
-        style="@style/Display"
+        style="@style/TextAppearance.App.DisplaySmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/display_text"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -82,7 +82,6 @@ public class OtpVerifyActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
         String email = intent.getStringExtra("email");
-        Log.d("email", email);
 
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.verifyOtp(token, type).enqueue(new Callback<OtpResponse>() {

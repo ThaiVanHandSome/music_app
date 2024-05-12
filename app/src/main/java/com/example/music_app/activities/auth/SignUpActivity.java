@@ -48,8 +48,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         mapping();
 
-        passwordLayout.setHelperText("Vui lòng nhập mật khẩu tối thiểu 6 kí tự, bao gồm cả chữ cái viết hoa, viết thường, kí tự số, kí tự đặc biệt");
-
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,7 +85,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private boolean checkSuccess() {
-        return firstNameLayout.getError() == null && lastNameLayout.getError() == null && phoneNumberLayout.getError() == null && passwordLayout.getError() == null && emailLayout.getError() == null;
+        return firstNameLayout.getError() == null && lastNameLayout.getError() == null && phoneNumberLayout.getError() == null && passwordLayout.getError() == null && emailLayout.getError() == null && passwordAgainLayout.getError() == null;
     }
 
     private void setEvent(TextInputLayout textInputLayout, TextInputEditText textInput, String type) {
@@ -106,16 +104,16 @@ public class SignUpActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 String inp = textInput.getText().toString();
                 if(inp.length() == 0) {
-                    textInputLayout.setError("Vui lòng nhập trường này");
+                    textInputLayout.setError(getText(R.string.error_required_field));
                 } else {
                     if(type.equals("email") && !validate.validateEmail(inp)) {
-                        textInputLayout.setError("Vui lòng nhập email chính xác!");
+                        textInputLayout.setError(getText(R.string.error_invalid_email));
                     } else if(type.equals("phoneNumber") && !validate.validatePhoneNumber(inp)) {
-                        textInputLayout.setError("Vui lòng nhập số điện thoại chính xác!");
+                        textInputLayout.setError(getText(R.string.error_invalid_phone));
                     } else if(type.equals("password") && !validate.validatePassword(inp)) {
-                        textInputLayout.setError("Vui lòng nhập mật khẩu chính xác!");
+                        textInputLayout.setError(getText(R.string.error_invalid_password));
                     } else if(type.equals("passwordAgain") && !passwordTxt.getText().toString().equals(inp)) {
-                        textInputLayout.setError("Mật khẩu không khớp");
+                        textInputLayout.setError(getText(R.string.error_password_not_match));
                     } else {
                         textInputLayout.setError(null);
                     }
@@ -130,20 +128,20 @@ public class SignUpActivity extends AppCompatActivity {
                 if(b) {
                     if(inp.length() != 0) {
                         if(type.equals("email") && !validate.validateEmail(inp)) {
-                            textInputLayout.setError("Vui lòng nhập email chính xác!");
+                            textInputLayout.setError(getText(R.string.error_invalid_email));
                         } else if(type.equals("phoneNumber") && !validate.validatePhoneNumber(inp)) {
-                            textInputLayout.setError("Vui lòng nhập số điện thoại chính xác!");
+                            textInputLayout.setError(getText(R.string.error_invalid_phone));
                         } else if(type.equals("password") && !validate.validatePassword(inp)) {
-                            textInputLayout.setError("Vui lòng nhập mật khẩu chính xác!");
+                            textInputLayout.setError(getText(R.string.error_invalid_password));
                         } else if(type.equals("passwordAgain") && !passwordTxt.getText().toString().equals(inp)) {
-                            textInputLayout.setError("Mật khẩu không khớp");
+                            textInputLayout.setError(getText(R.string.error_password_not_match));
                         }
                         return;
                     }
                     textInputLayout.setError(null);
                 } else {
                     if(inp.length() == 0) {
-                        textInputLayout.setError("Vui lòng nhập trường này");
+                        textInputLayout.setError(getText(R.string.error_required_field));
                     }
                 }
             }

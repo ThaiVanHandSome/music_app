@@ -4,395 +4,189 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.auth.SignUpActivity"
-    android:background="@color/neutral0"
-    android:paddingLeft="@dimen/spacing_12dp"
-    android:paddingRight="@dimen/spacing_12dp"
-    >
+    android:paddingStart="@dimen/spacing_16dp"
+    android:paddingEnd="@dimen/spacing_16dp"
+    tools:context=".activities.auth.SignUpActivity">
 
     <LinearLayout
         android:id="@+id/ln1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        android:weightSum="5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/ln2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:layout_marginEnd="16dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
-                android:text="Họ"
-                android:textColor="@color/neutral5"
-                android:textSize="@dimen/font_heading1"
-                android:textStyle="bold" />
+            android:weightSum="5"
+            android:layout_marginTop="@dimen/spacing_40dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/firstNameLayout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Nhập họ"
-                android:textColorHint="@color/neutral3"
-                app:errorEnabled="true"
-                >
+                android:layout_marginEnd="@dimen/spacing_16dp"
+                android:layout_weight="2"
+                android:hint="@string/hint_surname"
+                style="@style/TextInputFilledStyle">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/firstNameTxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/neutral2"
-                    android:paddingLeft="@dimen/spacing_12dp"
-                    android:paddingTop="@dimen/spacing_16dp"
-                    android:paddingRight="@dimen/spacing_12dp"
-                    android:paddingBottom="@dimen/spacing_16dp"
-                    android:textColor="@color/neutral3"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="@dimen/border_radius_10dp" />
+                    android:inputType="text"
+                    android:textColor="@color/neutral5"/>
             </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
-                android:text="Tên"
-                android:textColor="@color/neutral5"
-                android:textSize="@dimen/font_heading1"
-                android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/lastNameLayout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Nhập tên"
-                android:textColorHint="@color/neutral3"
-                app:errorEnabled="true"
-                >
+                android:layout_weight="3"
+                android:hint="@string/hint_firstname"
+                style="@style/TextInputFilledStyle">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/lastNameTxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/neutral2"
-                    android:paddingLeft="@dimen/spacing_12dp"
-                    android:paddingTop="@dimen/spacing_16dp"
-                    android:paddingRight="@dimen/spacing_12dp"
-                    android:paddingBottom="@dimen/spacing_16dp"
-                    android:textColor="@color/neutral3"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="@dimen/border_radius_10dp" />
+                    android:inputType="text"
+                    android:textColor="@color/neutral5"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ln2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/spacing_16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ln1"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:text="Email"
-            android:textColor="@color/neutral5"
-            android:textSize="@dimen/font_heading1"
-            android:textStyle="bold" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/emailLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nhập email của bạn"
-            android:textColorHint="@color/neutral3"
-            app:errorEnabled="true"
-            >
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/emailTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/neutral2"
-
-                android:paddingLeft="@dimen/spacing_12dp"
-                android:paddingTop="@dimen/spacing_16dp"
-                android:paddingRight="@dimen/spacing_12dp"
-                android:paddingBottom="@dimen/spacing_16dp"
-                android:textColor="@color/neutral3"
-
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:cornerRadius="@dimen/border_radius_10dp" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ln3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/spacing_16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ln2"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:text="Số điện thoại"
-            android:textColor="@color/neutral5"
-            android:textSize="@dimen/font_heading1"
-            android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/phoneNumberLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nhập số điện thoại của bạn"
-            android:textColorHint="@color/neutral3"
-            app:errorEnabled="true"
-            >
+            android:hint="@string/hint_phone_number"
+            style="@style/TextInputFilledStyle">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/phoneNumberTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/neutral2"
-                android:paddingLeft="@dimen/spacing_12dp"
-                android:paddingTop="@dimen/spacing_16dp"
-                android:paddingRight="@dimen/spacing_12dp"
-                android:paddingBottom="@dimen/spacing_16dp"
-                android:textColor="@color/neutral3"
-
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:cornerRadius="@dimen/border_radius_10dp" />
+                android:inputType="number"
+                android:textColor="@color/neutral5"/>
         </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ln4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/spacing_16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ln3"
-        >
 
-        <TextView
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:text="Mật khẩu"
-            android:textColor="@color/neutral5"
-            android:textSize="@dimen/font_heading1"
-            android:textStyle="bold" />
+            android:hint="@string/hint_email"
+            app:helperText="@string/helper_text_email"
+            style="@style/TextInputFilledStyle">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/neutral5" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="password_toggle"
-            android:hint="Nhập mật khẩu của bạn"
-            app:hintAnimationEnabled="false"
-            android:textColorHint="@color/neutral3"
-            app:errorEnabled="true"
-            app:helperTextEnabled="true"
-            >
+            android:hint="@string/hint_password"
+            app:helperText="@string/helper_text_password"
+            style="@style/TextInputFilledStyle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordTxt"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/neutral2"
-                android:paddingLeft="@dimen/spacing_12dp"
-                android:paddingTop="@dimen/spacing_16dp"
-                android:paddingRight="@dimen/spacing_12dp"
-                android:paddingBottom="@dimen/spacing_16dp"
-                android:textColor="@color/neutral3"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:cornerRadius="@dimen/border_radius_10dp"
-                />
+                android:textColor="@color/neutral5"/>
         </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ln5"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/spacing_16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ln4"
-        >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:text="Nhập Lại Mật khẩu"
-            android:textColor="@color/neutral5"
-            android:textSize="@dimen/font_heading1"
-            android:textStyle="bold" />
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordAgainLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/hint_retype_password"
             app:endIconMode="password_toggle"
-            android:hint="Nhập lại mật khẩu của bạn"
-            app:hintAnimationEnabled="false"
-            android:textColorHint="@color/neutral3"
-            app:errorEnabled="true"
-            app:helperTextEnabled="true"
-            >
+            style="@style/TextInputFilledStyle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordAgainTxt"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/neutral2"
-                android:paddingLeft="@dimen/spacing_12dp"
-                android:paddingTop="@dimen/spacing_16dp"
-                android:paddingRight="@dimen/spacing_12dp"
-                android:paddingBottom="@dimen/spacing_16dp"
-                android:textColor="@color/neutral3"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:cornerRadius="@dimen/border_radius_10dp"
+                android:textColor="@color/neutral5"
                 />
         </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ln6"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/spacing_16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ln5"
-        >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:text="Giới tính"
+            android:text="@string/label_gender"
             android:textColor="@color/neutral5"
-            android:textSize="@dimen/font_heading1"
-            android:textStyle="bold" />
+            style="@style/TextAppearance.App.TitleMedium"/>
 
         <RadioGroup
             android:id="@+id/radioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal" >
             <RadioButton
                 android:id="@+id/maleRadio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nam"
+                android:text="@string/radio_choice_male"
                 android:layout_marginEnd="@dimen/spacing_16dp"
                 android:textColor="@color/neutral5"
                 android:tag="1"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:checked="true"
-                />
+                android:checked="true" />
             <RadioButton
                 android:id="@+id/femaleRadio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nữ"
+                android:text="@string/radio_choice_female"
                 android:tag="0"
-                android:textColor="@color/neutral5"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                />
+                android:textColor="@color/neutral5" />
         </RadioGroup>
-    </LinearLayout>
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSignUp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Đăng ký"
-        android:textStyle="bold"
-        android:textSize="@dimen/font_heading1"
-        android:backgroundTint="@color/primary"
-        android:textColor="@color/neutral5"
-        android:layout_marginTop="@dimen/spacing_16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ln6"
-        />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/spacing_20dp"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSignUp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSignUp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Đã có tài khoản?"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:textColor="@color/neutral5"
-            android:layout_marginEnd="4sp"
-            />
-        <TextView
-            android:id="@+id/loginText"
-            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/spacing_24dp"
+            android:text="@string/button_signup"
+            style="@style/PrimaryFilledButton" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Đăng nhập"
-            android:textColor="@color/primary"
-            android:textStyle="bold"
-            android:textSize="16dp"
-            />
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/spacing_24dp"
+            android:gravity="center" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_have_account"
+                android:textColor="@color/neutral5"
+                android:layout_marginEnd="4dp" />
+            <TextView
+                android:id="@+id/loginText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_login"
+                android:textColor="@color/primary" />
+        </LinearLayout>
+
     </LinearLayout>
+
     <FrameLayout
         android:id="@+id/overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        android:visibility="invisible" />
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

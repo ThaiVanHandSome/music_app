@@ -12,8 +12,17 @@ public class LoginResponse {
     private String refreshToken;
     private boolean error;
     private boolean success;
-
     private String message;
+    private String type;
+    private String provider;
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
 
     public int getId() {
         return id;
@@ -109,5 +118,13 @@ public class LoginResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

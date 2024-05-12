@@ -1,7 +1,5 @@
 package com.example.music_app.activities.auth;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,9 +10,11 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.music_app.R;
 import com.example.music_app.models.ForgotPassword;
-import com.example.music_app.models.RegisterResponse;
+import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
 import com.example.music_app.utils.Validate;
@@ -105,14 +105,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         ForgotPassword forgotPassword = new ForgotPassword();
         forgotPassword.setEmail(emailTxt.getText().toString());
-        apiService.sendOtp(forgotPassword).enqueue(new Callback<RegisterResponse>() {
+        apiService.sendOtp(forgotPassword).enqueue(new Callback<ResponseMessage>() {
             @Override
-            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
                 progressBar.setVisibility(View.INVISIBLE);
                 overlay.setVisibility(View.INVISIBLE);
                 overlay.setFocusable(false);
                 overlay.setClickable(false);
-                RegisterResponse res = response.body();
+                ResponseMessage res = response.body();
                 if(res == null) {
                     Toast.makeText(ForgotPasswordActivity.this, "Encounter Wrong!", Toast.LENGTH_SHORT).show();
                     return;
@@ -128,7 +128,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<RegisterResponse> call, Throwable t) {
+            public void onFailure(Call<ResponseMessage> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
                 overlay.setVisibility(View.INVISIBLE);
                 overlay.setFocusable(false);

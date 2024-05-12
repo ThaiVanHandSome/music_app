@@ -25,6 +25,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.TopicActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SongDetailActivity"
             android:exported="false" />
         <activity
@@ -36,7 +39,27 @@
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback"/>
-
+        <activity
+            android:name=".activities.HomeSongsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SplashActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AddFavouriteSongsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.auth.GetStartedActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.auth.ResetPasswordActivity"
             android:exported="false" />
@@ -44,7 +67,7 @@
             android:name=".activities.auth.ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.auth.LoginActivity"
+            android:name=".activities.SettingActivity"
             android:exported="false" />
         <activity
             android:name=".activities.auth.OtpVerifyActivity"
@@ -53,19 +76,25 @@
             android:name=".retrofit.RetrofitClient"
             android:exported="false" />
         <activity
-            android:name=".activities.auth.SignUpActivity"
+            android:name=".activities.NotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.auth.GetStartedActivity"
+            android:name=".activities.CreatePlaylistActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.auth.SignUpActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.LibraryActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.TopicActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.auth.SplashActivity"
+            android:name=".activities.auth.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -73,6 +102,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <service
+            android:name=".services.NotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
 </manifest>

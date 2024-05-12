@@ -1,7 +1,5 @@
 package com.example.music_app.activities.auth;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,9 +11,11 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.music_app.R;
-import com.example.music_app.models.LoginRequest;
-import com.example.music_app.models.RegisterResponse;
+import com.example.music_app.models.ResetPasswordRequest;
+import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
 import com.example.music_app.utils.Validate;
@@ -64,7 +64,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     private void changePassword() {
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        LoginRequest req = new LoginRequest();
+        ResetPasswordRequest req = new ResetPasswordRequest();
         Intent intent = getIntent();
         String email = intent.getStringExtra("email");
         Log.d("email", email);
@@ -72,14 +72,14 @@ public class ResetPasswordActivity extends AppCompatActivity {
         req.setPassword(passwordTxt.getText().toString());
         Log.d("password", passwordTxt.getText().toString());
 
-        apiService.changePassword(req).enqueue(new Callback<RegisterResponse>() {
+        apiService.changePassword(req).enqueue(new Callback<ResponseMessage>() {
             @Override
-            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
                 progressBar.setVisibility(View.INVISIBLE);
                 overlay.setVisibility(View.INVISIBLE);
                 overlay.setFocusable(false);
                 overlay.setClickable(false);
-                RegisterResponse res = response.body();
+                ResponseMessage res = response.body();
                 if(res == null) {
                     Toast.makeText(ResetPasswordActivity.this, "Encounter Error!", Toast.LENGTH_SHORT).show();
                     return;
@@ -93,7 +93,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<RegisterResponse> call, Throwable t) {
+            public void onFailure(Call<ResponseMessage> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
                 overlay.setVisibility(View.INVISIBLE);
                 overlay.setFocusable(false);

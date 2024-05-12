@@ -11,6 +11,16 @@ public class User {
     private String accessToken;
     private String refreshToken;
 
+    private String provider;
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
     public int getId() {
         return id;
     }
