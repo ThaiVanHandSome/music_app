@@ -79,9 +79,11 @@ public interface APIService {
     @PATCH("user/{id_user}/change-password")
     Call<ResponseMessage> changePasswordWithIdUser(@Path("id_user") int id_user, @Body ChangePasswordRequest changePasswordRequest);
 
-    @Multipart
     @PATCH("user/{id_user}")
-    Call<ResponseMessage> updateProfile(@Part @Path("id_user") int id_user,
-                                        @Body UpdateProfileRequest updateProfileRequest,
-                                        @Part MultipartBody.Part imageFile);
+    Call<ResponseMessage> updateProfile(@Path("id_user") String id_user, @Body UpdateProfileRequest updateProfileRequest);
+
+    @Multipart
+    @POST("user/upload")
+    Call<ResponseMessage> uploadAvatar(@Part MultipartBody.Part imageFile, @Part("idUser") String idUser
+    );
 }
