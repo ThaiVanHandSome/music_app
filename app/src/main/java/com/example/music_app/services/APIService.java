@@ -4,7 +4,6 @@ import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.ListPlaylistResponse;
 import com.example.music_app.models.LoginRequest;
 import com.example.music_app.models.LoginResponse;
-import com.example.music_app.models.OAuthLogin;
 import com.example.music_app.models.OtpResponse;
 import com.example.music_app.models.PlaylistRequest;
 import com.example.music_app.models.PlaylistResponse;
@@ -13,6 +12,7 @@ import com.example.music_app.models.RegisterResponse;
 import com.example.music_app.models.ResetPasswordRequest;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.SongLikedRequest;
+import com.example.music_app.models.SongLikedResponse;
 import com.example.music_app.models.SongResponse;
 
 import retrofit2.Call;
@@ -70,4 +70,16 @@ public interface APIService {
 
     @POST("songLiked/songs")
     Call<ResponseMessage> addSongsToFavourite(@Body SongLikedRequest songLikedRequest);
+
+    @GET("songLiked/isUserLikedSong")
+    Call<SongLikedResponse> isUserLikedSong(@Query("songId") Long songId, @Query("userId") Long userId);
+
+    @POST("songLiked/toggle-like")
+    Call<SongLikedResponse> toggleLike(@Query("songId") Long songId, @Query("userId") Long userId);
+
+    @POST("playlistSong/{id_playlist}/{id_song}")
+    Call<ResponseMessage> addSongToPlaylist(@Path("id_playlist") Long id_playlist, @Path("id_song") Long id_song);
+
+    @GET("/playlist")
+    Call<ResponseMessage> isPlaylistNameExists(@Query("name") String name);
 }

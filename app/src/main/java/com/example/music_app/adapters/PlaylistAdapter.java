@@ -20,11 +20,14 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     private final Context context;
     private final List<Playlist> playlists;
 
-    private final OnItemClickListener listener;
+    private OnItemClickListener listener;
 
-    public PlaylistAdapter(Context context, List<Playlist> playlists, OnItemClickListener listener) {
+    public PlaylistAdapter(Context context, List<Playlist> playlists) {
         this.context = context;
         this.playlists = playlists;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 

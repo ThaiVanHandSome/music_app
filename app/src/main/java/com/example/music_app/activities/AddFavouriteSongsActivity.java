@@ -1,13 +1,13 @@
 package com.example.music_app.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.music_app.R;
 import com.example.music_app.adapters.SongAddToLibraryAdapter;
@@ -45,7 +45,6 @@ public class AddFavouriteSongsActivity extends AppCompatActivity {
         
         // Binding views
         recyclerView = binding.rvRecommendedSongs;
-        adapter = new SongAddToLibraryAdapter(this, songs);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset)));
@@ -75,7 +74,7 @@ public class AddFavouriteSongsActivity extends AppCompatActivity {
     }
 
     public void addSongToFavourite() {
-        binding.fabAddToFavorite.setOnClickListener(new View.OnClickListener() {
+        binding.fabAddToFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SongLikedRequest songLikedRequest = new SongLikedRequest();
@@ -88,6 +87,7 @@ public class AddFavouriteSongsActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             Intent intent = new Intent(AddFavouriteSongsActivity.this, LibraryActivity.class);
                             startActivity(intent);
+                            finish();
                             Toast.makeText(AddFavouriteSongsActivity.this, getText(R.string.toast_added_song_to_favourite), Toast.LENGTH_SHORT).show();
                         }
                     }

@@ -1,18 +1,9 @@
 package com.example.music_app.activities.auth;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
-import android.credentials.CredentialManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,9 +14,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cloudinary.api.exceptions.ApiException;
-import com.example.music_app.MainActivity;
 import com.example.music_app.R;
 import com.example.music_app.activities.LibraryActivity;
 import com.example.music_app.internals.SharePrefManagerAccount;
@@ -33,9 +29,7 @@ import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.LoginRequest;
 import com.example.music_app.models.LoginResponse;
-import com.example.music_app.models.OAuthLogin;
 import com.example.music_app.models.RegisterRequest;
-import com.example.music_app.models.RegisterResponse;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.User;
 import com.example.music_app.retrofit.RetrofitClient;
@@ -48,7 +42,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
@@ -156,6 +149,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onActivityResult(ActivityResult result) {
             if(result.getResultCode() == RESULT_OK){
                 Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+
                 try {
                     GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
                     AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);

@@ -18,13 +18,14 @@ import com.example.music_app.R;
 import java.util.List;
 
 public class SongHomeAdapter extends RecyclerView.Adapter<SongHomeAdapter.MyViewHolder> {
-    Context context;
-    List<Song> songList;
+    private final Context context;
+    private final List<Song> songList;
 
     public SongHomeAdapter(Context context, List<Song> songList) {
         this.context = context;
         this.songList = songList;
     }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,7 +47,7 @@ public class SongHomeAdapter extends RecyclerView.Adapter<SongHomeAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return 0;
+        return songList.size();
     }
     public class MyViewHolder extends RecyclerView.ViewHolder  {
         public ImageView image;

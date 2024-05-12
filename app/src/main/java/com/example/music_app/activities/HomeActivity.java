@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.music_app.R;
+import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.adapters.SongHomeAdapter;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.SongResponse;
@@ -51,12 +52,23 @@ public class HomeActivity extends AppCompatActivity {
                     Log.e("DataRes", "Code chay vao Res");
                     songList = response.body().getData();
                     Log.e("DataRes", songList.toString());
-//                    songHomeAdapter = new SongHomeAdapter(HomeActivity.this, songList);
-//                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-//                    rvTopThinhHanh.setHasFixedSize(true);
-//                    rvTopThinhHanh.setLayoutManager(layoutManager);
-//                    rvTopThinhHanh.setAdapter(songHomeAdapter);
-//                    songHomeAdapter.notifyDataSetChanged();
+                    apiService.getAllSongs().enqueue(new Callback<SongResponse>() {
+                        @Override
+                        public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
+                            songList = response.body().getData();
+                            songHomeAdapter = new SongHomeAdapter(HomeActivity.this, songList);
+                            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+                            rvTopThinhHanh.setHasFixedSize(true);
+                            rvTopThinhHanh.setLayoutManager(layoutManager);
+                            rvTopThinhHanh.setAdapter(songHomeAdapter);
+                        }
+
+                        @Override
+                        public void onFailure(Call<SongResponse> call, Throwable t) {
+
+                        }
+                    });
+
                 } else {
                     Log.e("DataRes", "No Res");
                 }
