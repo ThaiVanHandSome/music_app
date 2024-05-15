@@ -36,6 +36,7 @@ public class SongToMediaItemHelper {
                     Log.d("SongDetailFragment", "onFailure: " + t.getMessage());
                 }
             });
+            extras.putLong("id", song.getIdSong());
             MediaMetadata metadata = new MediaMetadata.Builder()
                     .setTitle(song.getName())
                     .setExtras(extras)

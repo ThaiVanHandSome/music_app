@@ -19,6 +19,8 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -27,6 +29,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
 import com.example.music_app.activities.BaseActivity;
+import com.example.music_app.activities.SongDetailActivity;
 import com.example.music_app.services.ExoBuilderService;
 import com.example.music_app.services.ExoPlayerQueue;
 import com.example.music_app.services.ExoService;
@@ -38,6 +41,7 @@ import com.google.android.material.button.MaterialButton;
 import java.util.Formatter;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 
@@ -47,18 +51,15 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     SeekBar seekBar;
     TextView tvSongTitle, tvArtistName, tvCurrentTime, tvDuration;
     MaterialButton btnRepeat, btnShuffle, btnPrevious, btnPlay, btnNext;
-    ImageView imSongAvt;
+    CircleImageView imSongAvt;
 
     private ExoService exoService;
     private ExoBuilderService exoBuilderService;
     private ExoPlayerQueue exoPlayerQueue;
+    private RotateAnimation rotateAnimation;
 
     public SongDetailFragment() {
 
-    }
-
-    public ExoPlayer getExoPlayer() {
-        return exoPlayer;
     }
 
     public static SongDetailFragment newInstance() {
@@ -70,6 +71,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -77,14 +79,6 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         super.onStart();
         exoPlayerQueue = ExoPlayerQueue.getInstance();
 
-        if (getActivity() instanceof BaseActivity) {
-            exoPlayer = ((BaseActivity) getActivity()).getExoPlayer();
-            if (exoPlayer.getCurrentMediaItem() == null) {
-                playPlaylist();
-            } else {
-                updateSongAsset(exoPlayer.getCurrentMediaItem().mediaMetadata);
-            }
-        }
         if (exoPlayerQueue.isShuffle()) {
             btnShuffle.setIconTint(getResources().getColorStateList(R.color.primary));
         } else {
@@ -120,9 +114,11 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
                     if (exoPlayer.isPlaying()) {
                         exoPlayer.pause();
                         btnPlay.setIcon(getResources().getDrawable(R.drawable.ic_32dp_filled_play));
+                        imSongAvt.clearAnimation();
                     } else {
                         exoPlayer.play();
                         btnPlay.setIcon(getResources().getDrawable(R.drawable.ic_32dp_filled_pause));
+                        imSongAvt.startAnimation(rotateAnimation);
                     }
                 }
             }
@@ -205,6 +201,10 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         btnNext = view.findViewById(R.id.btnNext);
 
         handler = new Handler();
+        if (getActivity() instanceof BaseActivity) {
+            exoPlayer = ((BaseActivity) getActivity()).getExoPlayer();
+            playPlaylist();
+        }
 
 
         return view;
@@ -213,26 +213,36 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (exoPlayer != null) {
-            if (exoPlayer.getCurrentMediaItem() != null) {
-                MediaItem currentSong = exoPlayer.getCurrentMediaItem();
-                MediaMetadata metadata = currentSong.mediaMetadata;
-                updateSongAsset(metadata);
-                handler.post(updateMediaRunable);
-            }
-        }
+//        if (exoPlayer != null) {
+//            if (exoPlayer.getCurrentMediaItem() != null) {
+//                MediaItem currentSong = exoPlayer.getCurrentMediaItem();
+//                MediaMetadata metadata = currentSong.mediaMetadata;
+//                updateSongAsset(metadata);
+//                handler.post(updateMediaRunable);
+//            }
+//        }
     }
-
-
 
     @OptIn(markerClass = UnstableApi.class)
     private void playPlaylist() {
-        exoPlayer.clearMediaItems();
-        if (exoPlayerQueue.isShuffle()) exoPlayerQueue.shuffle();
-        exoPlayer.setMediaItems(exoPlayerQueue.getCurrentQueue());
-        exoPlayer.prepare();
-        exoPlayer.seekTo(exoPlayerQueue.getCurrentPosition(), 0);
-        exoPlayer.play();
+        if (exoPlayerQueue == null) {
+            exoPlayerQueue = ExoPlayerQueue.getInstance();
+        }
+        long currentSongId = -1;
+        if (exoPlayer.getCurrentMediaItem() != null && exoPlayer.getCurrentMediaItem().mediaMetadata.extras != null) {
+            currentSongId = exoPlayer.getCurrentMediaItem().mediaMetadata.extras.getLong("id");
+        }
+        long newSongId = exoPlayerQueue.getCurrentMediaItem().mediaMetadata.extras.getLong("id");
+        if (currentSongId != newSongId) {
+            exoPlayer.clearMediaItems();
+            if (exoPlayerQueue.isShuffle()) exoPlayerQueue.shuffle();
+            exoPlayer.setMediaItems(exoPlayerQueue.getCurrentQueue());
+            exoPlayer.prepare();
+            exoPlayer.seekTo(exoPlayerQueue.getCurrentPosition(), 0);
+            exoPlayer.play();
+        } else {
+            if (!exoPlayer.isPlaying()) exoPlayer.play();
+        }
         updateSongAsset(exoPlayerQueue.getCurrentMediaItem().mediaMetadata);
 
         exoPlayer.addListener(new Player.Listener() {
@@ -257,18 +267,6 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         });
         btnPlay.setIcon(getResources().getDrawable(R.drawable.ic_32dp_filled_pause));
     }
-
-    @OptIn(markerClass = UnstableApi.class)
-    public void onNextClicked() {
-        exoPlayer.seekToNextMediaItem();
-    }
-
-
-    @OptIn(markerClass = UnstableApi.class)
-    public void onPreviousClicked() {
-        exoPlayer.seekToPreviousMediaItem();
-    }
-
 
     private Runnable updateMediaRunable = new Runnable() {
         @OptIn(markerClass = UnstableApi.class) @Override
@@ -336,8 +334,20 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
                     .load(metadata.artworkUri)
                     .transform(new RoundedCornersTransformation(30, 0))
                     .into(imSongAvt);
+
+            rotateAnimation = new RotateAnimation(
+                    0, 360,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f);
+
+            rotateAnimation.setDuration(20000);
+            rotateAnimation.setRepeatCount(Animation.INFINITE);
+
+            imSongAvt.startAnimation(rotateAnimation);
         }
     }
 
-
+    public ExoPlayer getExoPlayer() {
+        return exoPlayer;
+    }
 }

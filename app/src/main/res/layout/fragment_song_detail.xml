@@ -39,7 +39,7 @@
             android:textSize="@dimen/font_heading2"
             app:layout_constraintTop_toBottomOf="@+id/tvArtistName" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imSongAvt"
             android:layout_width="@dimen/image_300dp"
             android:layout_height="@dimen/image_300dp"

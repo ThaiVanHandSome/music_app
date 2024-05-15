@@ -71,9 +71,7 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topic);
-
         initMiniPlayer();
-
         exoPlayerQueue = ExoPlayerQueue.getInstance();
         topic = getIntent().getStringExtra("topic");
 
@@ -180,14 +178,80 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
             }
         });
 
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                getSupportFragmentManager().beginTransaction().hide(songDetailFragment).commit();
-                includeMiniPlayer.setVisibility(View.VISIBLE);
+//        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                getSupportFragmentManager().beginTransaction().hide(songDetailFragment).commit();
+//                includeMiniPlayer.setVisibility(View.VISIBLE);
+//
+//            }
+//        });
 
-            }
-        });
+//        binding = ActivityTopicBinding.inflate(getLayoutInflater(), null, false);
+//        setContentView(binding.getRoot());
+//        //Binding
+//        deletePlaylistButton = binding.includedTopPlaylistOption.btnDeletePlaylist;
+//        playlistImage = binding.includedTopPlaylist.imCoverPicture;
+//        playlistName = binding.includedTopPlaylist.tvPlaylistTitle;
+//        playlistSongCount = binding.includedTopPlaylist.tvPlaylistSongCount;
+//        binding.includedTopPlaylist.tvPlaylistIntro.setVisibility(View.GONE);
+//        recyclerView = binding.includedListSong.rvListSong;
+//        adapter = new SongAdapter(this, songs, null);
+//        recyclerView.setAdapter(adapter);
+////---------------------------------------------------
+//        //Get idPlaylist from intent
+//        Intent intent = getIntent();
+//
+//        int idPlaylist = intent.getIntExtra("SelectedPlaylist", 0);
+//        if (idPlaylist == 0) {
+//            Log.d("Intent", "No idPlaylist found");
+//            return;
+//        }
+//        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+//        apiService.getPlaylistById(idPlaylist).enqueue(new Callback<PlaylistResponse>() {
+//            @Override
+//            public void onResponse(Call<PlaylistResponse> call, Response<PlaylistResponse> response) {
+//                if (response.isSuccessful()) {
+//                    Playlist playlist = response.body().getData();
+//                    if (playlist != null) {
+//                        loadTopPlaylist(playlist);
+//                        loadPlaylistSongs(playlist.getSongs());
+//                    } else {
+//                        Log.d("API Response", "Playlist is null");
+//                    }
+//
+//                } else {
+//                    Log.d("API Response", "Request not successful");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<PlaylistResponse> call, Throwable t) {
+//
+//            }
+//        });
+//
+//        APIService finalApiService = apiService;
+//        deletePlaylistButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finalApiService.deletePlaylist(idPlaylist).enqueue(new Callback<ResponseMessage>() {
+//                    @Override
+//                    public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+//                        if (response.isSuccessful()) {
+//                            Log.d("API Response", "Delete playlist successful");
+//                            Intent intent = new Intent(TopicActivity.this, LibraryActivity.class);
+//                            startActivity(intent);
+//                            Toast.makeText(TopicActivity.this, getText(R.string.toast_deleted_playlist), Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<ResponseMessage> call, Throwable t) {
+//                    }
+//                });
+//            }
+//        });
     }
 
     private void fetchSongs(Call<GenericResponse<SongResponse>> call) {
@@ -277,19 +341,8 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
             exoPlayerQueue.setShuffle(false);
         }
         Log.d("SongClicked", "onSongClick: " + songList.get(position).getName() + " " + songList.get(position).getIdSong());
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-
-        if (songDetailFragment != null) {
-            songDetailFragment.getExoPlayer().stop();
-            fragmentTransaction.hide(songDetailFragment);
-        }
-        songDetailFragment = SongDetailFragment.newInstance();
-        if (songDetailFragment.isAdded()) {
-            fragmentTransaction.replace(R.id.fragment_container, songDetailFragment, "SongDetailFragment").addToBackStack(null);
-        } else {
-            fragmentTransaction.add(R.id.fragment_container, songDetailFragment, "SongDetailFragment").addToBackStack(null);
-        }
-        fragmentTransaction.commit();
+        Intent intent = new Intent(this, SongDetailActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -303,82 +356,10 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
             exoPlayerQueue.setShuffle(false);
         }
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-
-        if (songDetailFragment != null) {
-            songDetailFragment.getExoPlayer().stop();
-            fragmentTransaction.hide(songDetailFragment);
-        }
-
-
-        songDetailFragment = SongDetailFragment.newInstance();
-        if (songDetailFragment.isAdded()) {
-            fragmentTransaction.replace(R.id.fragment_container, songDetailFragment, "SongDetailFragment").addToBackStack(null);
-        } else {
-            fragmentTransaction.add(R.id.fragment_container, songDetailFragment, "SongDetailFragment").addToBackStack(null);
-        }
-        fragmentTransaction.commit();
+        Intent intent = new Intent(this, SongDetailActivity.class);
+        startActivity(intent);
         // Trong Phuc
-        binding = ActivityTopicBinding.inflate(getLayoutInflater(), null, false);
-        setContentView(binding.getRoot());
 
-        //Binding
-        deletePlaylistButton = binding.includedTopPlaylistOption.btnDeletePlaylist;
-        playlistImage = binding.includedTopPlaylist.imCoverPicture;
-        playlistName = binding.includedTopPlaylist.tvPlaylistTitle;
-        playlistSongCount = binding.includedTopPlaylist.tvPlaylistSongCount;
-        binding.includedTopPlaylist.tvPlaylistIntro.setVisibility(View.GONE);
-        recyclerView = binding.includedListSong.rvListSong;
-        adapter = new SongAdapter(this, songs, null);
-        recyclerView.setAdapter(adapter);
-//---------------------------------------------------
-        //Get idPlaylist from intent
-        Intent intent = getIntent();
-        int idPlaylist = intent.getIntExtra("SelectedPlaylist", 0);
-        apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getPlaylistById(idPlaylist).enqueue(new Callback<PlaylistResponse>() {
-            @Override
-            public void onResponse(Call<PlaylistResponse> call, Response<PlaylistResponse> response) {
-                if (response.isSuccessful()) {
-                    Playlist playlist = response.body().getData();
-                    if (playlist != null) {
-                        loadTopPlaylist(playlist);
-                        loadPlaylistSongs(playlist.getSongs());
-                    } else {
-                        Log.d("API Response", "Playlist is null");
-                    }
-
-                } else {
-                    Log.d("API Response", "Request not successful");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PlaylistResponse> call, Throwable t) {
-
-            }
-        });
-
-        deletePlaylistButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                apiService.deletePlaylist(idPlaylist).enqueue(new Callback<ResponseMessage>() {
-                    @Override
-                    public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
-                        if (response.isSuccessful()) {
-                            Log.d("API Response", "Delete playlist successful");
-                            Intent intent = new Intent(TopicActivity.this, LibraryActivity.class);
-                            startActivity(intent);
-                            Toast.makeText(TopicActivity.this, getText(R.string.toast_deleted_playlist), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseMessage> call, Throwable t) {
-                    }
-                });
-            }
-        });
     }
     private void loadTopPlaylist(Playlist playlist) {
         Glide.with(TopicActivity.this)

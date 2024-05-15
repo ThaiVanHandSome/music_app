@@ -144,9 +144,20 @@
 
 
 </androidx.core.widget.NestedScrollView>
+    <include
+        android:id="@+id/miniplayer"
+        layout="@layout/miniplayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="-30dp"
+        app:layout_constraintBottom_toTopOf="@id/navigation"/>
+
     <include layout="@layout/bottom_navigation_bar"
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
