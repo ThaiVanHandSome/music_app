@@ -52,9 +52,6 @@
             android:name=".activities.AddFavouriteSongsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ProfileActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.ChangePasswordActivity"
             android:exported="false" />
         <activity
@@ -92,9 +89,6 @@
             android:exported="false" />
         <activity
             android:name=".activities.LibraryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.TopicActivity"
             android:exported="false" />
         <activity
             android:name=".activities.auth.LoginActivity"
