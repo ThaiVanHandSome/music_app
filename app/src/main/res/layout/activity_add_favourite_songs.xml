@@ -25,16 +25,15 @@
                 android:id="@+id/tv_recommendation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="6"
+                android:layout_weight="1"
                 android:text="@string/label_recomendation"
                 android:textColor="@color/neutral5"
                 style="@style/TextAppearance.App.TitleMedium"/>
 
             <TextView
                 android:id="@+id/tv_clear_choices"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
                 android:gravity="end"
                 android:text="@string/label_clear_choices"
                 android:textColor="@color/primary"/>
@@ -51,7 +50,7 @@
 
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fab_add_to_favorite"
+        android:id="@+id/fab_add_to_favourite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"

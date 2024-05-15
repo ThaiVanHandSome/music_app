@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,6 +14,7 @@ import com.example.music_app.adapters.SongAddToLibraryAdapter;
 import com.example.music_app.databinding.ActivityCreatePlaylistBinding;
 import com.example.music_app.decorations.BottomOffsetDecoration;
 import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Playlist;
 import com.example.music_app.models.PlaylistRequest;
 import com.example.music_app.models.PlaylistResponse;
@@ -25,7 +25,6 @@ import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
 
 import java.util.Collections;
 import java.util.List;
@@ -65,62 +64,94 @@ public class CreatePlaylistActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset)));
         getAllSongs();
         createPlaylist();
-        clearCheckedSongs();
+        clearCheckedSongsIfNeeded();
     }
 
     private void getAllSongs() {
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<SongResponse>() {
+        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
             @Override
-            public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
+            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
                 if (response.isSuccessful()) {
                     songs = response.body().getData();
                     Collections.shuffle(songs);
                     adapter = new SongAddToLibraryAdapter(getApplicationContext(), songs);
                     recyclerView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
                 }
             }
 
             @Override
-            public void onFailure(Call<SongResponse> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
 
             }
         });
 
     }
 
-
-    private void createPlaylist() {
-        binding.fabCreatePlaylist.setOnClickListener(new View.OnClickListener() {
+    /*private void checkPlaylistName() {
+        edtPlaylistName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View view) {
-                PlaylistRequest playlistRequest = new PlaylistRequest();
-                playlistRequest.setIdUser(user.getId());
-                playlistRequest.setName(binding.edtPlaylistName.getText().toString());
-                playlistRequest.setSongIds(adapter.getCheckedSongIds());
-                apiService = RetrofitClient.getRetrofit().create(APIService.class);
-                apiService.createPlaylist(playlistRequest).enqueue(new Callback<PlaylistResponse>() {
-                    @Override
-                    public void onResponse(Call<PlaylistResponse> call, Response<PlaylistResponse> response) {
-                        if (response.isSuccessful()) {
-                            Playlist playlist = response.body().getData();
-                            Intent intent = new Intent(CreatePlaylistActivity.this, LibraryActivity.class);
-                            startActivity(intent);
-                            Toast.makeText(CreatePlaylistActivity.this, getText(R.string.toast_created_playlist), Toast.LENGTH_SHORT).show();
-                        }
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    String playlistName = edtPlaylistName.getText().toString();
+                    if (playlistName.isEmpty()) {
+                        playlistNameLayout.setError(getText(R.string.error_required_field));
+                    } else {
+                        playlistNameLayout.setError(null);
                     }
-
-                    @Override
-                    public void onFailure(Call<PlaylistResponse> call, Throwable t) {
-
-                    }
-                });
+                }
             }
         });
+
+        String playlistName = edtPlaylistName.getText().toString();
+        apiService.isPlaylistNameExists(playlistName).enqueue(new Callback<APIResponse>() {
+            @Override
+            public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
+                if (response.isSuccessful()) {
+                    if ((boolean) response.body().getData()) {
+                        playlistNameLayout.setError(getText(R.string.error_playlist_name_exists));
+                    } else {
+                        playlistNameLayout.setError(null);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse> call, Throwable t) {
+
+            }
+        });
+    }*/
+    private void createPlaylist() {
+            binding.fabCreatePlaylist.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PlaylistRequest playlistRequest = new PlaylistRequest();
+                    playlistRequest.setIdUser(user.getId());
+                    playlistRequest.setName(binding.edtPlaylistName.getText().toString());
+                    playlistRequest.setSongIds(adapter.getCheckedSongIds());
+                    apiService = RetrofitClient.getRetrofit().create(APIService.class);
+                    apiService.createPlaylist(playlistRequest).enqueue(new Callback<PlaylistResponse>() {
+                        @Override
+                        public void onResponse(Call<PlaylistResponse> call, Response<PlaylistResponse> response) {
+                            if (response.isSuccessful()) {
+                                Playlist playlist = response.body().getData();
+                                Intent intent = new Intent(CreatePlaylistActivity.this, LibraryActivity.class);
+                                startActivity(intent);
+                                Toast.makeText(CreatePlaylistActivity.this, getText(R.string.toast_created_playlist), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<PlaylistResponse> call, Throwable t) {
+
+                        }
+                    });
+                }
+            });
     }
 
-    private void clearCheckedSongs() {
+    private void clearCheckedSongsIfNeeded() {
         binding.tvClearChoices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

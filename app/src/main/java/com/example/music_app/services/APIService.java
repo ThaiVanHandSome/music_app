@@ -1,19 +1,26 @@
 package com.example.music_app.services;
 
+import com.example.music_app.models.Artist;
+import com.example.music_app.models.ForgotPassword;
+import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.ChangePasswordRequest;
 import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.ListPlaylistResponse;
 import com.example.music_app.models.LoginRequest;
 import com.example.music_app.models.LoginResponse;
-import com.example.music_app.models.OAuthLogin;
 import com.example.music_app.models.OtpResponse;
 import com.example.music_app.models.PlaylistRequest;
 import com.example.music_app.models.PlaylistResponse;
 import com.example.music_app.models.RegisterRequest;
 import com.example.music_app.models.RegisterResponse;
+import com.example.music_app.models.Song;
+import com.example.music_app.models.SongResponse;
+
+import java.util.List;
 import com.example.music_app.models.ResetPasswordRequest;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.SongLikedRequest;
+import com.example.music_app.models.SongLikedResponse;
 import com.example.music_app.models.SongResponse;
 import com.example.music_app.models.UpdateProfileRequest;
 
@@ -46,20 +53,32 @@ public interface APIService {
     Call<ResponseMessage> sendOtp(@Body ForgotPassword forgotPassword);
 
     @PATCH("user/forgot-password")
+    Call<RegisterResponse> changePassword(@Body LoginRequest loginRequest);
+
+
+    // Songs API
+    @GET("song/most-views")
+    Call<GenericResponse<SongResponse>> getMostViewSong(@Query("page") int page, @Query("size") int size);
+
+    @GET("song/most-likes")
+    Call<GenericResponse<SongResponse>> getMostLikeSong(@Query("page") int page, @Query("size") int size);
+
+    @GET("song/new-released")
+    Call<GenericResponse<SongResponse>> getSongNewReleased(@Query("page") int page, @Query("size") int size);
+
+    @GET("song/{songId}/artists")
+    Call<GenericResponse<List<Artist>>> getArtistsBySongId(@Path("songId") Long songId);
+
     Call<ResponseMessage> changePassword(@Body ResetPasswordRequest resetPasswordRequest);
 
     @GET("user/{id_user}/playlists")
     Call<ListPlaylistResponse> getPlaylistByIdUser(@Path("id_user") int id_user);
 
-
-    @GET("/user/{id_user}/liked-songs")
-    Call<SongResponse> getSongLikedByIdUser(@Path("id_user") Long id_user);
-
     @GET("user/{id_user}/liked-songs")
-    Call<SongResponse> getSongLikedByIdUser(@Path("id_user") int id_user);
+    Call<GenericResponse<List<Song>>> getSongLikedByIdUser(@Path("id_user") int id_user);
 
     @GET("songs")
-    Call<SongResponse> getAllSongs();
+    Call<GenericResponse<List<Song>>> getAllSongs();
 
     @POST("playlist")
     Call<PlaylistResponse> createPlaylist(@Body PlaylistRequest playlistRequest);
@@ -71,7 +90,7 @@ public interface APIService {
     Call<ResponseMessage> deletePlaylist(@Path("id_playlist") int id_playlist);
 
     @GET("user/{id_user}/not-liked-songs")
-    Call<SongResponse> getNotLikedSongsByIdUser(@Path("id_user") int id_user);
+    Call<GenericResponse<List<Song>>> getNotLikedSongsByIdUser(@Path("id_user") int id_user);
 
     @POST("songLiked/songs")
     Call<ResponseMessage> addSongsToFavourite(@Body SongLikedRequest songLikedRequest);
@@ -86,4 +105,19 @@ public interface APIService {
     @POST("user/upload")
     Call<ResponseMessage> uploadAvatar(@Part MultipartBody.Part imageFile, @Part("idUser") String idUser
     );
+    Call<ResponseMessage> updateProfile(@Part @Path("id_user") int id_user,
+                                        @Body UpdateProfileRequest updateProfileRequest,
+                                        @Part MultipartBody.Part imageFile);
+
+    @GET("songLiked/isUserLikedSong")
+    Call<SongLikedResponse> isUserLikedSong(@Query("songId") Long songId, @Query("userId") Long userId);
+
+    @POST("songLiked/toggle-like")
+    Call<SongLikedResponse> toggleLike(@Query("songId") Long songId, @Query("userId") Long userId);
+
+    @POST("playlistSong/{id_playlist}/{id_song}")
+    Call<ResponseMessage> addSongToPlaylist(@Path("id_playlist") Long id_playlist, @Path("id_song") Long id_song);
+
+    @GET("/playlist")
+    Call<ResponseMessage> isPlaylistNameExists(@Query("name") String name);
 }

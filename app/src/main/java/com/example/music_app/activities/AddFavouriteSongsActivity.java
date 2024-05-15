@@ -1,19 +1,20 @@
 package com.example.music_app.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.music_app.R;
 import com.example.music_app.adapters.SongAddToLibraryAdapter;
 import com.example.music_app.databinding.ActivityAddFavouriteSongsBinding;
 import com.example.music_app.decorations.BottomOffsetDecoration;
 import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.SongLikedRequest;
@@ -45,19 +46,19 @@ public class AddFavouriteSongsActivity extends AppCompatActivity {
         
         // Binding views
         recyclerView = binding.rvRecommendedSongs;
-        adapter = new SongAddToLibraryAdapter(this, songs);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset)));
         getSongNotInFavourite();
         addSongToFavourite();
+        clearCheckedSongsIfNeeded();
     }
 
     private void getSongNotInFavourite() {
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getNotLikedSongsByIdUser(user.getId()).enqueue(new Callback<SongResponse>() {
+        apiService.getNotLikedSongsByIdUser(user.getId()).enqueue(new Callback<GenericResponse<List<Song>>>() {
             @Override
-            public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
+            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
                 if (response.isSuccessful()) {
                     songs = response.body().getData();
                     Collections.shuffle(songs);
@@ -68,14 +69,14 @@ public class AddFavouriteSongsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<SongResponse> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
 
             }
         });
     }
 
     public void addSongToFavourite() {
-        binding.fabAddToFavorite.setOnClickListener(new View.OnClickListener() {
+        binding.fabAddToFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SongLikedRequest songLikedRequest = new SongLikedRequest();
@@ -88,6 +89,7 @@ public class AddFavouriteSongsActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             Intent intent = new Intent(AddFavouriteSongsActivity.this, LibraryActivity.class);
                             startActivity(intent);
+                            finish();
                             Toast.makeText(AddFavouriteSongsActivity.this, getText(R.string.toast_added_song_to_favourite), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -97,6 +99,15 @@ public class AddFavouriteSongsActivity extends AppCompatActivity {
 
                     }
                 });
+            }
+        });
+    }
+
+    private void clearCheckedSongsIfNeeded() {
+        binding.tvClearChoices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.clearAllCheckedSongs();
             }
         });
     }

@@ -1,5 +1,8 @@
 package com.example.music_app.models;
 
+import androidx.annotation.Nullable;
+
+import java.time.LocalDate;
 import com.google.gson.annotations.SerializedName;
 
 import java.time.LocalDateTime;
@@ -107,5 +110,4 @@ public class Song {
     public void setArtistName(String artistName) {
         this.artistName = artistName;
     }
-
 }

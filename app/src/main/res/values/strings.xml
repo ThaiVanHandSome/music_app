@@ -1,4 +1,16 @@
 <resources>
+    <string name="display_text">Hello World!</string>
+
+
+    <!--  Topic Album  -->
+    <string name="trending_title">Top thịnh hành</string>
+    <string name="trending_intro">Khám phá các bài hát được nghe nhiều nhất</string>
+    <string name="favorite_title">Bài hát yêu thích</string>
+    <string name="favorite_intro">Các bài hát được yêu thích nhất</string>
+    <string name="topartist_title">Nghệ sĩ hàng đầu</string>
+    <string name="topartist_intro">Danh sách các nghệ sĩ có mặt trên CisnW</string>
+    <string name="newreleased_title">Mới phát hành</string>
+    <string name="newreleased_intro">Thưởng thức các bài hát chất lượng vừa ra mắt</string>
     <string name="app_name">CisnW</string>
     <string name="app_description">Âm nhạc dành cho mọi người</string>
 
@@ -6,6 +18,10 @@
     <string name="menu_item_home">Trang chủ</string>
     <string name="menu_item_search">Tìm kiếm</string>
     <string name="menu_item_library">Thư viện</string>
+    <string name="menu_item_add_favourite">Thêm vào yêu thích</string>
+    <string name="menu_item_add_playlist">Thêm vào danh sách phát</string>
+    <string name="menu_item_remove_favourite">Xóa khỏi yêu thích</string>
+    <string name="menu_item_remove_playlist">Xóa khỏi danh sách phát</string>
 
     <!-- Menu item for tab layout in Library -->
     <string name="menu_item_my_playlist">Danh sách phát của tôi</string>
@@ -16,6 +32,7 @@
     <string name="label_songs">%d bài hát</string>
     <string name="label_enter_otp">Nhập mã OTP</string>
     <string name="label_recomendation">Gợi ý cho bạn</string>
+    <string name="label_your_playlist">Danh sách phát của bạn</string>
     <string name="label_clear_choices">Xóa lựa chọn</string>
 
     <!-- Button label -->
@@ -58,8 +75,13 @@
 
     <string name="playlist_name_placeholder">Danh sách phát mới</string>
     <string name="toast_added_song_to_favourite">Thêm bài hát vào yêu thích thành công!</string>
+    <string name="toast_removed_song_to_favourite">Xóa bài hát khỏi yêu thích thành công!</string>
     <string name="toast_created_playlist">Tạo danh sách phát thành công!</string>
     <string name="toast_deleted_playlist">Xóa danh sách phát thành công!</string>
+    <string name="toast_loged_in">Đăng nhập thành công!</string>
 
     <string name="client_id">90467436569-ibtnp170t1rb3fhksb8nhp99b0garii8.apps.googleusercontent.com</string>
+    <string name="toast_added_song_to_playlist">Thêm bài hát vào danh sách phát thành công!</string>
+    <string name="error_playlist_name_exists">Danh sách phát này đã tồn tại!</string>
+>>>>>>> b04fcfb10aa465867953c8b1b63fe7e24b27494d
 </resources>
