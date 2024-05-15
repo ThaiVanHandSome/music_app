@@ -32,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
 
     RecyclerView rvTopTrend, rvFavoriteSong, rvTopArtist, rvNewSong;
     SongHomeAdapter songHomeAdapter;
@@ -48,9 +48,16 @@ public class HomeActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        initMiniPlayer();
         User user = SharePrefManagerUser.getInstance(this).getUser();
         AnhXa();
         title.setText("Chào " + user.getFirstName() + " " + user.getLastName() + " 👋");
@@ -70,30 +77,24 @@ public class HomeActivity extends AppCompatActivity {
         xtt_moinguoiyeuthich.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, HomeSongsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("Keyy", 2);
-                intent.putExtras(bundle);
+                Intent intent = new Intent(HomeActivity.this, TopicActivity.class);
+                intent.putExtra("topic", "favorite");
                 startActivity(intent);
             }
         });
         xtt_nghesihangdau.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, HomeSongsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("Keyy", 3);
-                intent.putExtras(bundle);
+                Intent intent = new Intent(HomeActivity.this, TopicActivity.class);
+                intent.putExtra("topic", "topArtist");
                 startActivity(intent);
             }
         });
         xtt_moiramat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, HomeSongsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("Keyy", 4);
-                intent.putExtras(bundle);
+                Intent intent = new Intent(HomeActivity.this, TopicActivity.class);
+                intent.putExtra("topic", "newReleased");
                 startActivity(intent);
             }
         });
@@ -126,7 +127,6 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.navigation);
     }
     private void GetTopTrend(){
-        Log.e("DataRes", "Code chay vao ham get Thinh Hanh");
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
             @Override
@@ -222,5 +222,20 @@ public class HomeActivity extends AppCompatActivity {
                 Log.d("ErrorReponse", t.getMessage());
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
