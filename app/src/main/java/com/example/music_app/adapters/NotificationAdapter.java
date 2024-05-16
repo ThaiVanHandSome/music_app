@@ -13,17 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
+import com.example.music_app.models.NotificationFirebase;
 import com.example.music_app.models.Song;
 
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
     private final Context context;
-    private final List<Song> songList;
+    private final List<NotificationFirebase> notiList;
 
-    public NotificationAdapter(Context context, List<Song> songList) {
+    public NotificationAdapter(Context context, List<NotificationFirebase> notiList) {
         this.context = context;
-        this.songList = songList;
+        this.notiList = notiList;
     }
     @NonNull
     @Override
@@ -34,17 +35,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NotificationAdapter.MyViewHolder holder, int position) {
-        Song song = songList.get(position);
-        holder.notificaiton.setText(song.getName());
+        NotificationFirebase noti = notiList.get(position);
+        holder.notificaiton.setText(noti.getUserName() + " vừa phát hành ca khúc " + noti.getSongName());
 
         Glide.with(context)
-                .load(song.getImage())
+                .load(noti.getCover())
                 .into(holder.image);
     }
 
     @Override
     public int getItemCount() {
-        return   songList.size();
+        return   notiList.size();
     }
     public class MyViewHolder extends RecyclerView.ViewHolder  {
         public ImageView image;
@@ -57,8 +58,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Song song = songList.get(getAdapterPosition());
-                    Toast.makeText(context.getApplicationContext(), "Bạn đã click vào bài hát" + song.getName(), Toast.LENGTH_SHORT).show();
+                    NotificationFirebase noti = notiList.get(getAdapterPosition());
+                    Toast.makeText(context.getApplicationContext(), "Bạn đã click vào bài hát" + noti.getSongId(), Toast.LENGTH_SHORT).show();
 
                 }
             });

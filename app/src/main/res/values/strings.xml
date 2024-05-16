@@ -83,5 +83,8 @@
     <string name="client_id">90467436569-ibtnp170t1rb3fhksb8nhp99b0garii8.apps.googleusercontent.com</string>
     <string name="toast_added_song_to_playlist">Thêm bài hát vào danh sách phát thành công!</string>
     <string name="error_playlist_name_exists">Danh sách phát này đã tồn tại!</string>
-    >>>>>>> b04fcfb10aa465867953c8b1b63fe7e24b27494d
+
+    // Notification
+    <string name="channel_new_song">My Channel</string>
+    <string name="channel_description">Description Channel</string>
 </resources>

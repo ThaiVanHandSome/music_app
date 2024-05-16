@@ -169,7 +169,6 @@ public class ProfileActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(ProfileActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-
                 }
             }
 
