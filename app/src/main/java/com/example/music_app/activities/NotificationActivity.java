@@ -156,7 +156,10 @@ public class NotificationActivity extends AppCompatActivity {
                 Toast.makeText(NotificationActivity.this, "Call API fail", Toast.LENGTH_SHORT).show();
             }
         });
+
+        notiRef.child("user").child(String.valueOf(user.getId())).child("notification");
     }
+
 
     private void sendNotification(NotificationFirebase notificationFirebase) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NotificationService.CHANNEL_ID)
