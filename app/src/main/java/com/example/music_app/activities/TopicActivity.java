@@ -207,7 +207,6 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 if (page < totalPages) {
                     APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
                     Call<GenericResponse<SongResponse>> call = null;
