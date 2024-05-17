@@ -9,8 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.media3.common.MediaMetadata;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,10 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
 import com.example.music_app.adapters.SongAdapter;
-import com.example.music_app.databinding.ActivityTopicBinding;
-import com.example.music_app.decorations.GradientHelper;
+import com.example.music_app.decorations.BottomOffsetDecoration;
 import com.example.music_app.fragments.SongDetailFragment;
+import com.example.music_app.helpers.DialogHelper;
+import com.example.music_app.helpers.GradientHelper;
 import com.example.music_app.helpers.SongToMediaItemHelper;
+import com.example.music_app.listeners.DialogClickListener;
 import com.example.music_app.listeners.PaginationScrollListener;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Playlist;
@@ -42,8 +42,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TopicActivity extends BaseActivity implements SongAdapter.OnItemClickListener {
-
-//    Hoang Phuc
     private String topic;
     private List<Song> songList;
     private SongAdapter songAdapter;
@@ -53,19 +51,14 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
     private boolean isShuffle = false;
     private ExoPlayerQueue exoPlayerQueue;
     private SongDetailFragment songDetailFragment;
-//    ----------------------------------
-
-//    Trong Phuc
-    ActivityTopicBinding binding;
-    APIService apiService;
-    RecyclerView recyclerView;
-    List<Song> songs;
-    SongAdapter adapter;
-    ImageView playlistImage;
-    TextView playlistName;
-    TextView playlistSongCount;
+    private APIService apiService;
+    ImageView coverPic;
+    TextView tvPlaylistTitle;
+    TextView tvPlaylistIntro;
+    TextView tvPlaySongCount;
     MaterialButton deletePlaylistButton;
-//
+    RecyclerView rvListSong;
+    View includeTopPlaylist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,19 +68,22 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
         exoPlayerQueue = ExoPlayerQueue.getInstance();
         topic = getIntent().getStringExtra("topic");
 
-        View includeTopPlaylist = findViewById(R.id.included_top_playlist);
-        ImageView coverPic = includeTopPlaylist.findViewById(R.id.imCoverPicture);
-        TextView tvPlaylistTitle = includeTopPlaylist.findViewById(R.id.tvPlaylistTitle);
-        TextView tvPlaylistIntro = includeTopPlaylist.findViewById(R.id.tvPlaylistIntro);
-        TextView tvPlaySongCount = includeTopPlaylist.findViewById(R.id.tvPlaylistSongCount);
+        includeTopPlaylist = findViewById(R.id.included_top_playlist);
+        coverPic = includeTopPlaylist.findViewById(R.id.imCoverPicture);
+        tvPlaylistTitle = includeTopPlaylist.findViewById(R.id.tvPlaylistTitle);
+        tvPlaylistIntro = includeTopPlaylist.findViewById(R.id.tvPlaylistIntro);
+        tvPlaySongCount = includeTopPlaylist.findViewById(R.id.tvPlaylistSongCount);
         tvPlaySongCount.setVisibility(View.GONE);
 
         View includeOption = findViewById(R.id.included_top_playlist_option);
 
         View includeListSong = findViewById(R.id.included_list_song);
-        RecyclerView rvListSong = includeListSong.findViewById(R.id.rvListSong);
+        deletePlaylistButton = includeOption.findViewById(R.id.btn_delete_playlist);
+        rvListSong = includeListSong.findViewById(R.id.rvListSong);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         rvListSong.setLayoutManager(layoutManager);
+        RecyclerView.ItemDecoration itemDecoration = new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset));
+        rvListSong.addItemDecoration(itemDecoration);
 //        RecyclerView.ItemDecoration itemDecoration = new VerticalSpaceItemDecoration(R.dimen.spacing_4dp);
 //        rvListSong.addItemDecoration(itemDecoration);
         rvListSong.addOnScrollListener(new PaginationScrollListener(layoutManager) {
@@ -108,7 +104,7 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
             }
         });
         View containerFragment = findViewById(R.id.fragment_container);
-        APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         songList = new ArrayList<>();
         songAdapter = new SongAdapter(getApplicationContext(), songList, this);
         switch (topic) {
@@ -116,8 +112,8 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                 songList.clear();
                 page = 0;
                 size = 10;
-                containerFragment.setBackgroundResource(R.drawable.linear_background_trending);
                 coverPic.setImageResource(R.drawable.trending_cover);
+                GradientHelper.applyGradient(this, includeTopPlaylist, R.drawable.trending_cover);
                 tvPlaylistTitle.setText(R.string.trending_title);
                 tvPlaylistIntro.setText(R.string.trending_intro);
 
@@ -128,8 +124,8 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                 songList.clear();
                 page = 0;
                 size = 10;
-                containerFragment.setBackgroundResource(R.drawable.linear_background_favorite);
                 coverPic.setImageResource(R.drawable.favorite_cover);
+                GradientHelper.applyGradient(this, includeTopPlaylist, R.drawable.favorite_cover);
                 tvPlaylistTitle.setText(R.string.favorite_title);
                 tvPlaylistIntro.setText(R.string.favorite_intro);
 
@@ -137,8 +133,8 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                 rvListSong.setAdapter(songAdapter);
                 break;
             case "topArtist":
-                containerFragment.setBackgroundResource(R.drawable.linear_background_topartist);
                 coverPic.setImageResource(R.drawable.top_artist_cover);
+                GradientHelper.applyGradient(this, includeTopPlaylist, R.drawable.top_artist_cover);
                 tvPlaylistTitle.setText(R.string.topartist_title);
                 tvPlaylistIntro.setText(R.string.topartist_intro);
                 includeOption.setVisibility(View.GONE);
@@ -147,12 +143,19 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                 songList.clear();
                 page = 0;
                 size = 10;
-                containerFragment.setBackgroundResource(R.drawable.linear_background_newreleased);
                 coverPic.setImageResource(R.drawable.new_released);
+                GradientHelper.applyGradient(this, includeTopPlaylist, R.drawable.new_released);
                 tvPlaylistTitle.setText(R.string.newreleased_title);
                 tvPlaylistIntro.setText(R.string.newreleased_intro);
                 fetchSongs(apiService.getSongNewReleased(page, size));
                 rvListSong.setAdapter(songAdapter);
+                break;
+
+            default:
+                tvPlaySongCount.setVisibility(View.VISIBLE);
+                getPlaylistById(Integer.parseInt(topic));
+                rvListSong.setAdapter(songAdapter);
+                deletePlaylistIfNeeded(Integer.parseInt(topic));
                 break;
         }
 
@@ -177,81 +180,6 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                 onPlayPlaylistClick(songList);
             }
         });
-
-//        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-//            @Override
-//            public void handleOnBackPressed() {
-//                getSupportFragmentManager().beginTransaction().hide(songDetailFragment).commit();
-//                includeMiniPlayer.setVisibility(View.VISIBLE);
-//
-//            }
-//        });
-
-//        binding = ActivityTopicBinding.inflate(getLayoutInflater(), null, false);
-//        setContentView(binding.getRoot());
-//        //Binding
-//        deletePlaylistButton = binding.includedTopPlaylistOption.btnDeletePlaylist;
-//        playlistImage = binding.includedTopPlaylist.imCoverPicture;
-//        playlistName = binding.includedTopPlaylist.tvPlaylistTitle;
-//        playlistSongCount = binding.includedTopPlaylist.tvPlaylistSongCount;
-//        binding.includedTopPlaylist.tvPlaylistIntro.setVisibility(View.GONE);
-//        recyclerView = binding.includedListSong.rvListSong;
-//        adapter = new SongAdapter(this, songs, null);
-//        recyclerView.setAdapter(adapter);
-////---------------------------------------------------
-//        //Get idPlaylist from intent
-//        Intent intent = getIntent();
-//
-//        int idPlaylist = intent.getIntExtra("SelectedPlaylist", 0);
-//        if (idPlaylist == 0) {
-//            Log.d("Intent", "No idPlaylist found");
-//            return;
-//        }
-//        apiService = RetrofitClient.getRetrofit().create(APIService.class);
-//        apiService.getPlaylistById(idPlaylist).enqueue(new Callback<PlaylistResponse>() {
-//            @Override
-//            public void onResponse(Call<PlaylistResponse> call, Response<PlaylistResponse> response) {
-//                if (response.isSuccessful()) {
-//                    Playlist playlist = response.body().getData();
-//                    if (playlist != null) {
-//                        loadTopPlaylist(playlist);
-//                        loadPlaylistSongs(playlist.getSongs());
-//                    } else {
-//                        Log.d("API Response", "Playlist is null");
-//                    }
-//
-//                } else {
-//                    Log.d("API Response", "Request not successful");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<PlaylistResponse> call, Throwable t) {
-//
-//            }
-//        });
-//
-//        APIService finalApiService = apiService;
-//        deletePlaylistButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finalApiService.deletePlaylist(idPlaylist).enqueue(new Callback<ResponseMessage>() {
-//                    @Override
-//                    public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
-//                        if (response.isSuccessful()) {
-//                            Log.d("API Response", "Delete playlist successful");
-//                            Intent intent = new Intent(TopicActivity.this, LibraryActivity.class);
-//                            startActivity(intent);
-//                            Toast.makeText(TopicActivity.this, getText(R.string.toast_deleted_playlist), Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<ResponseMessage> call, Throwable t) {
-//                    }
-//                });
-//            }
-//        });
     }
 
     private void fetchSongs(Call<GenericResponse<SongResponse>> call) {
@@ -279,7 +207,6 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 if (page < totalPages) {
                     APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
                     Call<GenericResponse<SongResponse>> call = null;
@@ -358,24 +285,81 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
 
         Intent intent = new Intent(this, SongDetailActivity.class);
         startActivity(intent);
-        // Trong Phuc
 
     }
     private void loadTopPlaylist(Playlist playlist) {
+        tvPlaylistIntro.setVisibility(View.GONE);
         Glide.with(TopicActivity.this)
                 .load(playlist.getImage())
-                .into(playlistImage);
-        playlistName.setText(playlist.getName());
-        playlistSongCount.setText(getString(R.string.label_songs, playlist.getSongCount()));
+                .into(coverPic);
+        tvPlaylistTitle.setText(playlist.getName());
+        tvPlaySongCount.setText(getString(R.string.label_songs, playlist.getSongCount()));
 
-        GradientHelper.applyGradient(this, binding.includedTopPlaylist.getRoot(), playlist.getImage(), R.color.neutral2);
+        GradientHelper.applyGradient(this, includeTopPlaylist, playlist.getImage());
     }
 
     private void loadPlaylistSongs(List<Song> songs) {
-        adapter = new SongAdapter(this, songs, null);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter.notifyDataSetChanged();
+        songAdapter = new SongAdapter(this, songs, null);
+        rvListSong.setAdapter(songAdapter);
+        rvListSong.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+    }
+
+
+    private void getPlaylistById(int idPlaylist) {
+        apiService.getPlaylistById(Integer.parseInt(topic)).enqueue(new Callback<PlaylistResponse>() {
+            @Override
+            public void onResponse(Call<PlaylistResponse> call, Response<PlaylistResponse> response) {
+                if (response.isSuccessful()) {
+                    Playlist playlist = response.body().getData();
+                    if (playlist != null) {
+                        loadTopPlaylist(playlist);
+                        loadPlaylistSongs(playlist.getSongs());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlaylistResponse> call, Throwable t) {
+
+            }
+        });
+    }
+    private void deletePlaylistIfNeeded(int idPlaylist) {
+        deletePlaylistButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogHelper dialog = new DialogHelper(view.getContext(), new DialogClickListener() {
+                    @Override
+                    public void onPositiveButtonClick() {
+                        apiService.deletePlaylist(Integer.parseInt(topic)).enqueue(new Callback<ResponseMessage>() {
+                            @Override
+                            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                                if (response.isSuccessful()) {
+                                    Log.d("API Response", "Delete playlist successful");
+                                    Intent intent = new Intent(TopicActivity.this, LibraryActivity.class);
+                                    startActivity(intent);
+                                    Toast.makeText(TopicActivity.this, getText(R.string.toast_deleted_playlist), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onNegativeButtonClick() { }
+                });
+                dialog.show();
+                dialog.setTitle(getString(R.string.dialog_title_confirm_delete));
+                dialog.setMessage(getString(R.string.dialog_message_confirm_delete));
+                dialog.setPositiveButtonContent(getString(R.string.button_delete));
+                dialog.setNegativeButtonContent(getString(R.string.button_cancel));
+                dialog.setPositiveButtonColor(R.color.error);
+
+            }
+        });
     }
 
 }

@@ -37,6 +37,7 @@ public class SongToMediaItemHelper {
                 }
             });
             extras.putLong("id", song.getIdSong());
+            extras.putInt("position", songList.indexOf(song));
             MediaMetadata metadata = new MediaMetadata.Builder()
                     .setTitle(song.getName())
                     .setExtras(extras)

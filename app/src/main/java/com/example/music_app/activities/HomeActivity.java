@@ -2,10 +2,12 @@ package com.example.music_app.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +17,9 @@ import com.example.music_app.R;
 import com.example.music_app.adapters.ArtistAdapter;
 import com.example.music_app.adapters.NewSongHomeAdapter;
 import com.example.music_app.adapters.SongHomeAdapter;
+import com.example.music_app.helpers.SongToMediaItemHelper;
 import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.listeners.PaginationScrollListener;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.SongResponse;
@@ -26,6 +30,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,9 +40,9 @@ import retrofit2.Response;
 public class HomeActivity extends BaseActivity {
 
     RecyclerView rvTopTrend, rvFavoriteSong, rvTopArtist, rvNewSong;
-    SongHomeAdapter songHomeAdapter;
+    SongHomeAdapter songTrendAdapter, songFavoriteAdapter;
     ArtistAdapter artistAdapter;
-    NewSongHomeAdapter newSongHomeAdapter;
+    NewSongHomeAdapter songNewAdapter;
 
     APIService apiService;
     List<Song> trendSongs, favoriteSongs, NewSongs;
@@ -46,6 +51,57 @@ public class HomeActivity extends BaseActivity {
     TextView title, xtt_topthinhhanh, xtt_moinguoiyeuthich, xtt_nghesihangdau, xtt_moiramat;
 
     BottomNavigationView bottomNavigationView;
+    List<Song> songTrendList, songFavoriteList, songNewList;
+    int page = 0, totalPages;
+    boolean isLastPage = false, isLoading = false;
+
+    private final SongHomeAdapter.OnItemClickListener songTrendItemClick = new SongHomeAdapter.OnItemClickListener() {
+        @Override
+        public void onSongClick(int position) {
+            exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songTrendList));
+            exoPlayerQueue.setCurrentPosition(position);
+            Log.d("HomeActivity", "onSongClick: position " + exoPlayerQueue.getCurrentPosition() + "Recycler view tag: trend");
+            Intent intent = new Intent(getApplicationContext(), SongDetailActivity.class);
+            startActivity(intent);
+        }
+
+        @Override
+        public void onPlayPlaylistClick(List<Song> songList) {
+
+        }
+    };
+
+    private final SongHomeAdapter.OnItemClickListener songFavoriteItemClick = new SongHomeAdapter.OnItemClickListener() {
+        @Override
+        public void onSongClick(int position) {
+            exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songFavoriteList));
+            exoPlayerQueue.setCurrentPosition(position);
+            Log.d("HomeActivity", "onSongClick: position " + position + "Recycler view tag: favorite");
+            Intent intent = new Intent(getApplicationContext(), SongDetailActivity.class);
+            startActivity(intent);
+        }
+
+        @Override
+        public void onPlayPlaylistClick(List<Song> songList) {
+
+        }
+    };
+
+    private final NewSongHomeAdapter.OnItemClickListener songNewItemClick = new NewSongHomeAdapter.OnItemClickListener() {
+        @Override
+        public void onSongClick(int position, String tag) {
+            exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songNewList));
+            exoPlayerQueue.setCurrentPosition(position);
+            Log.d("HomeActivity", "onSongClick: position " + position + "Recycler view tag: newReleased");
+            Intent intent = new Intent(getApplicationContext(), SongDetailActivity.class);
+            startActivity(intent);
+        }
+
+        @Override
+        public void onPlayPlaylistClick(List<Song> songList) {
+
+        }
+    };
 
     @Override
     protected void onStart() {
@@ -60,11 +116,19 @@ public class HomeActivity extends BaseActivity {
         initMiniPlayer();
         User user = SharePrefManagerUser.getInstance(this).getUser();
         AnhXa();
+
+        songTrendAdapter = new SongHomeAdapter(getApplicationContext(), new ArrayList<>(), songTrendItemClick);
+
+        songFavoriteAdapter = new SongHomeAdapter(getApplicationContext(), new ArrayList<>(), songFavoriteItemClick);
+
+        songNewAdapter = new NewSongHomeAdapter(getApplicationContext(), new ArrayList<>(), songNewItemClick);
         title.setText("Chào " + user.getFirstName() + " " + user.getLastName() + " 👋");
         GetTopTrend();
         GetFavoriteSong();
         GetTopArtist();
         GetNewSong();
+
+
 
         xtt_topthinhhanh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,41 +192,44 @@ public class HomeActivity extends BaseActivity {
     }
     private void GetTopTrend(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
+        apiService.getMostViewSong(0, 5).enqueue(new Callback<GenericResponse<SongResponse>>() {
             @Override
-            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
+            public void onResponse(Call<GenericResponse<SongResponse>> call, Response<GenericResponse<SongResponse>> response) {
                 if (response.isSuccessful()) {
-                    trendSongs = response.body().getData();
-                    songHomeAdapter = new SongHomeAdapter(getApplicationContext(), trendSongs);
+                    songTrendList = new ArrayList<>();
+                    songTrendList = response.body().getData().getContent();
+                    songTrendAdapter.setSongList(songTrendList);
                     rvTopTrend.setHasFixedSize(true);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL,false );
                     rvTopTrend.setLayoutManager(layoutManager);
-                    rvTopTrend.setAdapter(songHomeAdapter);
+                    rvTopTrend.setAdapter(songTrendAdapter);
                 } else {
                     Log.e("DataRes", "No Res");
-
                 }
             }
 
             @Override
-            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<SongResponse>> call, Throwable t) {
                 Log.d("ErrorReponse", t.getMessage());
             }
 
         });
+
+
     }
     private void GetFavoriteSong(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
+        apiService.getMostLikeSong(0, 5).enqueue(new Callback<GenericResponse<SongResponse>>() {
             @Override
-            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
+            public void onResponse(Call<GenericResponse<SongResponse>> call, Response<GenericResponse<SongResponse>> response) {
                 if (response.isSuccessful()) {
-                    favoriteSongs = response.body().getData();
-                    songHomeAdapter = new SongHomeAdapter(getApplicationContext(), favoriteSongs);
+                    songFavoriteList = new ArrayList<>();
+                    songFavoriteList = response.body().getData().getContent();
+                    songFavoriteAdapter.setSongList(songFavoriteList);
                     rvFavoriteSong.setHasFixedSize(true);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL,false );
                     rvFavoriteSong.setLayoutManager(layoutManager);
-                    rvFavoriteSong.setAdapter(songHomeAdapter);
+                    rvFavoriteSong.setAdapter(songFavoriteAdapter);
                 } else {
                     Log.e("DataRes", "No Res");
 
@@ -170,10 +237,11 @@ public class HomeActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<SongResponse>> call, Throwable t) {
                 Log.d("ErrorReponse", t.getMessage());
             }
         });
+
     }
     private void GetTopArtist(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
@@ -181,15 +249,15 @@ public class HomeActivity extends BaseActivity {
             @Override
             public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
                 if (response.isSuccessful()) {
-                    NewSongs = response.body().getData();
-                    artistAdapter = new ArtistAdapter(getApplicationContext(), NewSongs);
+                    songNewList = new ArrayList<>();
+                    songNewList = response.body().getData();
+                    artistAdapter = new ArtistAdapter(getApplicationContext(), songNewList);
                     rvTopArtist.setHasFixedSize(true);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL,false );
                     rvTopArtist.setLayoutManager(layoutManager);
                     rvTopArtist.setAdapter(artistAdapter);
                 } else {
                     Log.e("DataRes", "No Res");
-
                 }
             }
 
@@ -200,28 +268,49 @@ public class HomeActivity extends BaseActivity {
         });
     }
     private void GetNewSong(){
+        songNewList = new ArrayList<>();
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
-            @Override
-            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
-                if (response.isSuccessful()) {
-                    NewSongs = response.body().getData();
-                    newSongHomeAdapter = new NewSongHomeAdapter(getApplicationContext(), NewSongs);
-                    rvNewSong.setHasFixedSize(true);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL,false );
-                    rvNewSong.setLayoutManager(layoutManager);
-                    rvNewSong.setAdapter(newSongHomeAdapter);
-                } else {
-                    Log.e("DataRes", "No Res");
 
-                }
-            }
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL,false );
+        rvNewSong.setLayoutManager(layoutManager);
 
-            @Override
-            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
-                Log.d("ErrorReponse", t.getMessage());
-            }
-        });
+        page = 0;
+
+        songNewAdapter = new NewSongHomeAdapter(getApplicationContext(), songNewList, songNewItemClick);
+
+        fetchSongs(apiService.getSongNewReleased(page, 10));
+        rvNewSong.setAdapter(songNewAdapter);
+
+
+//        NestedScrollView nestedScrollView = findViewById(R.id.nested_scroll_view);
+//        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
+//                    if (!isLoading && !isLastPage) {
+//                        loadNextPage();
+//                    }
+//                }
+//            }
+//        });
+//        rvNewSong.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+//            @Override
+//            public void loadMoreItems() {
+//                isLoading = true;
+//                loadNextPage();
+//                Log.d("HomeActivity", "loadMoreItems: load page " + page + "/" + totalPages);
+//            }
+//
+//            @Override
+//            public boolean isLastPage() {
+//                return isLastPage;
+//            }
+//
+//            @Override
+//            public boolean isLoading() {
+//                return isLoading;
+//            }
+//        });
     }
 
     @Override
@@ -238,4 +327,44 @@ public class HomeActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+
+
+    private void loadNextPage() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (page < totalPages) {
+                    fetchSongs(apiService.getSongNewReleased(page, 5));
+                }
+                isLoading = false;
+                if (page == totalPages) {
+                    isLastPage = true;
+                }
+                Log.d("HomeActivity", "run: Loading page" + page + "/" + totalPages);
+            }
+        }, 500);
+    }
+
+    private void fetchSongs(Call<GenericResponse<SongResponse>> call) {
+        call.enqueue(new Callback<GenericResponse<SongResponse>>() {
+            @Override
+            public void onResponse(Call<GenericResponse<SongResponse>> call, Response<GenericResponse<SongResponse>> response) {
+                if (response.isSuccessful()) {
+                    List<Song> newList =  response.body().getData().getContent();
+                    totalPages = response.body().getData().getTotalPages();
+                    songNewList.addAll(newList);
+                    page++;
+                    songNewAdapter.notifyDataSetChanged();
+                    Log.d("HomeActivity", "Total pages: " + response.body().getData().getTotalPages());
+                }
+            }
+            @Override
+            public void onFailure(Call<GenericResponse<SongResponse>> call, Throwable t) {
+                Log.d("HomeActivity", "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
 }

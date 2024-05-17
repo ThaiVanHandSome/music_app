@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.SongDetailFragment"
-    android:background="@drawable/linear_background_angle0">
+    android:background="@drawable/background_gradient">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +20,6 @@
             android:layout_marginEnd="22dp"
             android:fontFamily="@font/lexend_medium"
             android:gravity="center_horizontal"
-            android:text="Nghệ sĩ"
             android:textColor="@color/neutral4"
             android:textSize="@dimen/font_label"
             app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +33,6 @@
             android:layout_marginEnd="22dp"
             android:fontFamily="@font/lexend_semibold"
             android:gravity="center_horizontal"
-            android:text="Tên bài hát"
             android:textColor="@color/neutral5"
             android:textSize="@dimen/font_heading2"
             app:layout_constraintTop_toBottomOf="@+id/tvArtistName" />
@@ -44,7 +42,6 @@
             android:layout_width="@dimen/image_300dp"
             android:layout_height="@dimen/image_300dp"
             android:layout_marginTop="40dp"
-            android:src="@drawable/ic_song_avt_holder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSongTitle" />
@@ -78,7 +75,6 @@
 
                 <TextView
                     android:id="@+id/tvSongCurrentTime"
-                    android:text="0:00"
                     android:fontFamily="@font/lexend_bold"
                     android:textColor="@color/neutral4"
                     android:textSize="@dimen/font_label"
@@ -89,7 +85,6 @@
 
                 <TextView
                     android:id="@+id/tvSongDuration"
-                    android:text="4:13"
                     android:fontFamily="@font/lexend_bold"
                     android:textColor="@color/neutral4"
                     android:textSize="@dimen/font_label"
@@ -183,7 +178,78 @@
             </RelativeLayout>
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_40dp"
+            android:paddingLeft="@dimen/spacing_16dp"
+            android:paddingRight="@dimen/spacing_16dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llSongControl"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bình luận"
+                android:textSize="@dimen/font_heading1"
+                android:textColor="@color/neutral5"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/spacing_8dp"
+                >
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/avatarImageView"
+                    android:layout_width="@dimen/image_40dp"
+                    android:layout_height="@dimen/image_40dp"
+                    android:src="@drawable/cover_picture"
+                    />
+                <EditText
+                    android:id="@+id/commentTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/font_body"
+                    android:textColor="@color/neutral5"
+                    android:layout_marginStart="@dimen/spacing_8dp"
+                    android:layout_marginEnd="@dimen/spacing_4dp"
+                    />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/publishCommentBtn"
+                    android:layout_width="90sp"
+                    android:layout_height="wrap_content"
+                    android:text="Đăng"
+                    />
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewCmt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <FrameLayout
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 </FrameLayout>
