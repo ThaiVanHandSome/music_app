@@ -322,14 +322,16 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        if (exoPlayer != null) {
-//            if (exoPlayer.getCurrentMediaItem() != null) {
-//                MediaItem currentSong = exoPlayer.getCurrentMediaItem();
-//                MediaMetadata metadata = currentSong.mediaMetadata;
-//                updateSongAsset(metadata);
-//                handler.post(updateMediaRunable);
-//            }
-//        }
+        if (exoPlayer != null) {
+            if (exoPlayer.getCurrentMediaItem() != null) {
+                MediaItem currentSong = exoPlayer.getCurrentMediaItem();
+                MediaMetadata metadata = currentSong.mediaMetadata;
+                updateSongAsset(metadata);
+                handler.post(updateMediaRunable);
+                btnPlay.performClick();
+                btnPlay.performClick();
+            }
+        }
     }
 
     @OptIn(markerClass = UnstableApi.class)
@@ -345,9 +347,11 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         if (currentSongId != newSongId) {
             exoPlayer.clearMediaItems();
             if (exoPlayerQueue.isShuffle()) exoPlayerQueue.shuffle();
-            exoPlayer.setMediaItems(exoPlayerQueue.getCurrentQueue());
+            List<MediaItem> queue = exoPlayerQueue.getCurrentQueue();
+            int currentPos = exoPlayerQueue.getCurrentPosition();
+            exoPlayer.setMediaItems(queue);
             exoPlayer.prepare();
-            exoPlayer.seekTo(exoPlayerQueue.getCurrentPosition(), 0);
+            exoPlayer.seekTo(currentPos, 0);
             exoPlayer.play();
         } else {
             if (!exoPlayer.isPlaying()) exoPlayer.play();

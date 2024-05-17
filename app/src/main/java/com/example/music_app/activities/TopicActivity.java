@@ -103,7 +103,7 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                 return isLoading;
             }
         });
-        View containerFragment = findViewById(R.id.fragment_container);
+
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         songList = new ArrayList<>();
         songAdapter = new SongAdapter(getApplicationContext(), songList, this);

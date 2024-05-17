@@ -16,6 +16,5 @@
         <item name="fontFamily">@font/lexend_semibold</item>
     </style>
 
-    <style name="Theme.Music_app" parent="Base.Theme.Music_app">
-    </style>
+    <style name="Theme.Music_app" parent="Base.Theme.Music_app"></style>
 </resources>
