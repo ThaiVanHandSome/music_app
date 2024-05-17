@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +45,7 @@ public class UserPlaylistFragment extends Fragment {
 
     LinearLayout linearLayoutAddToLibrary;
 
-    User user = SharePrefManagerUser.getInstance(this.getContext()).getUser();
+    User user;
     public UserPlaylistFragment() {
         // Required empty public constructor
     }
@@ -58,6 +59,7 @@ public class UserPlaylistFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentUserPlaylistBinding.inflate(inflater, container, false);
+        user = SharePrefManagerUser.getInstance(this.getContext()).getUser();
 
         // Set text for tvAddToLibrary in include layout
         binding.linearLayoutAddToLibary.tvAddToLibrary.setText(R.string.label_add_new_playlist);
@@ -79,6 +81,7 @@ public class UserPlaylistFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.addItemDecoration(new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset)));
         getPlaylistByIdUser();
+        refreshFavouriteSongsIfNeeded();
         return binding.getRoot();
     }
 
@@ -88,13 +91,13 @@ public class UserPlaylistFragment extends Fragment {
             @Override
             public void onResponse(Call<ListPlaylistResponse> call, Response<ListPlaylistResponse> response) {
                 if (response.isSuccessful()) {
-                    playlists.addAll(response.body().getData());
+                    playlists = response.body().getData();
                     adapter = new PlaylistAdapter(getContext(), playlists);
                     adapter.setOnItemClickListener(new PlaylistAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(Playlist playlist) {
                             Intent intent = new Intent(getContext(), TopicActivity.class);
-                            intent.putExtra("SelectedPlaylist", playlist.getIdPlaylist());
+                            intent.putExtra("topic", String.valueOf(playlist.getIdPlaylist()));
                             startActivity(intent);
                         }
                     });
@@ -105,6 +108,16 @@ public class UserPlaylistFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ListPlaylistResponse> call, Throwable t) {
+            }
+        });
+    }
+
+    private void refreshFavouriteSongsIfNeeded() {
+        binding.swipeRefreshLayoutUserPlaylists.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getPlaylistByIdUser();
+                binding.swipeRefreshLayoutUserPlaylists.setRefreshing(false);
             }
         });
     }

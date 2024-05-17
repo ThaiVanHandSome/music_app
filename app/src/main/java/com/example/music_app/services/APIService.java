@@ -118,6 +118,6 @@ public interface APIService {
     @POST("playlistSong/{id_playlist}/{id_song}")
     Call<ResponseMessage> addSongToPlaylist(@Path("id_playlist") Long id_playlist, @Path("id_song") Long id_song);
 
-    @GET("/playlist")
+    @GET("playlist")
     Call<ResponseMessage> isPlaylistNameExists(@Query("name") String name);
 }

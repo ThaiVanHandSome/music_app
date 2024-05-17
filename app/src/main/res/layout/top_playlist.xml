@@ -8,7 +8,6 @@
 
     <ImageView
         android:id="@+id/imCoverPicture"
-        android:src="@drawable/cover_picture"
         android:layout_width="@dimen/image_240dp"
         android:layout_height="@dimen/image_240dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -21,7 +20,6 @@
         android:textSize="@dimen/font_heading1"
         style="@style/TextAppearance.App.HeadlineSmall"
         android:textColor="@color/neutral5"
-        android:text="Tên Album/Playlist"
         android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/imCoverPicture"
         android:layout_width="match_parent"
@@ -37,8 +35,7 @@
         android:fontFamily="@font/lexend_medium"
         android:textColor="@color/neutral4"
         android:textAlignment="center"
-        android:textSize="@dimen/font_body"
-        android:text="Giới thiệu"/>
+        android:textSize="@dimen/font_body"/>
 
     <TextView
         android:id="@+id/tvPlaylistSongCount"
@@ -50,7 +47,6 @@
         android:textColor="@color/neutral3"
         android:textAlignment="center"
         android:textSize="@dimen/font_body"
-        style="@style/TextAppearance.App.LabelMedium"
-        android:text="20 bài hát"/>
+        style="@style/TextAppearance.App.LabelMedium"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
