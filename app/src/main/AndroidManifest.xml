@@ -89,6 +89,10 @@
             android:name=".activities.LibraryActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.AddSongToPlaylistActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".activities.auth.GetStartedActivity"
             android:exported="true">
             <intent-filter>
