@@ -1,20 +1,8 @@
 package com.example.music_app.fragments;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.OptIn;
-import androidx.media3.common.MediaItem;
-import androidx.media3.common.MediaMetadata;
-import androidx.media3.common.Player;
-import androidx.media3.common.util.UnstableApi;
-import androidx.media3.common.util.Util;
-import androidx.media3.exoplayer.ExoPlayer;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +10,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -214,7 +201,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_song_detail, container, false);
+        view = inflater.inflate(R.layout.fragment_song_detail, container, false);
         tvSongTitle = view.findViewById(R.id.tvSongTitle);
         tvArtistName = view.findViewById(R.id.tvArtistName);
         tvCurrentTime = view.findViewById(R.id.tvSongCurrentTime);
