@@ -1,8 +1,20 @@
 package com.example.music_app.fragments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.MediaMetadata;
+import androidx.media3.common.Player;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.common.util.Util;
+import androidx.media3.exoplayer.ExoPlayer;
+
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -22,11 +35,19 @@ import androidx.media3.common.Player;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.common.util.Util;
 import androidx.media3.exoplayer.ExoPlayer;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
 import com.example.music_app.activities.BaseActivity;
+import com.example.music_app.adapters.SongCommentAdapter;
+import com.example.music_app.decorations.BottomOffsetDecoration;
 import com.example.music_app.helpers.GradientHelper;
+import com.example.music_app.models.SongComment;
+import com.example.music_app.models.SongCommentResponse;
+import com.example.music_app.retrofit.RetrofitClient;
+import com.example.music_app.services.APIService;
 import com.example.music_app.services.ExoBuilderService;
 import com.example.music_app.services.ExoPlayerQueue;
 import com.example.music_app.services.ExoService;
@@ -35,10 +56,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 
+import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SongDetailFragment extends BottomSheetDialogFragment {
@@ -49,11 +75,15 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     MaterialButton btnRepeat, btnShuffle, btnPrevious, btnPlay, btnNext;
     CircleImageView imSongAvt;
     View view;
+    RecyclerView recyclerViewCmt;
 
     private ExoService exoService;
     private ExoBuilderService exoBuilderService;
+    private SongCommentAdapter songCommentAdapter;
+    private List<SongComment> songComments = new ArrayList<>();
     private ExoPlayerQueue exoPlayerQueue;
     private RotateAnimation rotateAnimation;
+    private APIService apiService;
 
     public SongDetailFragment() {
 
@@ -184,7 +214,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_song_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_song_detail, container, false);
         tvSongTitle = view.findViewById(R.id.tvSongTitle);
         tvArtistName = view.findViewById(R.id.tvArtistName);
         tvCurrentTime = view.findViewById(R.id.tvSongCurrentTime);
@@ -196,6 +226,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         btnPrevious = view.findViewById(R.id.btnPrevious);
         btnPlay = view.findViewById(R.id.btnPlay);
         btnNext = view.findViewById(R.id.btnNext);
+        recyclerViewCmt = view.findViewById(R.id.recyclerViewCmt);
 
         handler = new Handler();
         if (getActivity() instanceof BaseActivity) {
@@ -203,8 +234,36 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
             playPlaylist();
         }
 
+        songCommentAdapter = new SongCommentAdapter(getContext(), songComments, null);
+        recyclerViewCmt.setAdapter(songCommentAdapter);
+        recyclerViewCmt.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerViewCmt.addItemDecoration(new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset)));
+        getAllComments();
 
         return view;
+    }
+
+    private void getAllComments() {
+        Long idSong = exoPlayer.getCurrentMediaItem().mediaMetadata.extras.getLong("id");
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        apiService.getAllCommentsOfSong(idSong).enqueue(new Callback<SongCommentResponse>() {
+            @Override
+            public void onResponse(Call<SongCommentResponse> call, Response<SongCommentResponse> response) {
+                SongCommentResponse res = response.body();
+                assert res != null;
+                if(res.isSuccess()) {
+                    songComments = res.getData();
+                    songCommentAdapter = new SongCommentAdapter(getContext(), songComments, null);
+                    recyclerViewCmt.setAdapter(songCommentAdapter);
+                    songCommentAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SongCommentResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override
