@@ -27,7 +27,7 @@ public class SongDetailActivity extends BaseActivity {
             @Override
             public void handleOnBackPressed() {
                 if (songDetailFragment != null) {
-                   startActivity(new Intent(SongDetailActivity.this, HomeActivity.class));
+                   startActivity(new Intent(SongDetailActivity.this, MainActivity.class));
                 }
             }
         });

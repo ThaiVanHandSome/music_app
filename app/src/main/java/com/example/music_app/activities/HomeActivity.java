@@ -20,6 +20,8 @@ import com.example.music_app.adapters.SongHomeAdapter;
 import com.example.music_app.helpers.SongToMediaItemHelper;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.listeners.PaginationScrollListener;
+import com.example.music_app.models.Artist;
+import com.example.music_app.models.ArtistResponse;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.SongResponse;
@@ -46,7 +48,7 @@ public class HomeActivity extends BaseActivity {
 
     APIService apiService;
     List<Song> trendSongs, favoriteSongs, NewSongs;
-    List<User> Artists;
+    List<Artist> artists;
 
     TextView title, xtt_topthinhhanh, xtt_moinguoiyeuthich, xtt_nghesihangdau, xtt_moiramat;
 
@@ -118,10 +120,9 @@ public class HomeActivity extends BaseActivity {
         AnhXa();
 
         songTrendAdapter = new SongHomeAdapter(getApplicationContext(), new ArrayList<>(), songTrendItemClick);
-
         songFavoriteAdapter = new SongHomeAdapter(getApplicationContext(), new ArrayList<>(), songFavoriteItemClick);
-
         songNewAdapter = new NewSongHomeAdapter(getApplicationContext(), new ArrayList<>(), songNewItemClick);
+
         title.setText("Chào " + user.getFirstName() + " " + user.getLastName() + " 👋");
         GetTopTrend();
         GetFavoriteSong();
@@ -214,8 +215,6 @@ public class HomeActivity extends BaseActivity {
             }
 
         });
-
-
     }
     private void GetFavoriteSong(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
@@ -245,31 +244,29 @@ public class HomeActivity extends BaseActivity {
     }
     private void GetTopArtist(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
+        apiService.getAllArtists(0, 10).enqueue(new Callback<GenericResponse<ArtistResponse>>() {
             @Override
-            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
+            public void onResponse(Call<GenericResponse<ArtistResponse>> call, Response<GenericResponse<ArtistResponse>> response) {
                 if (response.isSuccessful()) {
-                    songNewList = new ArrayList<>();
-                    songNewList = response.body().getData();
-                    artistAdapter = new ArtistAdapter(getApplicationContext(), songNewList);
+                    artists = new ArrayList<>();
+                    artists = response.body().getData().getContent();
+                    artistAdapter = new ArtistAdapter(getApplicationContext(), artists, null);
                     rvTopArtist.setHasFixedSize(true);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL,false );
                     rvTopArtist.setLayoutManager(layoutManager);
                     rvTopArtist.setAdapter(artistAdapter);
-                } else {
-                    Log.e("DataRes", "No Res");
                 }
             }
 
             @Override
-            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<ArtistResponse>> call, Throwable t) {
                 Log.d("ErrorReponse", t.getMessage());
             }
         });
     }
     private void GetNewSong(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getMostLikeSong(0, 5).enqueue(new Callback<GenericResponse<SongResponse>>() {
+        apiService.getSongNewReleased(0, 5).enqueue(new Callback<GenericResponse<SongResponse>>() {
             @Override
             public void onResponse(Call<GenericResponse<SongResponse>> call, Response<GenericResponse<SongResponse>> response) {
                 if (response.isSuccessful()) {

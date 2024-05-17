@@ -322,14 +322,16 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        if (exoPlayer != null) {
-//            if (exoPlayer.getCurrentMediaItem() != null) {
-//                MediaItem currentSong = exoPlayer.getCurrentMediaItem();
-//                MediaMetadata metadata = currentSong.mediaMetadata;
-//                updateSongAsset(metadata);
-//                handler.post(updateMediaRunable);
-//            }
-//        }
+        if (exoPlayer != null) {
+            if (exoPlayer.getCurrentMediaItem() != null) {
+                MediaItem currentSong = exoPlayer.getCurrentMediaItem();
+                MediaMetadata metadata = currentSong.mediaMetadata;
+                updateSongAsset(metadata);
+                handler.post(updateMediaRunable);
+                btnPlay.performClick();
+                btnPlay.performClick();
+            }
+        }
     }
 
     @OptIn(markerClass = UnstableApi.class)

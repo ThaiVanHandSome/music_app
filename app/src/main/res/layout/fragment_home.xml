@@ -96,13 +96,6 @@
                     android:text="👑 Nghệ sĩ hàng đầu"
                     android:textColor="@color/neutral5" />
 
-                <TextView
-                    android:id="@+id/xemtatca_nghesihangdau"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/spacing_16dp"
-                    android:text="Xem tất cả"
-                    android:textColor="@color/primary" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView

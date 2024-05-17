@@ -1,6 +1,7 @@
 package com.example.music_app.services;
 
 import com.example.music_app.models.Artist;
+import com.example.music_app.models.ArtistResponse;
 import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.ChangePasswordRequest;
@@ -128,4 +129,16 @@ public interface APIService {
 
     @POST("song/post-comment")
     Call<ResponseMessage> postComment(@Body SongCommentRequest songCommentRequest);
+
+    @GET("artists")
+    Call<GenericResponse<ArtistResponse>> getAllArtists(@Query("page") int page, @Query("size") int size);
+
+    @GET("artist/{id}")
+    Call<GenericResponse<Artist>> getArtistById(@Path("id") int id);
+
+    @GET("artist/{idArtist}/songs/count")
+    Call<GenericResponse<Integer>> getSongCountByArtistId(@Path("idArtist") int idArtist);
+
+    @GET("artist/{artistId}/songs")
+    Call<GenericResponse<SongResponse>> getAllSongsByArtistId(@Path("artistId") int artistId, @Query("page") int page, @Query("size") int size);
 }

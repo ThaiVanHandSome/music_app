@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
+import com.example.music_app.models.Artist;
 import com.example.music_app.models.Song;
 
 import java.util.List;
@@ -21,11 +22,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.MyViewHolder> {
     private final Context context;
-    private final List<Song> songList;
+    private final List<Artist> artistList;
+    private final OnItemClickListener onItemClickListener;
 
-    public ArtistAdapter(Context context, List<Song> songList) {
+    public ArtistAdapter(Context context, List<Artist> artistList, OnItemClickListener onItemClickListener) {
         this.context = context;
-        this.songList = songList;
+        this.artistList = artistList;
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public void setArtistList(List<Artist> artistList) {
+        this.artistList.clear();
+        this.artistList.addAll(artistList);
+        notifyDataSetChanged();
     }
     @NonNull
     @Override
@@ -36,17 +45,17 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Song song = songList.get(position);
-        holder.tenNgheSi.setText(song.getName());
+        Artist artist = artistList.get(position);
+        holder.tenNgheSi.setText(artist.getNickname());
 
         Glide.with(context)
-                .load(song.getImage())
+                .load(artist.getAvatar())
                 .into(holder.image);
     }
 
     @Override
     public int getItemCount() {
-        return   songList.size();
+        return   artistList.size();
     }
     public class MyViewHolder extends RecyclerView.ViewHolder  {
         public CircleImageView image;
@@ -59,13 +68,15 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.MyViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Song song = songList.get(getAdapterPosition());
-                    Toast.makeText(context.getApplicationContext(), "Bạn đã click vào bài hát" + song.getName(), Toast.LENGTH_SHORT).show();
-
+                    Artist artist = artistList.get(getAdapterPosition());
+                    onItemClickListener.onItemClick(artist);
                 }
             });
 
-
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Artist artist);
     }
 }

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.music_app.R;
+import com.example.music_app.activities.ArtistActivity;
 import com.example.music_app.activities.HomeActivity;
 import com.example.music_app.activities.HomeSongsActivity;
 import com.example.music_app.activities.LibraryActivity;
@@ -26,8 +27,11 @@ import com.example.music_app.adapters.NewSongHomeAdapter;
 import com.example.music_app.adapters.SongHomeAdapter;
 import com.example.music_app.helpers.SongToMediaItemHelper;
 import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.Artist;
+import com.example.music_app.models.ArtistResponse;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Song;
+import com.example.music_app.models.SongResponse;
 import com.example.music_app.models.User;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
@@ -35,6 +39,7 @@ import com.example.music_app.services.ExoPlayerQueue;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,13 +49,13 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
 
     RecyclerView rvTopTrend, rvFavoriteSong, rvTopArtist, rvNewSong;
-    SongHomeAdapter songHomeAdapter;
+    SongHomeAdapter songTrendAdapter, songFavoriteAdapter;
     ArtistAdapter artistAdapter;
-    NewSongHomeAdapter newSongHomeAdapter;
+    NewSongHomeAdapter songNewAdapter;
 
     APIService apiService;
-    List<Song> trendSongs, favoriteSongs, NewSongs;
-    List<User> Artists;
+    List<Song> trendSongs, favoriteSongs, newSongs;
+    List<Artist> artists;
     TextView title, xtt_topthinhhanh, xtt_moinguoiyeuthich, xtt_nghesihangdau, xtt_moiramat;
     private ExoPlayerQueue exoPlayerQueue = ExoPlayerQueue.getInstance();
     private final SongHomeAdapter.OnItemClickListener songTrendItemClick = new SongHomeAdapter.OnItemClickListener() {
@@ -88,7 +93,7 @@ public class HomeFragment extends Fragment {
     private final NewSongHomeAdapter.OnItemClickListener songNewItemClick = new NewSongHomeAdapter.OnItemClickListener() {
         @Override
         public void onSongClick(int position, String tag) {
-            exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(NewSongs));
+            exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(newSongs));
             exoPlayerQueue.setCurrentPosition(position);
             Log.d("HomeActivity", "onSongClick: position " + position + "Recycler view tag: newReleased");
             Intent intent = new Intent(getContext(), SongDetailActivity.class);
@@ -98,6 +103,15 @@ public class HomeFragment extends Fragment {
         @Override
         public void onPlayPlaylistClick(List<Song> songList) {
 
+        }
+    };
+
+    private final ArtistAdapter.OnItemClickListener artistItemClick = new ArtistAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(Artist artist) {
+            Intent intent = new Intent(getContext(), ArtistActivity.class);
+            intent.putExtra("artistId", artist.getIdUser());
+            startActivity(intent);
         }
     };
     public HomeFragment() {
@@ -126,6 +140,12 @@ public class HomeFragment extends Fragment {
         User user = SharePrefManagerUser.getInstance(requireContext()).getUser();
         title.setText("Chào " + user.getFirstName() + " " + user.getLastName() + " 👋");
 
+
+        songTrendAdapter = new SongHomeAdapter(getContext(), new ArrayList<>(), songTrendItemClick);
+        songFavoriteAdapter = new SongHomeAdapter(getContext(), new ArrayList<>(), songFavoriteItemClick);
+        songNewAdapter = new NewSongHomeAdapter(getContext(), new ArrayList<>(), songNewItemClick);
+        artistAdapter = new ArtistAdapter(getContext(), new ArrayList<>(), artistItemClick);
+
         GetTopTrend();
         GetFavoriteSong();
         GetTopArtist();
@@ -142,30 +162,17 @@ public class HomeFragment extends Fragment {
         xtt_moinguoiyeuthich.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), HomeSongsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("Keyy", 2);
-                intent.putExtras(bundle);
+                Intent intent = new Intent(requireContext(), TopicActivity.class);
+                intent.putExtra("topic", "favorite");
                 startActivity(intent);
             }
         });
-        xtt_nghesihangdau.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), HomeSongsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("Keyy", 3);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
+
         xtt_moiramat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), HomeSongsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("Keyy", 4);
-                intent.putExtras(bundle);
+                Intent intent = new Intent(requireContext(), TopicActivity.class);
+                intent.putExtra("topic", "newReleased");
                 startActivity(intent);
             }
         });
@@ -181,31 +188,28 @@ public class HomeFragment extends Fragment {
         title = view.findViewById(R.id.title_appbar_home);
         xtt_topthinhhanh = view.findViewById(R.id.xemtatca_topthinhhanh);
         xtt_moinguoiyeuthich = view.findViewById(R.id.xemtatca_moinguoiyeuthich);
-        xtt_nghesihangdau = view.findViewById(R.id.xemtatca_nghesihangdau);
         xtt_moiramat = view.findViewById(R.id.xemtatca_moiramat);
     }
     private void GetTopTrend(){
-        Log.e("DataRes", "Code chay vao ham get Thinh Hanh");
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
+        apiService.getMostViewSong(0, 5).enqueue(new Callback<GenericResponse<SongResponse>>() {
             @Override
-            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
-                if (response.isSuccessful() && isAdded()) {
-                    Log.e("DataRes", "Code chay vao ham get Song Thinh Hanh Thanh Cong");
-                    trendSongs = response.body().getData();
-                    songHomeAdapter = new SongHomeAdapter(requireContext(), trendSongs, songTrendItemClick);
+            public void onResponse(Call<GenericResponse<SongResponse>> call, Response<GenericResponse<SongResponse>> response) {
+                if (response.isSuccessful()) {
+                    trendSongs = new ArrayList<>();
+                    trendSongs = response.body().getData().getContent();
+                    songTrendAdapter.setSongList(trendSongs);
                     rvTopTrend.setHasFixedSize(true);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL,false );
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false );
                     rvTopTrend.setLayoutManager(layoutManager);
-                    rvTopTrend.setAdapter(songHomeAdapter);
+                    rvTopTrend.setAdapter(songTrendAdapter);
                 } else {
                     Log.e("DataRes", "No Res");
-
                 }
             }
 
             @Override
-            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<SongResponse>> call, Throwable t) {
                 Log.d("ErrorReponse", t.getMessage());
             }
 
@@ -213,64 +217,63 @@ public class HomeFragment extends Fragment {
     }
     private void GetFavoriteSong(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
+        apiService.getMostLikeSong(0, 5).enqueue(new Callback<GenericResponse<SongResponse>>() {
             @Override
-            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
-                if (response.isSuccessful() && isAdded()) {
-                    favoriteSongs = response.body().getData();
-                    songHomeAdapter = new SongHomeAdapter(requireContext(), favoriteSongs, songFavoriteItemClick);
+            public void onResponse(Call<GenericResponse<SongResponse>> call, Response<GenericResponse<SongResponse>> response) {
+                if (response.isSuccessful()) {
+                    favoriteSongs = new ArrayList<>();
+                    favoriteSongs = response.body().getData().getContent();
+                    songFavoriteAdapter.setSongList(favoriteSongs);
                     rvFavoriteSong.setHasFixedSize(true);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL,false );
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false );
                     rvFavoriteSong.setLayoutManager(layoutManager);
-                    rvFavoriteSong.setAdapter(songHomeAdapter);
+                    rvFavoriteSong.setAdapter(songFavoriteAdapter);
                 } else {
                     Log.e("DataRes", "No Res");
-
                 }
             }
 
             @Override
-            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<SongResponse>> call, Throwable t) {
                 Log.d("ErrorReponse", t.getMessage());
             }
+
         });
     }
     private void GetTopArtist(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
+        apiService.getAllArtists(0, 5).enqueue(new Callback<GenericResponse<ArtistResponse>>() {
             @Override
-            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
-                if (response.isSuccessful() && isAdded()) {
-                    NewSongs = response.body().getData();
-                    artistAdapter = new ArtistAdapter(requireContext(), NewSongs);
+            public void onResponse(Call<GenericResponse<ArtistResponse>> call, Response<GenericResponse<ArtistResponse>> response) {
+                if (response.isSuccessful()) {
+                    artists = new ArrayList<>();
+                    artists = response.body().getData().getContent();
+                    Log.d("HomeFragment", "onResponse: Artist get succesfully " + artists.size());
+                    artistAdapter.setArtistList(artists);
                     rvTopArtist.setHasFixedSize(true);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL,false );
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false );
                     rvTopArtist.setLayoutManager(layoutManager);
                     rvTopArtist.setAdapter(artistAdapter);
-                } else {
-                    Log.e("DataRes", "No Res");
-
                 }
             }
-
             @Override
-            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<ArtistResponse>> call, Throwable t) {
                 Log.d("ErrorReponse", t.getMessage());
             }
         });
     }
     private void GetNewSong(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getAllSongs().enqueue(new Callback<GenericResponse<List<Song>>>() {
+        apiService.getSongNewReleased(0, 10).enqueue(new Callback<GenericResponse<SongResponse>>() {
             @Override
-            public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
+            public void onResponse(Call<GenericResponse<SongResponse>> call, Response<GenericResponse<SongResponse>> response) {
                 if (response.isSuccessful() && isAdded()) {
-                    NewSongs = response.body().getData();
-                    newSongHomeAdapter = new NewSongHomeAdapter(requireContext(), NewSongs, songNewItemClick);
+                    newSongs = response.body().getData().getContent();
+                    songNewAdapter.setSongList(newSongs);
                     rvNewSong.setHasFixedSize(true);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false );
                     rvNewSong.setLayoutManager(layoutManager);
-                    rvNewSong.setAdapter(newSongHomeAdapter);
+                    rvNewSong.setAdapter(songNewAdapter);
                 } else {
                     Log.e("DataRes", "No Res");
 
@@ -278,7 +281,7 @@ public class HomeFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<GenericResponse<List<Song>>> call, Throwable t) {
+            public void onFailure(Call<GenericResponse<SongResponse>> call, Throwable t) {
                 Log.d("ErrorReponse", t.getMessage());
             }
         });
