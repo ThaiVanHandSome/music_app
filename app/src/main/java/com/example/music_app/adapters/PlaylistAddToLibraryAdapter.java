@@ -88,9 +88,9 @@ public class PlaylistAddToLibraryAdapter extends RecyclerView.Adapter<PlaylistAd
         MaterialCheckBox checkBox;
         public SongAddToLibraryViewHolder(@NonNull View itemView) {
             super(itemView);
-            playlistImage = itemView.findViewById(R.id.imv_add_playlist_image);
-            playlistTitle = itemView.findViewById(R.id.tv_add_playlist_title);
-            playlistSongCount = itemView.findViewById(R.id.tv_add_playlist_song_count);
+            playlistImage = itemView.findViewById(R.id.imv_playlist_image);
+            playlistTitle = itemView.findViewById(R.id.tv_playlist_title);
+            playlistSongCount = itemView.findViewById(R.id.tv_playlist_song_count);
             checkBox = itemView.findViewById(R.id.cb_add_playlist);
         }
     }

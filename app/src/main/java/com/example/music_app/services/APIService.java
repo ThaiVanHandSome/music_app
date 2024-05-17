@@ -14,6 +14,7 @@ import com.example.music_app.models.PlaylistResponse;
 import com.example.music_app.models.RegisterRequest;
 import com.example.music_app.models.RegisterResponse;
 import com.example.music_app.models.Song;
+import com.example.music_app.models.SongCommentResponse;
 import com.example.music_app.models.SongResponse;
 
 import java.util.List;
@@ -98,8 +99,13 @@ public interface APIService {
     @PATCH("user/{id_user}/change-password")
     Call<ResponseMessage> changePasswordWithIdUser(@Path("id_user") int id_user, @Body ChangePasswordRequest changePasswordRequest);
 
-    @Multipart
     @PATCH("user/{id_user}")
+    Call<ResponseMessage> updateProfile(@Path("id_user") String id_user, @Body UpdateProfileRequest updateProfileRequest);
+
+    @Multipart
+    @POST("user/upload")
+    Call<ResponseMessage> uploadAvatar(@Part MultipartBody.Part imageFile, @Part("idUser") String idUser
+    );
     Call<ResponseMessage> updateProfile(@Part @Path("id_user") int id_user,
                                         @Body UpdateProfileRequest updateProfileRequest,
                                         @Part MultipartBody.Part imageFile);
@@ -113,6 +119,9 @@ public interface APIService {
     @POST("playlistSong/{id_playlist}/{id_song}")
     Call<ResponseMessage> addSongToPlaylist(@Path("id_playlist") Long id_playlist, @Path("id_song") Long id_song);
 
-    @GET("/playlist")
+    @GET("playlist")
     Call<ResponseMessage> isPlaylistNameExists(@Query("name") String name);
+
+    @GET("song/{id_song}/comments")
+    Call<SongCommentResponse> getAllCommentsOfSong(@Path("id_song") Long idSong);
 }

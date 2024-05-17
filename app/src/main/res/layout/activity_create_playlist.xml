@@ -75,6 +75,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:text="@string/button_create"
-        style="@style/ExtendedFloatingActionButton"/>
+        android:backgroundTint="@color/button_background_color_selector"
+        android:textColor="@color/button_foreground_color_selector"
+        style="@style/ExtendedFloatingActionButton" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

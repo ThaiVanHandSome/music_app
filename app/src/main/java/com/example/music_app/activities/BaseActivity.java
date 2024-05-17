@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.music_app.R;
 import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.fragments.SongDetailFragment;
+import com.example.music_app.helpers.GradientHelper;
 import com.example.music_app.helpers.ProgressBarUpdater;
 import com.example.music_app.services.ExoBuilderService;
 import com.example.music_app.services.ExoPlayerQueue;
@@ -38,6 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected ExoPlayerQueue exoPlayerQueue;
     protected
     View includeMiniPlayer;
+    View container;
     private CountDownLatch latch = new CountDownLatch(1);
 
     @Override
@@ -99,6 +101,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         ivSongImage = includeMiniPlayer.findViewById(R.id.imSongAvt);
         progressIndicator = includeMiniPlayer.findViewById(R.id.pbSongProgress);
         playPauseBtn = includeMiniPlayer.findViewById(R.id.btnSongOption);
+        container = includeMiniPlayer.findViewById(R.id.conatiner);
 
         playPauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +131,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         tvSongTitle.setText(metadata.title);
         tvSongArtist.setText(metadata.extras.getString("artist"));
         Glide.with(getApplicationContext()).load(metadata.artworkUri).into(ivSongImage);
+        GradientHelper.applyDoubleGradient(getApplicationContext(), container, String.valueOf(metadata.artworkUri));
         progressIndicator.setProgress((int) exoPlayer.getCurrentPosition() / 1000);
         if (playPauseBtn != null && exoPlayer != null) {
             if (exoPlayer.isPlaying()) {

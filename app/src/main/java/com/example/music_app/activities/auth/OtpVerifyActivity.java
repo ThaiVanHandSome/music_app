@@ -17,6 +17,8 @@ import com.example.music_app.models.OtpResponse;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -101,6 +103,7 @@ public class OtpVerifyActivity extends AppCompatActivity {
                         intent1 = new Intent(OtpVerifyActivity.this, ResetPasswordActivity.class);
                         intent1.putExtra("email", email);
                     }
+                    saveUserToFirebase(res.getId());
                     startActivity(intent1);
                     finish();
                 }
@@ -111,5 +114,11 @@ public class OtpVerifyActivity extends AppCompatActivity {
                 Toast.makeText(OtpVerifyActivity.this, "Call API Error", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    void saveUserToFirebase(Long id){
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://music-app-967da-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        DatabaseReference usersRef = database.getReference("index");
+        usersRef.child(String.valueOf(id)).setValue(1);
     }
 }

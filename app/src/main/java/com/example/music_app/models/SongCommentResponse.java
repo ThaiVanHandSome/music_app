@@ -1,20 +1,12 @@
 package com.example.music_app.models;
 
-public class OtpResponse {
+import java.util.List;
+
+public class SongCommentResponse {
     private boolean success;
     private boolean error;
     private String message;
-    private String type;
-
-    private Long id;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private List<SongComment> data;
 
     public boolean isSuccess() {
         return success;
@@ -40,11 +32,11 @@ public class OtpResponse {
         this.message = message;
     }
 
-    public String getType() {
-        return type;
+    public List<SongComment> getData() {
+        return data;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setData(List<SongComment> data) {
+        this.data = data;
     }
 }

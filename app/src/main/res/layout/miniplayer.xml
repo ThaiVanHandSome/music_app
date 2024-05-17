@@ -14,6 +14,7 @@
         app:cardCornerRadius="6dp">
 
         <FrameLayout
+            android:id="@+id/conatiner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/linear_background_angle0"/>
@@ -59,8 +60,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/img_border_radius_5dp"
-                        android:src="@drawable/ic_song_avt_holder" />
+                        android:background="@drawable/img_border_radius_5dp"/>
 
                 </androidx.cardview.widget.CardView>
 
@@ -77,7 +77,6 @@
 
                     <TextView
                         android:id="@+id/tvSongTitle"
-                        android:text="Tên bài hát"
                         android:textSize="@dimen/font_title"
                         android:fontFamily="@font/lexend_bold"
                         android:textColor="@color/neutral5"
@@ -88,7 +87,6 @@
 
                     <TextView
                         android:id="@+id/tvSongArtist"
-                        android:text="Nghệ sĩ"
                         android:fontFamily="@font/lexend_medium"
                         android:textSize="@dimen/font_label"
                         android:layout_width="wrap_content"
