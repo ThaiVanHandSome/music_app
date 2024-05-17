@@ -50,6 +50,9 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -208,6 +211,7 @@ public class LoginActivity extends AppCompatActivity {
                     // Handle data for realtime
                     Log.d("ProviderLogin", res.getProvider());
                     Log.d("LoginToken", res.getAccessToken());
+                    saveTokenToServer(res.getId());
                     SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
@@ -302,6 +306,7 @@ public class LoginActivity extends AppCompatActivity {
                     user.setRefreshToken(res.getRefreshToken());
                     user.setProvider(res.getProvider());
                     SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);
+                    saveTokenToServer(res.getId());
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
@@ -391,5 +396,23 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         overlay = (FrameLayout) findViewById(R.id.overlay);
         btnGetOtp = (MaterialButton) findViewById(R.id.btnGetOtp);
+    }
+
+    private void saveTokenToServer(int id) {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    return;
+                }
+                String token = task.getResult();
+
+                String userId = String.valueOf(id);
+                FirebaseDatabase database = FirebaseDatabase.getInstance("https://music-app-967da-default-rtdb.asia-southeast1.firebasedatabase.app/");
+                DatabaseReference tokenRef = database.getReference("tokenPhone");
+                tokenRef.child(String.valueOf(id)).setValue(token);
+
+            }
+        });
     }
 }
