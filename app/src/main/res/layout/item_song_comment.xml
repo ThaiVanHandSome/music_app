@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
+    android:layout_marginTop="@dimen/spacing_4dp"
+    android:layout_marginBottom="@dimen/spacing_4dp"
     >
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -30,7 +32,7 @@
                 android:id="@+id/nameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/font_heading2"
+                android:textSize="@dimen/font_title"
                 android:textColor="@color/neutral5"
                 android:layout_marginEnd="@dimen/spacing_8dp"
                 android:text="Tên"
@@ -39,6 +41,7 @@
                 android:id="@+id/timeTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/font_body"
                 android:text="Thời gian" />
         </LinearLayout>
         <TextView

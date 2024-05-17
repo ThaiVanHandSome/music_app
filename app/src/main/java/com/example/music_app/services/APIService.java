@@ -14,6 +14,7 @@ import com.example.music_app.models.PlaylistResponse;
 import com.example.music_app.models.RegisterRequest;
 import com.example.music_app.models.RegisterResponse;
 import com.example.music_app.models.Song;
+import com.example.music_app.models.SongCommentRequest;
 import com.example.music_app.models.SongCommentResponse;
 import com.example.music_app.models.SongResponse;
 
@@ -124,4 +125,7 @@ public interface APIService {
 
     @GET("song/{id_song}/comments")
     Call<SongCommentResponse> getAllCommentsOfSong(@Path("id_song") Long idSong);
+
+    @POST("song/post-comment")
+    Call<ResponseMessage> postComment(@Body SongCommentRequest songCommentRequest);
 }
