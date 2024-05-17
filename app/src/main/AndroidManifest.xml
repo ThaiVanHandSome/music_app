@@ -43,10 +43,10 @@
             android:name=".activities.HomeSongsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".activities.AddFavouriteSongsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.AddFavouriteSongsActivity"
+            android:name=".activities.AddSongToPlaylistActivity"
             android:exported="false" />
         <activity
             android:name=".activities.ProfileActivity"
@@ -58,7 +58,7 @@
             android:name=".activities.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.auth.GetStartedActivity"
+            android:name=".activities.auth.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".activities.auth.ResetPasswordActivity"
@@ -85,16 +85,10 @@
             android:name=".activities.auth.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.LibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.TopicActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.auth.LoginActivity"
+            android:name=".activities.auth.GetStartedActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

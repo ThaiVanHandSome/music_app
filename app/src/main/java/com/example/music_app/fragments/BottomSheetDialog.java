@@ -35,14 +35,9 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     private String songName;
     private String artistName;
     private APIService apiService;
-    private final User user = SharePrefManagerUser.getInstance(getContext()).getUser();
-    /*private OnItemFavouriteChangeListener listener;*/
+    private User user;
 
     public BottomSheetDialog() { }
-
-    /*public void setOnItemFavouriteChangedListener(OnItemFavouriteChangeListener listener) {
-        this.listener = listener;
-    }*/
 
     public void setContent(Long songId, String imageUrl, String songName, String artistName) {
         this.songId = songId;
@@ -56,6 +51,8 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bottom_sheet, container, false);
         binding = BottomSheetBinding.bind(view);
+        user = SharePrefManagerUser.getInstance(getContext()).getUser();
+
         binding.itemSong.btnSongOption.setVisibility(View.GONE);
 
         if (songId != null && imageUrl != null && songName != null && artistName != null) {
@@ -130,16 +127,4 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
         return view;
     }
-
-    /*@Override
-    public void onDismiss(@NonNull DialogInterface dialog) {
-        super.onDismiss(dialog);
-        if (listener != null) {
-            listener.onItemFavouriteChanged();
-        }
-    }*/
-
-    /*public interface OnItemFavouriteChangeListener {
-        void onItemFavouriteChanged();
-    }*/
 }

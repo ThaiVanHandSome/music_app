@@ -20,12 +20,12 @@
             android:id="@+id/imv_new_song_home"
             android:layout_width="match_parent"
             android:layout_height="360dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/add_image_holder" />
+            android:scaleType="centerCrop" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/card_overlay_gradient">
 
             <TextView
                 android:id="@+id/tv_time"

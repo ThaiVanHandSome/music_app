@@ -1,9 +1,17 @@
 package com.example.music_app.fragments;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.FrameLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,21 +23,10 @@ import androidx.media3.common.util.UnstableApi;
 import androidx.media3.common.util.Util;
 import androidx.media3.exoplayer.ExoPlayer;
 
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
 import com.example.music_app.activities.BaseActivity;
-import com.example.music_app.activities.SongDetailActivity;
+import com.example.music_app.helpers.GradientHelper;
 import com.example.music_app.services.ExoBuilderService;
 import com.example.music_app.services.ExoPlayerQueue;
 import com.example.music_app.services.ExoService;
@@ -39,7 +36,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.Formatter;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -52,6 +48,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     TextView tvSongTitle, tvArtistName, tvCurrentTime, tvDuration;
     MaterialButton btnRepeat, btnShuffle, btnPrevious, btnPlay, btnNext;
     CircleImageView imSongAvt;
+    View view;
 
     private ExoService exoService;
     private ExoBuilderService exoBuilderService;
@@ -187,7 +184,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_song_detail, container, false);
+        view = inflater.inflate(R.layout.fragment_song_detail, container, false);
         tvSongTitle = view.findViewById(R.id.tvSongTitle);
         tvArtistName = view.findViewById(R.id.tvArtistName);
         tvCurrentTime = view.findViewById(R.id.tvSongCurrentTime);
@@ -334,6 +331,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
                     .load(metadata.artworkUri)
                     .transform(new RoundedCornersTransformation(30, 0))
                     .into(imSongAvt);
+            GradientHelper.applyGradient(getContext(), view, String.valueOf(metadata.artworkUri));
 
             rotateAnimation = new RotateAnimation(
                     0, 360,

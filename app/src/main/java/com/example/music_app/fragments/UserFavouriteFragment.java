@@ -15,9 +15,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.music_app.R;
 import com.example.music_app.activities.AddFavouriteSongsActivity;
+import com.example.music_app.activities.SongDetailActivity;
 import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.databinding.FragmentUserFavouriteBinding;
 import com.example.music_app.decorations.BottomOffsetDecoration;
+import com.example.music_app.helpers.SongToMediaItemHelper;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Song;
@@ -25,21 +27,24 @@ import com.example.music_app.models.SongResponse;
 import com.example.music_app.models.User;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
+import com.example.music_app.services.ExoPlayerQueue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserFavouriteFragment extends Fragment {
+public class UserFavouriteFragment extends Fragment implements SongAdapter.OnItemClickListener{
     FragmentUserFavouriteBinding binding;
     RecyclerView songRecyclerView;
     SongAdapter songAdapter;
     List<Song> favouriteSongs;
     LinearLayout linearLayoutAddToLibrary;
     APIService apiService;
-    User user = SharePrefManagerUser.getInstance(this.getContext()).getUser();
+    User user;
+    ExoPlayerQueue exoPlayerQueue;
     public UserFavouriteFragment() {
         // Required empty public constructor
     }
@@ -55,10 +60,12 @@ public class UserFavouriteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentUserFavouriteBinding.inflate(inflater, container, false);
+        user = SharePrefManagerUser.getInstance(this.getContext()).getUser();
 
         // Set text for tvAddToLibrary in include layout
         binding.linearLayoutAddToLibary.tvAddToLibrary.setText(R.string.label_add_new_favourite);
 
+        exoPlayerQueue = ExoPlayerQueue.getInstance();
         // Set onClickListener for linearLayoutAddToLibrary
         linearLayoutAddToLibrary = binding.linearLayoutAddToLibary.getRoot();
         linearLayoutAddToLibrary.setOnClickListener(new View.OnClickListener() {
@@ -82,13 +89,15 @@ public class UserFavouriteFragment extends Fragment {
     }
 
     private void getSongLikedByIdUser() {
+        favouriteSongs = new ArrayList<>();
+        songAdapter = new SongAdapter(getContext(), favouriteSongs, this);
         apiService.getSongLikedByIdUser(user.getId()).enqueue(new Callback<GenericResponse<List<Song>>>() {
             @Override
             public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
                 if (response.isSuccessful()) {
-                    favouriteSongs = response.body().getData();
-                    songAdapter = new SongAdapter(getContext(), favouriteSongs, null);
+                    favouriteSongs.addAll(response.body().getData());
                     songRecyclerView.setAdapter(songAdapter);
+                    songAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -102,9 +111,25 @@ public class UserFavouriteFragment extends Fragment {
         binding.swipeRefreshLayoutUserFavourites.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                favouriteSongs.clear();
                 getSongLikedByIdUser();
                 binding.swipeRefreshLayoutUserFavourites.setRefreshing(false);
             }
         });
+    }
+
+    @Override
+    public void onSongClick(int position) {
+        exoPlayerQueue.clear();
+        exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(favouriteSongs));
+        exoPlayerQueue.setCurrentPosition(position);
+
+        Intent intent = new Intent(getContext(), SongDetailActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onPlayPlaylistClick(List<Song> songList) {
+
     }
 }

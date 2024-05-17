@@ -94,9 +94,9 @@ public class SongAddToLibraryAdapter extends RecyclerView.Adapter<SongAddToLibra
         MaterialCheckBox checkBox;
         public SongAddToLibraryViewHolder(@NonNull View itemView) {
             super(itemView);
-            songImage = itemView.findViewById(R.id.imv_add_song_image);
-            songTitle = itemView.findViewById(R.id.tv_add_song_title);
-            artistName = itemView.findViewById(R.id.tv_add_song_artist);
+            songImage = itemView.findViewById(R.id.imSongAvt);
+            songTitle = itemView.findViewById(R.id.tvSongTitle);
+            artistName = itemView.findViewById(R.id.tvSongArtist);
             checkBox = itemView.findViewById(R.id.cb_add_song);
         }
     }
