@@ -33,7 +33,9 @@ public class GradientHelper {
                                     gradientDrawable.setColors(new int[]{context.getColor(R.color.neutral0), darkVibrant});
                                 else
                                     gradientDrawable.setColors(new int[]{context.getColor(R.color.neutral0), mutedColor});
-                                view.setBackground(gradientDrawable);
+                                if (view != null) {
+                                    view.setBackground(gradientDrawable);
+                                }
                             }
                         });
                     }
@@ -62,7 +64,9 @@ public class GradientHelper {
                                     gradientDrawable.setColors(new int[]{context.getColor(R.color.neutral0), darkVibrant});
                                 else
                                     gradientDrawable.setColors(new int[]{context.getColor(R.color.neutral0), mutedColor});
-                                view.setBackground(gradientDrawable);
+                                if (view != null) {
+                                    view.setBackground(gradientDrawable);
+                                }
                             }
                         });
                     }
@@ -92,7 +96,10 @@ public class GradientHelper {
                                     gradientDrawable.setColors(new int[]{vibrantColor, darkVibrant});
                                 else
                                     gradientDrawable.setColors(new int[]{darkVibrant, mutedColor});
-                                view.setBackground(gradientDrawable);
+                                if (view != null) {
+                                    view.setBackground(gradientDrawable);
+
+                                }
                             }
                         });
                     }
