@@ -1,5 +1,7 @@
 package com.example.music_app.models;
 
+import android.health.connect.datatypes.units.Pressure;
+
 import com.google.firebase.database.Exclude;
 
 import java.util.HashMap;
@@ -10,10 +12,13 @@ public class NotificationFirebase {
     private String songName;
     private String userName;
 
-    public NotificationFirebase(int songId, String songName, String userName) {
+    private String cover;
+
+    public NotificationFirebase(int songId, String songName, String userName, String cover) {
         this.songId = songId;
         this.songName = songName;
         this.userName = userName;
+        this.cover = cover;
     }
 
     public NotificationFirebase() {
@@ -43,22 +48,23 @@ public class NotificationFirebase {
         this.userName = userName;
     }
 
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("songId", songId);
         result.put("songName", songName);
         result.put("userName", userName);
+        result.put("cover",cover);
 
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "NotificationFirebase{" +
-                "songId=" + songId +
-                ", songName='" + songName + '\'' +
-                ", userName='" + userName + '\'' +
-                '}';
-    }
 }
