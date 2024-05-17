@@ -345,9 +345,11 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         if (currentSongId != newSongId) {
             exoPlayer.clearMediaItems();
             if (exoPlayerQueue.isShuffle()) exoPlayerQueue.shuffle();
-            exoPlayer.setMediaItems(exoPlayerQueue.getCurrentQueue());
+            List<MediaItem> queue = exoPlayerQueue.getCurrentQueue();
+            int currentPos = exoPlayerQueue.getCurrentPosition();
+            exoPlayer.setMediaItems(queue);
             exoPlayer.prepare();
-            exoPlayer.seekTo(exoPlayerQueue.getCurrentPosition(), 0);
+            exoPlayer.seekTo(currentPos, 0);
             exoPlayer.play();
         } else {
             if (!exoPlayer.isPlaying()) exoPlayer.play();

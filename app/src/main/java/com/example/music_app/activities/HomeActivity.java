@@ -268,18 +268,28 @@ public class HomeActivity extends BaseActivity {
         });
     }
     private void GetNewSong(){
-        songNewList = new ArrayList<>();
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        apiService.getMostLikeSong(0, 5).enqueue(new Callback<GenericResponse<SongResponse>>() {
+            @Override
+            public void onResponse(Call<GenericResponse<SongResponse>> call, Response<GenericResponse<SongResponse>> response) {
+                if (response.isSuccessful()) {
+                    songFavoriteList = new ArrayList<>();
+                    songFavoriteList = response.body().getData().getContent();
+                    songFavoriteAdapter.setSongList(songFavoriteList);
+                    rvFavoriteSong.setHasFixedSize(true);
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL,false );
+                    rvFavoriteSong.setLayoutManager(layoutManager);
+                    rvFavoriteSong.setAdapter(songFavoriteAdapter);
+                } else {
+                    Log.e("DataRes", "No Res");
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL,false );
-        rvNewSong.setLayoutManager(layoutManager);
-
-        page = 0;
-
-        songNewAdapter = new NewSongHomeAdapter(getApplicationContext(), songNewList, songNewItemClick);
-
-        fetchSongs(apiService.getSongNewReleased(page, 10));
-        rvNewSong.setAdapter(songNewAdapter);
+                }
+            }
+            @Override
+            public void onFailure(Call<GenericResponse<SongResponse>> call, Throwable t) {
+                Log.d("ErrorReponse", t.getMessage());
+            }
+        });
 
 
 //        NestedScrollView nestedScrollView = findViewById(R.id.nested_scroll_view);
@@ -326,25 +336,6 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-
-
-    private void loadNextPage() {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (page < totalPages) {
-                    fetchSongs(apiService.getSongNewReleased(page, 5));
-                }
-                isLoading = false;
-                if (page == totalPages) {
-                    isLastPage = true;
-                }
-                Log.d("HomeActivity", "run: Loading page" + page + "/" + totalPages);
-            }
-        }, 500);
     }
 
     private void fetchSongs(Call<GenericResponse<SongResponse>> call) {
