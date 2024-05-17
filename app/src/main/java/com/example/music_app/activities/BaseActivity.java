@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
+import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.fragments.SongDetailFragment;
 import com.example.music_app.helpers.ProgressBarUpdater;
 import com.example.music_app.services.ExoBuilderService;
@@ -23,9 +24,11 @@ import com.example.music_app.services.ExoPlayerQueue;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
+import java.util.concurrent.CountDownLatch;
+
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private ExoPlayer exoPlayer;
+    protected ExoPlayer exoPlayer;
     private ExoBuilderService exoBuilderService;
     protected TextView tvSongTitle, tvSongArtist;
     protected ImageView ivSongImage;
@@ -35,16 +38,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected ExoPlayerQueue exoPlayerQueue;
     protected
     View includeMiniPlayer;
+    private CountDownLatch latch = new CountDownLatch(1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-            exoBuilderService = new ExoBuilderService(this, new ExoBuilderService.ServiceReadyCallback() {
+        exoBuilderService = new ExoBuilderService(this, new ExoBuilderService.ServiceReadyCallback() {
             @Override
             public void onServiceReady() {
                 exoPlayer = exoBuilderService.getExoPlayer();
@@ -56,7 +55,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                         if (mediaItem != null) {
                             MediaMetadata metadata = mediaItem.mediaMetadata;
                             updateMiniplayer(metadata);
-
                             progressBarUpdater.startUpdating();
                         }
                     }
@@ -68,13 +66,21 @@ public abstract class BaseActivity extends AppCompatActivity {
                     progressBarUpdater.startUpdating();
                 }
 
-                if (exoPlayer.getCurrentMediaItem() == null) {
-                    findViewById(R.id.miniplayer).setVisibility(View.GONE);
-                } else {
-                    findViewById(R.id.miniplayer).setVisibility(View.VISIBLE);
+                if (includeMiniPlayer != null) {
+                    if (exoPlayer.getCurrentMediaItem() == null) {
+                        includeMiniPlayer.setVisibility(View.GONE);
+                    } else {
+                        includeMiniPlayer.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
+                }
+
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     protected void initMiniPlayer() {
@@ -114,7 +120,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void updateMiniplayer(MediaMetadata metadata) {
+    protected void  updateMiniplayer(MediaMetadata metadata) {
+        if (metadata == null) {
+            return;
+        }
+        Log.d("BaseActivity", "updateMiniplayer: " + metadata.title);
         tvSongTitle.setText(metadata.title);
         tvSongArtist.setText(metadata.extras.getString("artist"));
         Glide.with(getApplicationContext()).load(metadata.artworkUri).into(ivSongImage);
@@ -126,14 +136,16 @@ public abstract class BaseActivity extends AppCompatActivity {
                 playPauseBtn.setIcon(getDrawable(R.drawable.ic_32dp_filled_play));
             }
         }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (exoPlayer != null) {
-            if (exoPlayer.getCurrentMediaItem() != null) {
+        if (includeMiniPlayer != null && exoPlayer != null) {
+            if (exoPlayer.getCurrentMediaItem() == null) {
+                includeMiniPlayer.setVisibility(View.GONE);
+            } else {
+                includeMiniPlayer.setVisibility(View.VISIBLE);
                 MediaItem currentSong = exoPlayer.getCurrentMediaItem();
                 MediaMetadata metadata = currentSong.mediaMetadata;
                 updateMiniplayer(metadata);
@@ -167,7 +179,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showSongDetailFragment() {
-        SongDetailFragment songDetailFragment = (SongDetailFragment) getSupportFragmentManager().findFragmentByTag("SongDetailFragment");
-        getSupportFragmentManager().beginTransaction().show(songDetailFragment).commit();
+        Intent intent = new Intent(this, SongDetailActivity.class);
+        startActivity(intent);
     }
 }
