@@ -93,6 +93,10 @@
             android:exported="false">
         </activity>
         <activity
+            android:name=".activities.MainActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".activities.auth.GetStartedActivity"
             android:exported="true">
             <intent-filter>
