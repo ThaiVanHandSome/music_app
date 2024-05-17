@@ -78,4 +78,5 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging:24.0.0")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-database")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 }

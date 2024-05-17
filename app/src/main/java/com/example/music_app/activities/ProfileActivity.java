@@ -37,6 +37,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MultipartBody;
@@ -152,23 +153,49 @@ public class ProfileActivity extends AppCompatActivity {
     private void updateInfo() throws IOException, URISyntaxException {
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
 
-        MultipartBody.Part imagePart = MultipartUtil.createMultipartFromUri(this, mUri, "imageFile", "image_file.png");
         UpdateProfileRequest newInfoUser = new UpdateProfileRequest();
-//        newInfoUser.setAvatar(imagePart);
-        newInfoUser.setLastName(ho.getText().toString());
-        newInfoUser.setFirstName(ten.getText().toString());
+
+        newInfoUser.setLastName(Objects.requireNonNull(ho.getText()).toString());
+        newInfoUser.setFirstName(Objects.requireNonNull(ten.getText()).toString());
         newInfoUser.setGender(gender);
-        apiService.updateProfile(userId, newInfoUser, imagePart).enqueue(new Callback<ResponseMessage>() {
+        String id = String.valueOf(userId);
+        try {
+            uploadAvatar();
+        } catch (Exception ignored) {
+            Log.e("FailToUpload", "Code chay vao day");
+        }
+        apiService.updateProfile(id, newInfoUser).enqueue(new Callback<ResponseMessage>() {
             @Override
             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
                 if (response.isSuccessful()) {
-                    Log.e("GoiThanhCong","Code chay vao day");
+                    Toast.makeText(ProfileActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseMessage> call, Throwable t) {
-                Log.e("GoiThanhCong","Code chay vao day1");
+                Log.e("ThatBai", "Code chay vao day1");
+            }
+        });
+
+    }
+
+    private void uploadAvatar() throws IOException, URISyntaxException {
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+
+        MultipartBody.Part imagePart = MultipartUtil.createMultipartFromUri(this, mUri, "imageFile", "image_file.png");
+        String id = String.valueOf(userId);
+        Log.d("success_parse", imagePart.toString());
+        apiService.uploadAvatar(imagePart, id).enqueue(new Callback<ResponseMessage>() {
+            @Override
+            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                Log.d("success_parse", imagePart.toString());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+
+                Log.d("error", t.toString());
             }
         });
     }
