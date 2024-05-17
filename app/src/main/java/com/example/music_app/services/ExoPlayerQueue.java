@@ -87,6 +87,7 @@ public class ExoPlayerQueue {
         currentPosition = 0;
     }
 
+
     public void shuffle() {
         Collections.shuffle(currentQueue);
     }

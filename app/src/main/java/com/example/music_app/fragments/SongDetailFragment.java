@@ -77,7 +77,6 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        exoPlayerQueue = ExoPlayerQueue.getInstance();
 
         if (exoPlayerQueue.isShuffle()) {
             btnShuffle.setIconTint(getResources().getColorStateList(R.color.primary));

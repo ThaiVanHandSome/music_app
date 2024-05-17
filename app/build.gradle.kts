@@ -68,7 +68,7 @@ dependencies {
     implementation("androidx.media3:media3-ui:1.3.1")
     implementation("androidx.media3:media3-session:1.1.0")
 
-    implementation("androidx.media:media:1.4.3")
+    implementation("androidx.media:media:1.7.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.palette:palette:1.0.0")
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))

@@ -144,16 +144,7 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                 includeOption.setVisibility(View.GONE);
                 break;
             case "newReleased":
-                songList.clear();
-                page = 0;
-                size = 10;
-                containerFragment.setBackgroundResource(R.drawable.linear_background_newreleased);
-                coverPic.setImageResource(R.drawable.new_released);
-                tvPlaylistTitle.setText(R.string.newreleased_title);
-                tvPlaylistIntro.setText(R.string.newreleased_intro);
-                fetchSongs(apiService.getSongNewReleased(page, size));
-                rvListSong.setAdapter(songAdapter);
-                break;
+
         }
 
         MaterialButton btnShuffle = includeOption.findViewById(R.id.btnTopPlaylistOptionShuffle);
@@ -279,7 +270,6 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 if (page < totalPages) {
                     APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
                     Call<GenericResponse<SongResponse>> call = null;
