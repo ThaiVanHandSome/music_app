@@ -25,6 +25,7 @@ import com.cloudinary.api.exceptions.ApiException;
 import com.example.music_app.R;
 import com.example.music_app.activities.HomeActivity;
 import com.example.music_app.activities.LibraryActivity;
+import com.example.music_app.activities.MainActivity;
 import com.example.music_app.internals.SharePrefManagerAccount;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.models.ForgotPassword;
@@ -209,7 +210,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("ProviderLogin", res.getProvider());
                     Log.d("LoginToken", res.getAccessToken());
                     SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -302,7 +303,7 @@ public class LoginActivity extends AppCompatActivity {
                     user.setRefreshToken(res.getRefreshToken());
                     user.setProvider(res.getProvider());
                     SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 }
