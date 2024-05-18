@@ -211,6 +211,7 @@ public class HomeFragment extends Fragment {
         title = view.findViewById(R.id.title_appbar_home);
         xtt_topthinhhanh = view.findViewById(R.id.xemtatca_topthinhhanh);
         xtt_moinguoiyeuthich = view.findViewById(R.id.xemtatca_moinguoiyeuthich);
+        xtt_nghesihangdau = view.findViewById(R.id.xemtatca_nghesihangdau);
         xtt_moiramat = view.findViewById(R.id.xemtatca_moiramat);
     }
     private void GetTopTrend(){
