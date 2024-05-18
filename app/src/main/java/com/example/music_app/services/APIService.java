@@ -130,6 +130,12 @@ public interface APIService {
     @GET("song/{id_song}/comments")
     Call<SongCommentResponse> getAllCommentsOfSong(@Path("id_song") Long idSong);
 
+    @POST("playlist/{id_playlist}")
+    Call<ResponseMessage> updatePlaylistName(@Path("id_playlist") int i, @Query("name") String name);
+
+    @DELETE("playlistSong/{id_playlist}/{id_song}")
+    Call<ResponseMessage> deleteSongFromPlaylist(@Path("id_playlist") Long id_playlist, @Path("id_song") Long id_song);
+  
     @POST("song/post-comment")
     Call<ResponseMessage> postComment(@Body SongCommentRequest songCommentRequest);
 

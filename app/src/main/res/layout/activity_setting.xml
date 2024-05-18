@@ -24,53 +24,43 @@
 
 
         <TextView
-            style="@style/TextAppearance.AppCompat.Title"
+            style="@style/TextAppearance.App.TitleMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hệ Thống"
+            android:text="@string/label_system"
             android:textColor="@color/neutral5"
             android:layout_marginBottom="@dimen/spacing_16dp"/>
 
         <TextView
-            style="@style/TextAppearance.App.BodyLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ngôn Ngữ"
-            android:textColor="@color/neutral5"
-            android:layout_marginBottom="@dimen/spacing_16dp"/>
+            android:text="@string/label_language"
+            android:textColor="@color/neutral5" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
             <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="end"
                 android:layout_marginBottom="@dimen/spacing_16dp">
 
-
-
                 <RadioButton
-                    android:id="@+id/RadioButtonTiengViet"
+                    android:id="@+id/rad_vietnamese"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="100dp"
-                    android:checked="true"
-                    android:text="Tiếng Việt"
+                    android:text="@string/label_language_vietnamese"
                     android:textColor="@color/neutral5"/>
 
 
                 <RadioButton
-                    android:id="@+id/RadioButtonTiengAnh"
+                    android:id="@+id/rad_english"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tiếng Anh"
+                    android:text="@string/label_language_english"
                     android:textColor="@color/neutral5" />
 
             </RadioGroup>
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,12 +69,11 @@
             android:layout_marginBottom="@dimen/spacing_16dp">
 
             <TextView
-                style="@style/TextAppearance.App.BodyLarge"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Giao diện tối"
+                android:layout_weight="1"
+                android:text="@string/label_dark_mode"
                 android:textColor="@color/neutral5"
-                android:layout_marginEnd="160dp"
                 android:layout_marginBottom="@dimen/spacing_16dp"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -96,27 +85,25 @@
         </LinearLayout>
 
         <TextView
-            style="@style/TextAppearance.AppCompat.Title"
+            style="@style/TextAppearance.App.TitleMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tài Khoản"
+            android:text="@string/label_account"
             android:textColor="@color/neutral5"
             android:layout_marginBottom="@dimen/spacing_16dp"/>
 
         <TextView
-            style="@style/TextAppearance.App.BodyLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Đổi mật khẩu"
+            android:text="@string/label_change_password"
             android:id="@+id/ChangePasswordTxt"
             android:textColor="@color/neutral5"
             android:layout_marginBottom="@dimen/spacing_16dp"/>
 
         <TextView
-            style="@style/TextAppearance.App.BodyLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Đăng Xuất"
+            android:text="@string/label_logout"
             android:id="@+id/LogoutTxt"
             android:textColor="@color/neutral5"
             android:layout_marginBottom="@dimen/spacing_16dp"/>

@@ -14,7 +14,7 @@
         android:layout_marginHorizontal="@dimen/spacing_8dp"
         android:layout_marginTop="@dimen/spacing_8dp"
         android:textColorHint="@color/neutral5"
-        android:hint="🎧 Chủ đề"/>
+        android:hint="@string/label_topic"/>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,8 +26,8 @@
         android:layout_marginHorizontal="@dimen/spacing_8dp"
         android:layout_marginTop="@dimen/spacing_8dp"
         android:textColorHint="@color/neutral5"
-        android:hint="🌟 Đề xuất cho bạn"/>
+        android:hint="@string/label_recommended"/>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>.
+        android:layout_height="wrap_content"/>
 </LinearLayout>

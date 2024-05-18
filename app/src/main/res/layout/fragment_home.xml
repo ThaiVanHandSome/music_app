@@ -32,11 +32,11 @@
                 <TextView
                     android:id="@+id/textView3"
                     style="@style/TextAppearance.AppCompat.Medium"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_16dp"
                     android:layout_weight="1"
-                    android:text="🔥 Top thịnh hành"
+                    android:text="@string/label_top_trending"
                     android:textColor="@color/neutral5" />
 
                 <TextView
@@ -44,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/spacing_16dp"
-                    android:text="Xem tất cả"
+                    android:text="@string/label_see_all"
                     android:textColor="@color/primary" />
             </LinearLayout>
 
@@ -60,11 +60,11 @@
 
                 <TextView
                     style="@style/TextAppearance.AppCompat.Medium"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_16dp"
                     android:layout_weight="1"
-                    android:text="❤️ Mọi người yêu thích"
+                    android:text="@string/label_top_favorite"
                     android:textColor="@color/neutral5" />
 
                 <TextView
@@ -72,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/spacing_16dp"
-                    android:text="Xem tất cả"
+                    android:text="@string/label_see_all"
                     android:textColor="@color/primary" />
             </LinearLayout>
 
@@ -89,13 +89,20 @@
 
                 <TextView
                     style="@style/TextAppearance.AppCompat.Medium"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_16dp"
                     android:layout_weight="1"
-                    android:text="👑 Nghệ sĩ hàng đầu"
+                    android:text="@string/label_top_artist"
                     android:textColor="@color/neutral5" />
 
+                <TextView
+                    android:id="@+id/xemtatca_nghesihangdau"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/spacing_16dp"
+                    android:text="@string/label_see_all"
+                    android:textColor="@color/primary" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -110,11 +117,11 @@
 
                 <TextView
                     style="@style/TextAppearance.AppCompat.Medium"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_16dp"
                     android:layout_weight="1"
-                    android:text="✨ Mới ra mắt"
+                    android:text="@string/label_new_released"
                     android:textColor="@color/neutral5" />
 
                 <TextView
@@ -122,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/spacing_16dp"
-                    android:text="Xem tất cả"
+                    android:text="@string/label_see_all"
                     android:textColor="@color/primary" />
             </LinearLayout>
 

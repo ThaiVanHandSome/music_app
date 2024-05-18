@@ -28,7 +28,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
+public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> implements BottomSheetDialog.OnSongDeletedListener{
     private final Context context;
     private List<Song> songList;
 
@@ -64,10 +64,10 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             @Override
             public void onClick(View view) {
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+                bottomSheetDialog.setContent(song.getIdSong(), song.getImage(), song.getName(), song.getArtistName());
+                bottomSheetDialog.setOnSongDeletedListener(SongAdapter.this);
                 bottomSheetDialog.show(((androidx.fragment.app.FragmentActivity) context)
                         .getSupportFragmentManager(), "ModalBottomSheet");
-                bottomSheetDialog.setContent(song.getIdSong(), song.getImage(), song.getName(), song.getArtistName());
-
             }
         });
         APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
@@ -92,6 +92,18 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     @Override
     public int getItemCount() {
         return songList == null ? 0 : songList.size();
+    }
+
+    @Override
+    public void onSongDeleted(Long songId) {
+        for (int i = 0; i < songList.size(); i++) {
+            if (songList.get(i).getIdSong().equals(songId)) {
+                songList.remove(i);
+                notifyItemRemoved(i);
+                break;
+            }
+        }
+        int songs = getItemCount();
     }
 
     public class SongViewHolder extends RecyclerView.ViewHolder {

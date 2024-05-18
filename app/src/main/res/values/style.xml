@@ -106,7 +106,7 @@
 
     <style name="OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
         <item name="android:textAppearance">@style/TextAppearance.App.TitleMedium</item>
-        <item name="boxStrokeColor">@color/neutral4</item>
+        <item name="boxStrokeColor">@color/neutral5</item>
         <item name="android:textColor">@color/neutral5</item>
     </style>
 
@@ -119,6 +119,18 @@
 
     <!-- Custom text input field -->
     <style name="TextInputFilledStyle" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="android:layout_marginBottom">@dimen/spacing_24dp</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxCornerRadiusTopStart">@dimen/border_radius_8dp</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/border_radius_8dp</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/border_radius_8dp</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/border_radius_8dp</item>
+        <item name="helperTextTextAppearance">@style/TextAppearance.App.BodySmall</item>
+        <item name="helperTextTextColor">@color/neutral3</item>
+        <item name="errorEnabled">true</item>
+    </style>
+
+    <style name="TextInputOutlinedStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="android:layout_marginBottom">@dimen/spacing_24dp</item>
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxCornerRadiusTopStart">@dimen/border_radius_8dp</item>
