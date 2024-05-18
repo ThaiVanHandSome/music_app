@@ -12,15 +12,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     private static Retrofit retrofit;
 
-    private static OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(100, TimeUnit.SECONDS)
-            .readTimeout(100,TimeUnit.SECONDS).build();
+//    private static OkHttpClient client = new OkHttpClient.Builder()
+//            .connectTimeout(100, TimeUnit.SECONDS)
+//            .readTimeout(100,TimeUnit.SECONDS).build();
 
     public static Retrofit getRetrofit() {
         if(retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl("http://10.0.2.2:8989/api/v1/")
-                    .client(client)
+                    .client(getClient())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
