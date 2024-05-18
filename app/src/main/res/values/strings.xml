@@ -15,7 +15,7 @@
     <string name="app_description">Âm nhạc dành cho mọi người</string>
 
     <!-- Menu items for bottom navigation bar -->
-    <string name="menu_item_home">Phân tích</string>
+    <string name="menu_item_home">Trang <chủ></chủ></string>
     <string name="menu_item_search">Tìm kiếm</string>
     <string name="menu_item_library">Thư viện</string>
     <string name="menu_item_profile">Hồ sơ</string>
