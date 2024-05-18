@@ -74,7 +74,7 @@ public class SearchFragment extends Fragment {
                 fragmentManager.beginTransaction()
                         .replace(R.id.search_frame_layout, SearchInitFragment.newInstance())
                         .commit();
-                return false; // Trả về true nếu bạn đã xử lý sự kiện và không muốn SearchView được đóng
+                return false;
             }
         });
         return view;

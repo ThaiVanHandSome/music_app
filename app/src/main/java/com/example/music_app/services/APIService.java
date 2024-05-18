@@ -1,6 +1,7 @@
 package com.example.music_app.services;
 
 import com.example.music_app.models.Artist;
+import com.example.music_app.models.ArtistResponse;
 import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.ChangePasswordRequest;
@@ -14,6 +15,7 @@ import com.example.music_app.models.PlaylistResponse;
 import com.example.music_app.models.RegisterRequest;
 import com.example.music_app.models.RegisterResponse;
 import com.example.music_app.models.Song;
+import com.example.music_app.models.SongCommentRequest;
 import com.example.music_app.models.SongCommentResponse;
 import com.example.music_app.models.SongResponse;
 
@@ -66,6 +68,9 @@ public interface APIService {
 
     @GET("song/new-released")
     Call<GenericResponse<SongResponse>> getSongNewReleased(@Query("page") int page, @Query("size") int size);
+
+    @PATCH("song/{id}/view")
+    Call<GenericResponse<Song>> increaseViewOfSongBySongId(@Path("id") Long songId);
 
     @GET("song/{songId}/artists")
     Call<GenericResponse<List<Artist>>> getArtistsBySongId(@Path("songId") Long songId);
@@ -130,4 +135,25 @@ public interface APIService {
 
     @DELETE("playlistSong/{id_playlist}/{id_song}")
     Call<ResponseMessage> deleteSongFromPlaylist(@Path("id_playlist") Long id_playlist, @Path("id_song") Long id_song);
+  
+    @POST("song/post-comment")
+    Call<ResponseMessage> postComment(@Body SongCommentRequest songCommentRequest);
+
+    @GET("artists")
+    Call<GenericResponse<ArtistResponse>> getAllArtists(@Query("page") int page, @Query("size") int size);
+
+    @GET("artist/{id}")
+    Call<GenericResponse<Artist>> getArtistById(@Path("id") int id);
+
+    @GET("artist/{idArtist}/songs/count")
+    Call<GenericResponse<Integer>> getSongCountByArtistId(@Path("idArtist") int idArtist);
+
+    @GET("artist/{artistId}/songs")
+    Call<GenericResponse<SongResponse>> getAllSongsByArtistId(@Path("artistId") int artistId, @Query("page") int page, @Query("size") int size);
+
+    @GET("user/{id_user}/is-followed-artist")
+    Call<GenericResponse<Boolean>> isFollowedArtist(@Path("id_user") int id_user, @Query("id_artist") int id_artist);
+
+    @POST("user/{id_user}/follow-artist")
+    Call<GenericResponse<Boolean>> followArtist(@Path("id_user") int id_user, @Query("id_artist") int id_artist);
 }

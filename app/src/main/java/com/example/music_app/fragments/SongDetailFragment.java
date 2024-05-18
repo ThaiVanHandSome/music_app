@@ -2,6 +2,7 @@ package com.example.music_app.fragments;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -9,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +23,7 @@ import androidx.annotation.OptIn;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
 import androidx.media3.common.Player;
+import androidx.media3.common.util.Log;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.common.util.Util;
 import androidx.media3.exoplayer.ExoPlayer;
@@ -31,13 +36,19 @@ import com.example.music_app.activities.BaseActivity;
 import com.example.music_app.adapters.SongCommentAdapter;
 import com.example.music_app.decorations.BottomOffsetDecoration;
 import com.example.music_app.helpers.GradientHelper;
+import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.ResponseMessage;
+import com.example.music_app.models.Song;
 import com.example.music_app.models.SongComment;
+import com.example.music_app.models.SongCommentRequest;
 import com.example.music_app.models.SongCommentResponse;
+import com.example.music_app.models.User;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
 import com.example.music_app.services.ExoBuilderService;
 import com.example.music_app.services.ExoPlayerQueue;
 import com.example.music_app.services.ExoService;
+import com.example.music_app.services.SongViewManager;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -59,8 +70,11 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     private ExoPlayer exoPlayer;
     SeekBar seekBar;
     TextView tvSongTitle, tvArtistName, tvCurrentTime, tvDuration;
-    MaterialButton btnRepeat, btnShuffle, btnPrevious, btnPlay, btnNext;
+    MaterialButton btnRepeat, btnShuffle, btnPrevious, btnPlay, btnNext, publishCommentBtn;
     CircleImageView imSongAvt;
+    EditText commentTxt;
+    private FrameLayout overlay;
+    private ProgressBar progressBar;
     View view;
     RecyclerView recyclerViewCmt;
 
@@ -71,6 +85,8 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     private ExoPlayerQueue exoPlayerQueue;
     private RotateAnimation rotateAnimation;
     private APIService apiService;
+    private SongViewManager songViewManager;
+    private User user;
 
     public SongDetailFragment() {
 
@@ -91,7 +107,6 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        exoPlayerQueue = ExoPlayerQueue.getInstance();
 
         if (exoPlayerQueue.isShuffle()) {
             btnShuffle.setIconTint(getResources().getColorStateList(R.color.primary));
@@ -105,7 +120,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
                 if (exoPlayerQueue.isShuffle()) {
                     btnShuffle.setIconTint(getResources().getColorStateList(R.color.primary));
                 } else {
-                    btnShuffle.setIconTint(getResources().getColorStateList(R.color.neutral3));
+                    btnShuffle.setIconTint(getResources().getColorStateList(R.color.neutral5));
                 }
             }
         });
@@ -115,7 +130,15 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
                 if (exoPlayer != null) {
-                    exoPlayer.seekToPreviousMediaItem();
+                    if (exoPlayerQueue.isShuffle()) {
+                        MediaItem randomSong = exoPlayerQueue.getRandomUnplayedSong();
+                        if (randomSong != null) {
+                            exoPlayer.setMediaItem(randomSong);
+                            exoPlayerQueue.addPlayedSong(randomSong);
+                        }
+                    } else {
+                        exoPlayer.seekToPreviousMediaItem();
+                    }
                 }
             }
         });
@@ -142,7 +165,18 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
                 if (exoPlayer != null) {
-                    exoPlayer.seekToNextMediaItem();
+                    if (exoPlayerQueue.isShuffle()) {
+                        MediaItem randomSong = exoPlayerQueue.getRandomUnplayedSong();
+                        if (randomSong != null) {
+                            exoPlayer.setMediaItem(randomSong);
+                            exoPlayerQueue.addPlayedSong(randomSong);
+                        }
+                    } else if (exoPlayer.getRepeatMode() == Player.REPEAT_MODE_ONE) {
+                        exoPlayer.seekTo(0);
+                    }
+                    else {
+                        exoPlayer.seekToNextMediaItem();
+                    }
                 }
             }
         });
@@ -151,17 +185,19 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         btnRepeat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 int repeatMode = exoPlayer.getRepeatMode();
                 if (repeatMode == Player.REPEAT_MODE_OFF) {
-                    btnRepeat.setIcon(getResources().getDrawable(R.drawable.ic_24dp_outline_repeat_on));
-                    btnRepeat.setIconTint(getResources().getColorStateList(R.color.neutral3));
-                } else if (repeatMode == Player.REPEAT_MODE_ALL) {
+                    exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
                     btnRepeat.setIcon(getResources().getDrawable(R.drawable.ic_24dp_outline_repeat_on));
                     btnRepeat.setIconTint(getResources().getColorStateList(R.color.primary));
-                } else {
+                } else if (repeatMode == Player.REPEAT_MODE_ALL){
+                    exoPlayer.setRepeatMode(Player.REPEAT_MODE_ONE);
                     btnRepeat.setIcon(getResources().getDrawable(R.drawable.ic_24dp_filled_repeat_one));
-                    btnRepeat.setIconTint(getResources().getColorStateList(R.color.neutral3));
+                    btnRepeat.setIconTint(getResources().getColorStateList(R.color.primary));
+                } else {
+                    exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
+                    btnRepeat.setIcon(getResources().getDrawable(R.drawable.ic_24dp_outline_repeat_off));
+                    btnRepeat.setIconTint(getResources().getColorStateList(R.color.neutral5));
                 }
             }
         });
@@ -198,6 +234,21 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         super.onStop();
     }
 
+    private void hideOverlay() {
+        overlay.setVisibility(View.INVISIBLE);
+        overlay.setFocusable(false);
+        overlay.setClickable(false);
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void openOverlay() {
+        overlay.setBackgroundColor(Color.argb(89, 0, 0, 0));
+        overlay.setVisibility(View.VISIBLE);
+        overlay.setFocusable(true);
+        overlay.setClickable(true);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -214,6 +265,11 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         btnPlay = view.findViewById(R.id.btnPlay);
         btnNext = view.findViewById(R.id.btnNext);
         recyclerViewCmt = view.findViewById(R.id.recyclerViewCmt);
+        commentTxt = view.findViewById(R.id.commentTxt);
+        publishCommentBtn = view.findViewById(R.id.publishCommentBtn);
+        progressBar = view.findViewById(R.id.progressBar);
+        overlay = view.findViewById(R.id.overlay);
+        songViewManager = SongViewManager.getInstance();
 
         handler = new Handler();
         if (getActivity() instanceof BaseActivity) {
@@ -223,11 +279,47 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
 
         songCommentAdapter = new SongCommentAdapter(getContext(), songComments, null);
         recyclerViewCmt.setAdapter(songCommentAdapter);
-        recyclerViewCmt.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerViewCmt.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
         recyclerViewCmt.addItemDecoration(new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset)));
+        recyclerViewCmt.setAdapter(songCommentAdapter);
         getAllComments();
 
+        publishCommentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(String.valueOf(commentTxt.getText()).length() == 0) return;
+                System.out.println(String.valueOf(commentTxt.getText()).length());
+                openOverlay();
+                postComment();
+            }
+        });
+
         return view;
+    }
+
+    private void postComment() {
+        SongCommentRequest req = new SongCommentRequest();
+        req.setIdSong(exoPlayer.getCurrentMediaItem().mediaMetadata.extras.getLong("id"));
+        user = SharePrefManagerUser.getInstance(getContext()).getUser();
+        req.setIdUser((long) user.getId());
+        req.setContent(String.valueOf(commentTxt.getText()));
+        commentTxt.setText("");
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        apiService.postComment(req).enqueue(new Callback<ResponseMessage>() {
+            @Override
+            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                hideOverlay();
+                ResponseMessage res = response.body();
+                assert res != null;
+                getAllComments();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                hideOverlay();
+            }
+        });
+
     }
 
     private void getAllComments() {
@@ -240,9 +332,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
                 assert res != null;
                 if(res.isSuccess()) {
                     songComments = res.getData();
-                    songCommentAdapter = new SongCommentAdapter(getContext(), songComments, null);
-                    recyclerViewCmt.setAdapter(songCommentAdapter);
-                    songCommentAdapter.notifyDataSetChanged();
+                    songCommentAdapter.setSongComments(songComments);
                 }
             }
 
@@ -256,14 +346,16 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        if (exoPlayer != null) {
-//            if (exoPlayer.getCurrentMediaItem() != null) {
-//                MediaItem currentSong = exoPlayer.getCurrentMediaItem();
-//                MediaMetadata metadata = currentSong.mediaMetadata;
-//                updateSongAsset(metadata);
-//                handler.post(updateMediaRunable);
-//            }
-//        }
+        if (exoPlayer != null) {
+            if (exoPlayer.getCurrentMediaItem() != null) {
+                MediaItem currentSong = exoPlayer.getCurrentMediaItem();
+                MediaMetadata metadata = currentSong.mediaMetadata;
+                updateSongAsset(metadata);
+                handler.post(updateMediaRunable);
+                btnPlay.performClick();
+                btnPlay.performClick();
+            }
+        }
     }
 
     @OptIn(markerClass = UnstableApi.class)
@@ -279,9 +371,12 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         if (currentSongId != newSongId) {
             exoPlayer.clearMediaItems();
             if (exoPlayerQueue.isShuffle()) exoPlayerQueue.shuffle();
-            exoPlayer.setMediaItems(exoPlayerQueue.getCurrentQueue());
+            List<MediaItem> queue = exoPlayerQueue.getCurrentQueue();
+            int currentPos = exoPlayerQueue.getCurrentPosition();
+            exoPlayer.setMediaItems(queue);
+            exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
             exoPlayer.prepare();
-            exoPlayer.seekTo(exoPlayerQueue.getCurrentPosition(), 0);
+            exoPlayer.seekTo(currentPos, 0);
             exoPlayer.play();
         } else {
             if (!exoPlayer.isPlaying()) exoPlayer.play();
@@ -302,9 +397,19 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
             }
             @Override
             public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
+                if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO) {
+                    if (exoPlayerQueue.isShuffle()) {
+                        MediaItem randomSong = exoPlayerQueue.getRandomUnplayedSong();
+                        if (randomSong != null) {
+                            exoPlayer.setMediaItem(randomSong);
+                            exoPlayerQueue.addPlayedSong(randomSong);
+                        }
+                    }
+                }
                 if (mediaItem != null) {
                     MediaMetadata metadata = mediaItem.mediaMetadata;
                     updateSongAsset(metadata);
+                    getAllComments();
                 }
             }
         });

@@ -11,7 +11,7 @@ public class ExoPlayerQueue {
     private static ExoPlayerQueue instance = null;
     private final Random random = new Random();
     private List<MediaItem> currentQueue;
-    private List<Integer> played;
+    private List<MediaItem> played;
     private boolean shuffle = false;
     private boolean repeat = false;
     private int currentPosition = 0;
@@ -62,7 +62,7 @@ public class ExoPlayerQueue {
     }
 
     public void next() {
-        played.add(currentPosition);
+        played.add(currentQueue.get(currentPosition));
         if (!repeat) {
             currentPosition = (shuffle)
                     ? random.nextInt(currentQueue.size())
@@ -77,7 +77,7 @@ public class ExoPlayerQueue {
             currentPosition = 0;
             return;
         }
-        currentPosition = played.get(played.size() - 1);
+        currentPosition = played.size() - 1;
         played.remove(played.size() - 1);
     }
 
@@ -85,6 +85,24 @@ public class ExoPlayerQueue {
         currentQueue = null;
         played = null;
         currentPosition = 0;
+    }
+
+    public MediaItem getRandomUnplayedSong() {
+        if (currentQueue == null || currentQueue.isEmpty()) {
+            return null;
+        }
+        if (played.size() == currentQueue.size()) {
+            played.clear();
+        }
+        int randomIndex = random.nextInt(currentQueue.size());
+        while (played.contains(randomIndex)) {
+            randomIndex = random.nextInt(currentQueue.size());
+        }
+        return currentQueue.get(randomIndex);
+    }
+
+    public void addPlayedSong(MediaItem mediaItem) {
+        played.add(mediaItem);
     }
 
     public void shuffle() {

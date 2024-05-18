@@ -33,6 +33,7 @@ import com.example.music_app.models.User;
 import com.example.music_app.models.UserFirebase;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
+import com.example.music_app.services.FirebaseNotification;
 import com.example.music_app.services.NotificationService;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -67,15 +68,26 @@ public class NotificationActivity extends AppCompatActivity {
     List<NotificationFirebase> notificationList = new ArrayList<>();
     private boolean isFirstLoad = true;
 
+    Button button;
+
+    FirebaseNotification firebaseNotification;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
         recyclerView = (RecyclerView) findViewById(R.id.rv_notification);
         title = (TextView) findViewById(R.id.title_appbar_home);
-        title.setText(getText(R.string.label_notications));
+        button = (Button) findViewById(R.id.button) ;
         user = SharePrefManagerUser.getInstance(this).getUser();
         getNotification();
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // firebaseNotification = new FirebaseNotification();
+               // firebaseNotification.sendNotificationToUser("Thanh đã thêm bài hát mới","eNcJJzs9RUynriEUPmtAZ9:APA91bEBTpcDnI_r1Br-P1Crtv_otYLOI9E5lwZB7P-run8URHTbieAMsXjXtEKrzMzVD8uAZyZwkz5t6d_lsiOHb083eefMiuEx9MuYvXcxUgqFvbGjW5qRatX4wfkXEzvkrhH_ue55");
+            }
+        });
     }
 
 

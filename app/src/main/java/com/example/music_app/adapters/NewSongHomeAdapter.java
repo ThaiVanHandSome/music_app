@@ -20,11 +20,19 @@ import java.util.List;
 public class NewSongHomeAdapter extends RecyclerView.Adapter<NewSongHomeAdapter.MyViewHolder> {
     private final Context context;
     private final List<Song> songList;
+    private final OnItemClickListener onItemClickListener;
+    private String tag;
 
-    public NewSongHomeAdapter(Context context, List<Song> songList) {
+    public NewSongHomeAdapter(Context context, List<Song> songList, OnItemClickListener onItemClickListener) {
         this.context = context;
         this.songList = songList;
+        this.onItemClickListener = onItemClickListener;
     }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -38,7 +46,7 @@ public class NewSongHomeAdapter extends RecyclerView.Adapter<NewSongHomeAdapter.
         holder.tenBaiHat.setText(song.getName());
         holder.tenNgheSi.setText(song.getName());
         holder.tenNgheSi.setText(song.getName());
-
+        holder.position = position;
         Glide.with(context)
                 .load(song.getImage())
                 .into(holder.image);
@@ -52,6 +60,7 @@ public class NewSongHomeAdapter extends RecyclerView.Adapter<NewSongHomeAdapter.
         public ImageView image;
         public TextView tenBaiHat;
         public TextView tenNgheSi;
+        int position;
 
         public TextView thoiGian;
 
@@ -64,13 +73,23 @@ public class NewSongHomeAdapter extends RecyclerView.Adapter<NewSongHomeAdapter.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Song song = songList.get(getAdapterPosition());
-                    //Goi item
-
+                    if (position != RecyclerView.NO_POSITION) {
+                        onItemClickListener.onSongClick(position, tag);
+                    }
                 }
             });
 
 
         }
+    }
+    public void setSongList(List<Song> songList) {
+        this.songList.clear();
+        this.songList.addAll(songList);
+        notifyDataSetChanged();
+    }
+
+    public interface OnItemClickListener {
+        void onSongClick(int position, String tag);
+        void onPlayPlaylistClick(List<Song> songList);
     }
 }

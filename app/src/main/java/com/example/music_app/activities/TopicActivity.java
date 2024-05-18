@@ -114,7 +114,7 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                 return isLoading;
             }
         });
-        View containerFragment = findViewById(R.id.fragment_container);
+
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         songList = new ArrayList<>();
         songAdapter = new SongAdapter(this, songList, this);
@@ -224,7 +224,6 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 if (page < totalPages) {
                     APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
                     Call<GenericResponse<SongResponse>> call = null;
