@@ -76,7 +76,7 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
 
         includeTopPlaylist = findViewById(R.id.included_top_playlist);
         coverPic = includeTopPlaylist.findViewById(R.id.imCoverPicture);
-        tvPlaylistTitle = includeTopPlaylist.findViewById(R.id.tvPlaylistTitle);
+        tvPlaylistTitle = includeTopPlaylist.findViewById(R.id.edtPlaylistTitle);
         tvPlaylistIntro = includeTopPlaylist.findViewById(R.id.tvPlaylistIntro);
         tvPlaySongCount = includeTopPlaylist.findViewById(R.id.tvPlaylistSongCount);
         tvPlaylistIntro.setVisibility(View.GONE);

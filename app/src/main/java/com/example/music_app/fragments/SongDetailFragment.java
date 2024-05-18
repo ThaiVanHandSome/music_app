@@ -280,7 +280,6 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         songCommentAdapter = new SongCommentAdapter(getContext(), songComments, null);
         recyclerViewCmt.setAdapter(songCommentAdapter);
         recyclerViewCmt.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
-        recyclerViewCmt.addItemDecoration(new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset)));
         recyclerViewCmt.setAdapter(songCommentAdapter);
         getAllComments();
 

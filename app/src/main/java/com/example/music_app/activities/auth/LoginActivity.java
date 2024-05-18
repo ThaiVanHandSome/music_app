@@ -306,6 +306,7 @@ public class LoginActivity extends AppCompatActivity {
                     user.setGender(res.getGender());
                     user.setId(res.getId());
                     user.setAccessToken(res.getAccessToken());
+                    Const.setAccessToken(res.getAccessToken());
                     user.setRefreshToken(res.getRefreshToken());
                     user.setProvider(res.getProvider());
                     SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);

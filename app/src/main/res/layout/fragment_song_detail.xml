@@ -121,15 +121,6 @@
                         android:id="@+id/llControlButtons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="?attr/materialIconButtonStyle"
-                        app:icon="@drawable/ic_32dp_filled_play"
-                        app:iconSize="@dimen/image_48dp"
-                        app:iconTint="@color/pure_color"
-                        android:backgroundTint="@color/neutral5"
-                        android:insetLeft="0dp"
-                        android:insetRight="0dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
                         android:layout_centerInParent="true"
                         android:orientation="horizontal">
 
@@ -152,7 +143,7 @@
                             style="?attr/materialIconButtonStyle"
                             app:icon="@drawable/ic_32dp_filled_play"
                             app:iconSize="@dimen/image_48dp"
-                            app:iconTint="@color/black"
+                            app:iconTint="@color/pure_color"
                             android:backgroundTint="@color/neutral5"
                             android:insetLeft="0dp"
                             android:insetRight="0dp"
@@ -170,7 +161,9 @@
                             android:layout_gravity="center_vertical"
                             android:paddingLeft="0dp"
                             android:paddingRight="0dp"/>
+
                     </LinearLayout>
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnRepeat"
                         android:layout_width="wrap_content"
@@ -185,55 +178,7 @@
                         android:paddingRight="0dp"/>
 
                 </RelativeLayout>
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnRepeat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="?attr/materialIconButtonStyle"
-                    app:icon="@drawable/ic_24dp_outline_repeat_off"
-                    app:iconSize="@dimen/icon_24dp"
-                    app:iconTint="@color/neutral5"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="0dp"
-                    android:paddingRight="0dp"/>
 
-            </RelativeLayout>
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_40dp"
-            android:paddingLeft="@dimen/spacing_16dp"
-            android:paddingRight="@dimen/spacing_16dp"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/llSongControl"
-            >
-            <TextView
-                style="@style/TextAppearance.App.TitleMedium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/label_comment"
-                android:textColor="@color/neutral5"
-                />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/spacing_8dp"
-                android:gravity="center_vertical">
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/avatarImageView"
-                    android:layout_width="@dimen/image_40dp"
-                    android:layout_height="@dimen/image_40dp"
-                    android:src="@drawable/cover_picture"
-                    />
-                <EditText
-                    android:id="@+id/commentTxt"
-                    android:layout_width="0dp"
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -249,21 +194,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bình luận"
+                    android:text="@string/label_comment"
                     android:textSize="@dimen/font_heading1"
                     android:textColor="@color/neutral5"
                     />
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/publishCommentBtn"
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/button_post"
-                    />
-            </LinearLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewCmt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -290,7 +224,7 @@
                         android:id="@+id/publishCommentBtn"
                         android:layout_width="90sp"
                         android:layout_height="wrap_content"
-                        android:text="Đăng"
+                        android:text="@string/button_post"
                         />
                 </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView

@@ -75,6 +75,7 @@ public interface APIService {
     @GET("song/{songId}/artists")
     Call<GenericResponse<List<Artist>>> getArtistsBySongId(@Path("songId") Long songId);
 
+    @PATCH("user/forgot-password")
     Call<ResponseMessage> changePassword(@Body ResetPasswordRequest resetPasswordRequest);
 
     @GET("user/{id_user}/playlists")
@@ -109,8 +110,7 @@ public interface APIService {
 
     @Multipart
     @POST("user/upload")
-    Call<ResponseMessage> uploadAvatar(@Part MultipartBody.Part imageFile, @Part("idUser") String idUser
-    );
+    Call<ResponseMessage> uploadAvatar(@Part MultipartBody.Part imageFile, @Part("idUser") String idUser);
     Call<ResponseMessage> updateProfile(@Part @Path("id_user") int id_user,
                                         @Body UpdateProfileRequest updateProfileRequest,
                                         @Part MultipartBody.Part imageFile);

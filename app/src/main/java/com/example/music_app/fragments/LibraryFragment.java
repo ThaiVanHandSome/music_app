@@ -61,10 +61,10 @@ public class LibraryFragment extends Fragment {
         LibraryViewPager2Adapter adapter = new LibraryViewPager2Adapter(fragmentManager, getLifecycle());
         binding.libraryViewPager.setAdapter(adapter);
         CircleImageView imvUserAvatar = binding.includedTopAppBar.imvUserAvatar;
-        /*user = SharePrefManagerUser.getInstance(this.getContext()).getUser();
+        user = SharePrefManagerUser.getInstance(this.getContext()).getUser();
         Glide.with(this.getContext())
                 .load(user.getAvatar())
-                .into(imvUserAvatar);*/
+                .into(imvUserAvatar);
     }
 
     private void handleTabLayout() {

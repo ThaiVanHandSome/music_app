@@ -35,7 +35,7 @@ public class ExoService extends Service {
 
     private ExoPlayer exoPlayer;
     private ExoPlayerQueue exoPlayerQueue;
-//    private ExoPlayerQueue exoPlayerQueue;
+    //    private ExoPlayerQueue exoPlayerQueue;
     private static final int NOTIFICATION_ID = 1;
     private static final String CHANNEL_ID = "com.example.music_app.services.ExoService";
     private static final String CHANNEL_NAME = "ExoService";
@@ -75,7 +75,7 @@ public class ExoService extends Service {
         });
 
 
-        
+
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

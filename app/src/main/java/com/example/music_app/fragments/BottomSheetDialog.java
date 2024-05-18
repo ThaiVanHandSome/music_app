@@ -138,6 +138,10 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                                             }
                                             Toast.makeText(getContext(), getText(R.string.toast_removed_song_from_playlist), Toast.LENGTH_SHORT).show();
                                             BottomSheetDialog.this.dismiss();
+
+                                            Intent intent = getActivity().getIntent();
+                                            getActivity().finish();
+                                            startActivity(intent);
                                         }
                                     }
 

@@ -10,17 +10,21 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.music_app.R;
 import com.example.music_app.internals.SharePrefManagerUser;
@@ -59,6 +63,8 @@ public class ProfileActivity extends AppCompatActivity {
     RadioButton nam, nu;
 
     MaterialButton btnSubmit;
+    FrameLayout overlay;
+    ProgressBar progressBar;
 
     private Uri mUri;
     private APIService apiService;
@@ -87,8 +93,11 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        user = SharePrefManagerUser.getInstance(this).getUser();
         mapping();
+        user = SharePrefManagerUser.getInstance(getApplicationContext()).getUser();
+        Glide.with(getApplicationContext())
+                .load(user.getAvatar())
+                .into(avatar);
         showInfo();
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +120,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
+                    openOverlay();
                     updateInfo();
                 } catch (URISyntaxException | IOException e) {
                     throw new RuntimeException(e);
@@ -129,6 +139,8 @@ public class ProfileActivity extends AppCompatActivity {
         email = (TextInputEditText) findViewById(R.id.tv_gmail_profile);
         avatar = (CircleImageView) findViewById(R.id.avatar_profile);
         btnSubmit = (MaterialButton) findViewById(R.id.btnSubmit_profile);
+        overlay = (FrameLayout) findViewById(R.id.overlay);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
     }
     void showInfo(){
         title.setText("Trang cá nhân");
@@ -168,12 +180,14 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
                 if (response.isSuccessful()) {
+                    hideOverlay();
                     Toast.makeText(ProfileActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                hideOverlay();
                 Log.e("ThatBai", "Code chay vao day1");
             }
         });
@@ -198,5 +212,19 @@ public class ProfileActivity extends AppCompatActivity {
                 Log.d("error", t.toString());
             }
         });
+    }
+    private void hideOverlay() {
+        overlay.setVisibility(View.INVISIBLE);
+        overlay.setFocusable(false);
+        overlay.setClickable(false);
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void openOverlay() {
+        overlay.setBackgroundColor(Color.argb(89, 0, 0, 0));
+        overlay.setVisibility(View.VISIBLE);
+        overlay.setFocusable(true);
+        overlay.setClickable(true);
+        progressBar.setVisibility(View.VISIBLE);
     }
 }
