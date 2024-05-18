@@ -310,7 +310,7 @@ public class LoginActivity extends AppCompatActivity {
                     user.setProvider(res.getProvider());
                     SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);
                     saveTokenToServer(res.getId());
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 }

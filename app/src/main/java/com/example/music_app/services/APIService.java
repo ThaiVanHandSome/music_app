@@ -69,6 +69,9 @@ public interface APIService {
     @GET("song/new-released")
     Call<GenericResponse<SongResponse>> getSongNewReleased(@Query("page") int page, @Query("size") int size);
 
+    @PATCH("song/{id}/view")
+    Call<GenericResponse<Song>> increaseViewOfSongBySongId(@Path("id") Long songId);
+
     @GET("song/{songId}/artists")
     Call<GenericResponse<List<Artist>>> getArtistsBySongId(@Path("songId") Long songId);
 
@@ -141,4 +144,10 @@ public interface APIService {
 
     @GET("artist/{artistId}/songs")
     Call<GenericResponse<SongResponse>> getAllSongsByArtistId(@Path("artistId") int artistId, @Query("page") int page, @Query("size") int size);
+
+    @GET("user/{id_user}/is-followed-artist")
+    Call<GenericResponse<Boolean>> isFollowedArtist(@Path("id_user") int id_user, @Query("id_artist") int id_artist);
+
+    @POST("user/{id_user}/follow-artist")
+    Call<GenericResponse<Boolean>> followArtist(@Path("id_user") int id_user, @Query("id_artist") int id_artist);
 }

@@ -141,4 +141,7 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="followed">Đã theo dõi</string>
+    <string name="follow">Theo dõi</string>
+    <string name="view_more">Xem thêm</string>
 </resources>

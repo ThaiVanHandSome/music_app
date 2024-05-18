@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -25,8 +26,10 @@ import com.example.music_app.activities.TopicActivity;
 import com.example.music_app.adapters.ArtistAdapter;
 import com.example.music_app.adapters.NewSongHomeAdapter;
 import com.example.music_app.adapters.SongHomeAdapter;
+import com.example.music_app.decorations.BottomOffsetDecoration;
 import com.example.music_app.helpers.SongToMediaItemHelper;
 import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.listeners.PaginationScrollListener;
 import com.example.music_app.models.Artist;
 import com.example.music_app.models.ArtistResponse;
 import com.example.music_app.models.GenericResponse;
@@ -37,6 +40,7 @@ import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
 import com.example.music_app.services.ExoPlayerQueue;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
@@ -52,11 +56,13 @@ public class HomeFragment extends Fragment {
     SongHomeAdapter songTrendAdapter, songFavoriteAdapter;
     ArtistAdapter artistAdapter;
     NewSongHomeAdapter songNewAdapter;
-
+    MaterialButton btnLoadMore;
     APIService apiService;
     List<Song> trendSongs, favoriteSongs, newSongs;
     List<Artist> artists;
     TextView title, xtt_topthinhhanh, xtt_moinguoiyeuthich, xtt_nghesihangdau, xtt_moiramat;
+    int page = 0, size = 5, totalPages = 0;
+    boolean isLoading = false, isLastPage = false;
     private ExoPlayerQueue exoPlayerQueue = ExoPlayerQueue.getInstance();
     private final SongHomeAdapter.OnItemClickListener songTrendItemClick = new SongHomeAdapter.OnItemClickListener() {
         @Override
@@ -143,9 +149,10 @@ public class HomeFragment extends Fragment {
 
         songTrendAdapter = new SongHomeAdapter(getContext(), new ArrayList<>(), songTrendItemClick);
         songFavoriteAdapter = new SongHomeAdapter(getContext(), new ArrayList<>(), songFavoriteItemClick);
-        songNewAdapter = new NewSongHomeAdapter(getContext(), new ArrayList<>(), songNewItemClick);
+        newSongs = new ArrayList<>();
+        songNewAdapter = new NewSongHomeAdapter(getContext(), newSongs, songNewItemClick);
         artistAdapter = new ArtistAdapter(getContext(), new ArrayList<>(), artistItemClick);
-
+        btnLoadMore = view.findViewById(R.id.btn_viewmore_newsongs);
         GetTopTrend();
         GetFavoriteSong();
         GetTopArtist();
@@ -264,26 +271,67 @@ public class HomeFragment extends Fragment {
     }
     private void GetNewSong(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getSongNewReleased(0, 10).enqueue(new Callback<GenericResponse<SongResponse>>() {
-            @Override
-            public void onResponse(Call<GenericResponse<SongResponse>> call, Response<GenericResponse<SongResponse>> response) {
-                if (response.isSuccessful() && isAdded()) {
-                    newSongs = response.body().getData().getContent();
-                    songNewAdapter.setSongList(newSongs);
-                    rvNewSong.setHasFixedSize(true);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false );
-                    rvNewSong.setLayoutManager(layoutManager);
-                    rvNewSong.setAdapter(songNewAdapter);
-                } else {
-                    Log.e("DataRes", "No Res");
+        Call<GenericResponse<SongResponse>> call = apiService.getSongNewReleased(page, size);
+        fetchSongs(call);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        rvNewSong.setLayoutManager(layoutManager);
+        RecyclerView.ItemDecoration itemDecoration = new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset));
+        rvNewSong.addItemDecoration(itemDecoration);
 
+        rvNewSong.setHasFixedSize(true);
+
+        rvNewSong.setAdapter(songNewAdapter);
+
+        btnLoadMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isLoading) {
+                    isLoading = true;
+                    loadNextPage();
+                }
+                isLoading = false;
+                if (isLastPage) {
+                    btnLoadMore.setVisibility(View.GONE);
                 }
             }
-
+        });
+    }
+    private void fetchSongs(Call<GenericResponse<SongResponse>> call) {
+        call.enqueue(new Callback<GenericResponse<SongResponse>>() {
+            @Override
+            public void onResponse(Call<GenericResponse<SongResponse>> call, Response<GenericResponse<SongResponse>> response) {
+                if (response.isSuccessful()) {
+                    List<Song> newList =  response.body().getData().getContent();
+                    totalPages = response.body().getData().getTotalPages();
+                    newSongs.addAll(newList);
+                    page++;
+                    songNewAdapter.notifyDataSetChanged();
+                }
+            }
             @Override
             public void onFailure(Call<GenericResponse<SongResponse>> call, Throwable t) {
-                Log.d("ErrorReponse", t.getMessage());
             }
         });
+    }
+
+    private void loadNextPage() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (page < totalPages) {
+                    APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
+                    Call<GenericResponse<SongResponse>> call = apiService.getSongNewReleased(page, 10);
+                    fetchSongs(call);
+                }
+                isLoading = false;
+                if (page == totalPages) {
+                    isLastPage = true;
+                }
+                if (isLastPage) {
+                    btnLoadMore.setVisibility(View.GONE);
+                }
+            }
+        }, 500);
     }
 }
