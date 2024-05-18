@@ -3,12 +3,18 @@ package com.example.music_app.services;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.Service;
+import android.content.Intent;
 import android.os.Build;
+import android.os.IBinder;
+
+import androidx.annotation.Nullable;
+
 import com.example.music_app.R;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 
-public class NotificationService extends Application {
+public class NotificationService extends Service {
 
     public static final String CHANNEL_ID = "MY_CHANNEL";
     @Override
@@ -16,6 +22,12 @@ public class NotificationService extends Application {
         super.onCreate();
 
         createNotificationChannel();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     private void createNotificationChannel() {

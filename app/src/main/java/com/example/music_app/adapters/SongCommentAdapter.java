@@ -33,6 +33,11 @@ public class SongCommentAdapter extends RecyclerView.Adapter<SongCommentAdapter.
         this.onItemClickListener = onItemClickListener;
     }
 
+    public void setSongComments(List<SongComment> songComments) {
+        this.songComments = songComments;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public SongCommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

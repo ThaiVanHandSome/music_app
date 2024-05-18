@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,12 +19,16 @@ import com.example.music_app.R;
 import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.decorations.BottomOffsetDecoration;
 import com.example.music_app.helpers.ArtistHelper;
+import com.example.music_app.helpers.GradientHelper;
 import com.example.music_app.helpers.SongToMediaItemHelper;
+import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.listeners.PaginationScrollListener;
 import com.example.music_app.models.Artist;
 import com.example.music_app.models.GenericResponse;
+import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.SongResponse;
+import com.example.music_app.models.User;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
 import com.example.music_app.services.ExoPlayerQueue;
@@ -44,7 +49,7 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
     TextView tvPlaylistIntro;
     TextView tvPlaySongCount;
     RecyclerView rvListSong;
-    View includeTopPlaylist, includeTopPlaylistOption;
+    View includeTopPlaylist, includeTopPlaylistOption, includeListSong, container;
     MaterialButton btnOption, btnShuffle;
     APIService apiService;
     List<Song> songList;
@@ -52,6 +57,7 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
     int page = 0, totalPages;
     boolean isLoading = false, isLastPage = false, isShuffle = false;
     private ExoPlayerQueue exoPlayerQueue;
+    boolean isUserFollowedArtist = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +69,11 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
         if(artistId == -1){
             finish();
         }
+
         exoPlayerQueue = ExoPlayerQueue.getInstance();
+
+        container = findViewById(R.id.layout_container);
+
         includeTopPlaylist = findViewById(R.id.included_top_playlist);
         coverPic = includeTopPlaylist.findViewById(R.id.imCoverPicture);
         tvPlaylistTitle = includeTopPlaylist.findViewById(R.id.tvPlaylistTitle);
@@ -71,9 +81,61 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
         tvPlaySongCount = includeTopPlaylist.findViewById(R.id.tvPlaylistSongCount);
         tvPlaylistIntro.setVisibility(View.GONE);
 
+
+
         includeTopPlaylistOption = findViewById(R.id.included_top_playlist_option);
         btnOption = includeTopPlaylistOption.findViewById(R.id.btn_delete_playlist);
-        btnOption.setText("Theo dõi");
+
+        User user = SharePrefManagerUser.getInstance(this).getUser();
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+
+        apiService.isFollowedArtist(user.getId(), artistId).enqueue(new Callback<GenericResponse<Boolean>>() {
+
+            @Override
+            public void onResponse(Call<GenericResponse<Boolean>> call, Response<GenericResponse<Boolean>> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getData()) {
+                        btnOption.setText(R.string.followed);
+                        isUserFollowedArtist = true;
+                    } else {
+                        btnOption.setText(R.string.follow);
+                        isUserFollowedArtist = false;
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GenericResponse<Boolean>> call, Throwable t) {
+
+            }
+        });
+
+        btnOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                apiService.followArtist(user.getId(), artistId).enqueue(new Callback<GenericResponse<Boolean>>() {
+
+                    @Override
+                    public void onResponse(Call<GenericResponse<Boolean>> call, Response<GenericResponse<Boolean>> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body().getData()) {
+                                btnOption.setText(R.string.followed);
+                                isUserFollowedArtist = true;
+                            } else {
+                                btnOption.setText(R.string.follow);
+                                isUserFollowedArtist = false;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<GenericResponse<Boolean>> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+
         btnShuffle = includeTopPlaylistOption.findViewById(R.id.btnTopPlaylistOptionShuffle);
         btnShuffle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +150,7 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
             }
         });
 
-        View includeListSong = findViewById(R.id.included_list_song);
+        includeListSong = findViewById(R.id.included_list_song);
         rvListSong = includeListSong.findViewById(R.id.rvListSong);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         rvListSong.setLayoutManager(layoutManager);
@@ -127,6 +189,7 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
             public void onSuccess(Artist artist) {
                 tvPlaylistTitle.setText(artist.getNickname());
                 Glide.with(getApplicationContext()).load(artist.getAvatar()).into(coverPic);
+                GradientHelper.applyGradient(getApplicationContext(), includeTopPlaylist, String.valueOf(artist.getAvatar()));
             }
 
             @Override
