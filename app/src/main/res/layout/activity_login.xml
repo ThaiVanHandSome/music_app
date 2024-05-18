@@ -75,7 +75,7 @@
             android:drawableEnd="@drawable/ic_google"
             android:drawablePadding="8dp"
             android:layout_marginTop="@dimen/spacing_24dp"
-            android:text="Đăng nhập với google" />
+            android:text="@string/button_loggin_google" />
 
         <LinearLayout
             android:id="@+id/ln3"

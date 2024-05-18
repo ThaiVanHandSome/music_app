@@ -16,6 +16,6 @@
         android:textColorHint="@color/neutral5"
         android:layout_marginTop="@dimen/spacing_8dp"
         android:layout_marginHorizontal="@dimen/spacing_8dp"
-        android:hint="Xóa lịch sử tìm kiếm"/>
+        android:hint="@string/label_delete_history"/>
 
 </LinearLayout>

@@ -75,7 +75,7 @@ public class HomeFragment extends Fragment {
         Log.e("DataRes", "Code chay vao ham onCreateView");
 
         User user = SharePrefManagerUser.getInstance(requireContext()).getUser();
-        title.setText("Chào " + user.getFirstName() + " " + user.getLastName() + " 👋");
+        title.setText(getContext().getString(R.string.label_hello_user, user.getLastName()));
 
         GetTopTrend();
         GetFavoriteSong();
@@ -90,33 +90,35 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        xtt_topthinhhanh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireContext(), TopicActivity.class);
+                intent.putExtra("topic", "trending");
+                startActivity(intent);
+            }
+        });
         xtt_moinguoiyeuthich.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), HomeSongsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("Keyy", 2);
-                intent.putExtras(bundle);
+                Intent intent = new Intent(requireContext(), TopicActivity.class);
+                intent.putExtra("topic", "favorite");
                 startActivity(intent);
             }
         });
         xtt_nghesihangdau.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), HomeSongsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("Keyy", 3);
-                intent.putExtras(bundle);
+                Intent intent = new Intent(requireContext(), TopicActivity.class);
+                intent.putExtra("topic", "topArtist");
                 startActivity(intent);
             }
         });
         xtt_moiramat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), HomeSongsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("Keyy", 4);
-                intent.putExtras(bundle);
+                Intent intent = new Intent(requireContext(), TopicActivity.class);
+                intent.putExtra("topic", "newReleased");
                 startActivity(intent);
             }
         });

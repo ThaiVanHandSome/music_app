@@ -73,7 +73,7 @@ public class NotificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notification);
         recyclerView = (RecyclerView) findViewById(R.id.rv_notification);
         title = (TextView) findViewById(R.id.title_appbar_home);
-        title.setText("Thông báo");
+        title.setText(getText(R.string.label_notications));
         user = SharePrefManagerUser.getInstance(this).getUser();
         getNotification();
     }

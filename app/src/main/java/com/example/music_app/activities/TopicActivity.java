@@ -3,8 +3,11 @@ package com.example.music_app.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.music_app.R;
 import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.decorations.BottomOffsetDecoration;
+import com.example.music_app.fragments.LibraryFragment;
 import com.example.music_app.fragments.SongDetailFragment;
 import com.example.music_app.helpers.DialogHelper;
 import com.example.music_app.helpers.GradientHelper;
@@ -49,14 +53,18 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
     private boolean isLoading = false;
     private boolean isLastPage = false;
     private boolean isShuffle = false;
+    private boolean isEditState = true;
+    Handler handler;
+    Runnable runnable;
     private ExoPlayerQueue exoPlayerQueue;
     private SongDetailFragment songDetailFragment;
     private APIService apiService;
     ImageView coverPic;
-    TextView tvPlaylistTitle;
+    EditText edtPlaylistTitle;
     TextView tvPlaylistIntro;
-    TextView tvPlaySongCount;
+    TextView tvPlaylistSongCount;
     MaterialButton deletePlaylistButton;
+    MaterialButton editPlaylistNameButton;
     RecyclerView rvListSong;
     View includeTopPlaylist;
 
@@ -70,10 +78,13 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
 
         includeTopPlaylist = findViewById(R.id.included_top_playlist);
         coverPic = includeTopPlaylist.findViewById(R.id.imCoverPicture);
-        tvPlaylistTitle = includeTopPlaylist.findViewById(R.id.tvPlaylistTitle);
+        edtPlaylistTitle = includeTopPlaylist.findViewById(R.id.edtPlaylistTitle);
         tvPlaylistIntro = includeTopPlaylist.findViewById(R.id.tvPlaylistIntro);
-        tvPlaySongCount = includeTopPlaylist.findViewById(R.id.tvPlaylistSongCount);
-        tvPlaySongCount.setVisibility(View.GONE);
+        tvPlaylistSongCount = includeTopPlaylist.findViewById(R.id.tvPlaylistSongCount);
+        editPlaylistNameButton = includeTopPlaylist.findViewById(R.id.btn_edit_name);
+        tvPlaylistSongCount.setVisibility(View.GONE);
+        editPlaylistNameButton.setVisibility(View.GONE);
+        edtPlaylistTitle.setEnabled(false);
 
         View includeOption = findViewById(R.id.included_top_playlist_option);
 
@@ -106,7 +117,7 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
         View containerFragment = findViewById(R.id.fragment_container);
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         songList = new ArrayList<>();
-        songAdapter = new SongAdapter(getApplicationContext(), songList, this);
+        songAdapter = new SongAdapter(this, songList, this);
         switch (topic) {
             case "trending":
                 songList.clear();
@@ -114,8 +125,9 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                 size = 10;
                 coverPic.setImageResource(R.drawable.trending_cover);
                 GradientHelper.applyGradient(this, includeTopPlaylist, R.drawable.trending_cover);
-                tvPlaylistTitle.setText(R.string.trending_title);
+                edtPlaylistTitle.setText(R.string.trending_title);
                 tvPlaylistIntro.setText(R.string.trending_intro);
+                deletePlaylistButton.setVisibility(View.GONE);
 
                 fetchSongs(apiService.getMostViewSong(page, size));
                 rvListSong.setAdapter(songAdapter);
@@ -126,8 +138,9 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                 size = 10;
                 coverPic.setImageResource(R.drawable.favorite_cover);
                 GradientHelper.applyGradient(this, includeTopPlaylist, R.drawable.favorite_cover);
-                tvPlaylistTitle.setText(R.string.favorite_title);
+                edtPlaylistTitle.setText(R.string.favorite_title);
                 tvPlaylistIntro.setText(R.string.favorite_intro);
+                deletePlaylistButton.setVisibility(View.GONE);
 
                 fetchSongs(apiService.getMostLikeSong(page, size));
                 rvListSong.setAdapter(songAdapter);
@@ -135,7 +148,7 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
             case "topArtist":
                 coverPic.setImageResource(R.drawable.top_artist_cover);
                 GradientHelper.applyGradient(this, includeTopPlaylist, R.drawable.top_artist_cover);
-                tvPlaylistTitle.setText(R.string.topartist_title);
+                edtPlaylistTitle.setText(R.string.topartist_title);
                 tvPlaylistIntro.setText(R.string.topartist_intro);
                 includeOption.setVisibility(View.GONE);
                 break;
@@ -145,16 +158,20 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                 size = 10;
                 coverPic.setImageResource(R.drawable.new_released);
                 GradientHelper.applyGradient(this, includeTopPlaylist, R.drawable.new_released);
-                tvPlaylistTitle.setText(R.string.newreleased_title);
+                edtPlaylistTitle.setText(R.string.newreleased_title);
                 tvPlaylistIntro.setText(R.string.newreleased_intro);
+                deletePlaylistButton.setVisibility(View.GONE);
                 fetchSongs(apiService.getSongNewReleased(page, size));
                 rvListSong.setAdapter(songAdapter);
                 break;
 
             default:
-                tvPlaySongCount.setVisibility(View.VISIBLE);
+                tvPlaylistSongCount.setVisibility(View.VISIBLE);
+                editPlaylistNameButton.setVisibility(View.VISIBLE);
                 getPlaylistById(Integer.parseInt(topic));
                 rvListSong.setAdapter(songAdapter);
+                invalidateOptionsMenu();
+                renamePlaylistIfNeeded(Integer.parseInt(topic));
                 deletePlaylistIfNeeded(Integer.parseInt(topic));
                 break;
         }
@@ -293,8 +310,8 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
         Glide.with(TopicActivity.this)
                 .load(playlist.getImage())
                 .into(coverPic);
-        tvPlaylistTitle.setText(playlist.getName());
-        tvPlaySongCount.setText(getString(R.string.label_songs, playlist.getSongCount()));
+        edtPlaylistTitle.setText(playlist.getName());
+        tvPlaylistSongCount.setText(getString(R.string.label_songs, playlist.getSongCount()));
 
         GradientHelper.applyGradient(this, includeTopPlaylist, playlist.getImage());
     }
@@ -325,6 +342,92 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
             }
         });
     }
+
+    private void renamePlaylistIfNeeded(int i) {
+        editPlaylistNameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                edtPlaylistTitle.setEnabled(true);
+                edtPlaylistTitle.requestFocus();
+                edtPlaylistTitle.setSelection(edtPlaylistTitle.getText().length());
+                handler = new Handler();
+                if (isEditState) {
+                    editPlaylistNameButton.setIcon(getDrawable(R.drawable.ic_24dp_filled_check_circle));
+                    edtPlaylistTitle.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+                            if (runnable != null) {
+                                handler.removeCallbacks(runnable);
+                            }
+                            runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                String newName = edtPlaylistTitle.getText().toString();
+                                if (newName.isEmpty()) {
+                                    editPlaylistNameButton.setEnabled(false);
+                                    /*edtPlaylistTitle.setError(getText(R.string.error_required_field));*/
+                                    tvPlaylistIntro.setVisibility(View.VISIBLE);
+                                    tvPlaylistIntro.setText(getText(R.string.error_required_field));
+                                    tvPlaylistIntro.setTextColor(getColor(R.color.accent_error));
+                                } else {
+                                    apiService.isPlaylistNameExists(newName).enqueue(new Callback<ResponseMessage>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                                            if (response.isSuccessful()) {
+                                                if (response.body().getData().equals(Boolean.TRUE)) {
+                                                    editPlaylistNameButton.setEnabled(false);
+                                                    /*edtPlaylistTitle.setError(getText(R.string.error_playlist_name_exists));*/
+                                                    tvPlaylistIntro.setVisibility(View.VISIBLE);
+                                                    tvPlaylistIntro.setText(getText(R.string.error_playlist_name_exists));
+                                                    tvPlaylistIntro.setTextColor(getColor(R.color.accent_error));
+                                                } else {
+                                                    editPlaylistNameButton.setEnabled(true);
+                                                    tvPlaylistIntro.setVisibility(View.GONE);
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseMessage> call, Throwable t) {}
+                                    });
+                                }
+                            }
+                        };
+                        handler.postDelayed(runnable, 1000);
+                        }
+                    });
+                } else {
+                    String newName = edtPlaylistTitle.getText().toString();
+
+                    apiService.updatePlaylistName(i, newName).enqueue(new Callback<ResponseMessage>() {
+                        @Override
+                        public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                            if (response.isSuccessful()) {
+                                if (response.body().getData().equals(Boolean.TRUE)) {
+                                    edtPlaylistTitle.setEnabled(false);
+                                    tvPlaylistIntro.setVisibility(View.GONE);
+                                    Toast.makeText(TopicActivity.this, getText(R.string.toast_updated_playlist_name), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                        }
+                    });
+                    editPlaylistNameButton.setIcon(getDrawable(R.drawable.ic_24dp_outline_edit));
+                }
+                isEditState = !isEditState;
+            }
+        });
+    }
+
     private void deletePlaylistIfNeeded(int idPlaylist) {
         deletePlaylistButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -337,7 +440,7 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
                                 if (response.isSuccessful()) {
                                     Log.d("API Response", "Delete playlist successful");
-                                    Intent intent = new Intent(TopicActivity.this, LibraryActivity.class);
+                                    Intent intent = new Intent(TopicActivity.this, LibraryFragment.class);
                                     startActivity(intent);
                                     Toast.makeText(TopicActivity.this, getText(R.string.toast_deleted_playlist), Toast.LENGTH_SHORT).show();
                                 }
@@ -362,5 +465,4 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
             }
         });
     }
-
 }
