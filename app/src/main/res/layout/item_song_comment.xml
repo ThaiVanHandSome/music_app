@@ -56,12 +56,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <TextView
-                android:id="@+id/likeBtn"
+            <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/spacing_8dp"
-                android:text="icon" />
+                style="@style/Widget.Material3.Button.IconButton"
+                app:icon="@drawable/ic_24dp_filled_favorite"
+                app:iconSize="@dimen/icon_24dp"
+                />
             <TextView
                 android:id="@+id/likeCntTxt"
                 android:layout_width="wrap_content"
