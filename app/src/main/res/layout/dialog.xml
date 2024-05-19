@@ -35,14 +35,15 @@
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/spacing_24dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_negative"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="@dimen/spacing_12dp"
                 style="@style/TextButton" />
-            <Button
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_positive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

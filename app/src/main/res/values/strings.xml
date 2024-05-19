@@ -49,6 +49,7 @@
     <string name="label_new_released">✨ Mới ra mắt</string>
     <string name="label_topic">🎧 Chủ đề</string>
     <string name="label_recommended">🌟 Đề xuất cho bạn</string>
+    <string name="label_popular_song">🔥 Bài hát phổ biến</string>
     <string name="label_forget_password">Quên mật khẩu?</string>
     <string name="label_not_have_account">Chưa có tài khoản?</string>
     <string name="label_have_account">Đã có tài khoản?</string>
@@ -63,6 +64,10 @@
     <string name="label_change_password">Đổi mật khẩu</string>
     <string name="label_logout">Đăng xuất</string>
     <string name="label_notications">Thông báo</string>
+    <string name="label_profile">Tài khoản</string>
+    <string name="label_lastname">Họ</string>
+    <string name="label_firstname">Tên</string>
+    <string name="label_email">Email</string>
 
     <!-- Button text -->
     <string name="button_signup">Đăng ký</string>
@@ -75,7 +80,9 @@
     <string name="button_delete_playlist">Xóa danh sách phát</string>
     <string name="button_cancel">Hủy</string>
     <string name="button_delete">Xóa</string>
+    <string name="button_ok">Đồng ý</string>
     <string name="button_post">Đăng</string>
+    <string name="button_save">Lưu</string>
     <string name="button_change_password">Đổi mật khẩu</string>
     <string name="button_reset_password">Lấy lại mật khẩu</string>
     <string name="button_loggin_google">Đăng nhập với Google</string>
@@ -117,6 +124,8 @@
     <!-- Dialog -->
     <string name="dialog_title_confirm_delete">Xác nhận xóa</string>
     <string name="dialog_message_confirm_delete">Bạn có chắc chắn muốn xóa danh sách phát này không?</string>
+    <string name="dialog_title_confirm_restart">Khởi động lại ứng dụng</string>
+    <string name="dialog_message_confirm_restart">Vui lòng khởi động lại ứng dụng để cập nhật ngôn ngữ</string>
 
 
     <!--Notification-->
@@ -125,14 +134,14 @@
     <string name="toast_updated_playlist_name">Cập nhật tên danh sách phát thành công</string>
     <string name="toast_removed_song_from_playlist">Đã xóa khỏi danh sách phát</string>
     <string name="toast_forbiden">Bạn không thể xóa bài hát khỏi danh sách phát này</string>
-    <string name="title_activity_artist">ArtistActivity</string>
+    <string name="title_activity_artist" translatable="false">ArtistActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="first_fragment_label" translatable="false">First Fragment</string>
+    <string name="second_fragment_label" translatable="false">Second Fragment</string>
+    <string name="next" translatable="false">Next</string>
+    <string name="previous" translatable="false">Previous</string>
 
-    <string name="lorem_ipsum">
+    <string name="lorem_ipsum" translatable="false">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
         dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad

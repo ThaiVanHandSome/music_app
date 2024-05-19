@@ -143,7 +143,7 @@ public class ProfileActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
     }
     void showInfo(){
-        title.setText("Trang cá nhân");
+        title.setText(getText(R.string.label_profile));
         ho.setText(user.getLastName());
         ten.setText(user.getFirstName());
         email.setText(user.getEmail());

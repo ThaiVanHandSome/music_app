@@ -1,28 +1,21 @@
 package com.example.music_app.activities;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.music_app.R;
 import com.example.music_app.activities.auth.LoginActivity;
+import com.example.music_app.helpers.DialogHelper;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.internals.SharedPrefManagerLanguage;
-import com.example.music_app.models.Song;
-import com.example.music_app.services.APIService;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.music_app.listeners.DialogClickListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.messaging.FirebaseMessaging;
-
-import java.util.Locale;
 
 public class SettingActivity extends AppCompatActivity {
     TextView changePassword, logout;
@@ -32,16 +25,16 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String language = SharedPrefManagerLanguage.getInstance(getApplicationContext()).getLanguage();
         setContentView(R.layout.activity_setting);
         mapping();
-        sharedPrefManagerLanguage = new SharedPrefManagerLanguage(this);
-        String savedLanguage = sharedPrefManagerLanguage.getLanguage();
-        setLocale(savedLanguage);
 
-        if (savedLanguage.equals("en")) {
-            english.setChecked(true);
-        } else {
+        if (language.equals("vi")) {
             vietnamese.setChecked(true);
+            english.setChecked(false);
+        } else {
+            vietnamese.setChecked(false);
+            english.setChecked(true);
         }
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,18 +56,48 @@ public class SettingActivity extends AppCompatActivity {
         english.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setLocale("en");
-                sharedPrefManagerLanguage.saveLanguage("en");
-                restartApplication();
+                DialogHelper dialog = new DialogHelper(view.getContext(), new DialogClickListener() {
+                    @Override
+                    public void onPositiveButtonClick() {
+                        restartApplication();
+                        SharedPrefManagerLanguage.getInstance(getApplicationContext()).saveLanguage("en");
+                    }
+
+                    @Override
+                    public void onNegativeButtonClick() {
+                        english.setChecked(false);
+                        vietnamese.setChecked(true);
+                    }
+                });
+                dialog.show();
+                dialog.setTitle(getString(R.string.dialog_title_confirm_restart));
+                dialog.setMessage(getString(R.string.dialog_message_confirm_restart));
+                dialog.setPositiveButtonContent(getString(R.string.button_ok));
+                dialog.setNegativeButtonContent(getString(R.string.button_cancel));
             }
         });
 
         vietnamese.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setLocale("vi");
-                sharedPrefManagerLanguage.saveLanguage("vi");
-                restartApplication();
+                DialogHelper dialog = new DialogHelper(view.getContext(), new DialogClickListener() {
+                    @Override
+                    public void onPositiveButtonClick() {
+                        restartApplication();
+                        SharedPrefManagerLanguage.getInstance(getApplicationContext()).saveLanguage("vi");
+                    }
+
+                    @Override
+                    public void onNegativeButtonClick() {
+                        vietnamese.setChecked(false);
+                        english.setChecked(true);
+                    }
+                });
+                dialog.show();
+                dialog.setTitle(getString(R.string.dialog_title_confirm_restart));
+                dialog.setMessage(getString(R.string.dialog_message_confirm_restart));
+                dialog.setPositiveButtonContent(getString(R.string.button_ok));
+                dialog.setNegativeButtonContent(getString(R.string.button_cancel));
             }
         });
     }
@@ -83,14 +106,6 @@ public class SettingActivity extends AppCompatActivity {
         final Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-    }
-
-    private void setLocale(String language) {
-        Locale locale = new Locale(language);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
 
     void mapping() {
