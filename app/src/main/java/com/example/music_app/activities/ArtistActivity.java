@@ -1,10 +1,8 @@
 package com.example.music_app.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +24,6 @@ import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.listeners.PaginationScrollListener;
 import com.example.music_app.models.Artist;
 import com.example.music_app.models.GenericResponse;
-import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.SongResponse;
 import com.example.music_app.models.User;
@@ -77,9 +74,10 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
 
         includeTopPlaylist = findViewById(R.id.included_top_playlist);
         coverPic = includeTopPlaylist.findViewById(R.id.imCoverPicture);
-        tvPlaylistTitle = includeTopPlaylist.findViewById(R.id.edtPlaylistTitle);
+        edtPlaylistTitle = includeTopPlaylist.findViewById(R.id.edtPlaylistTitle);
         tvPlaylistIntro = includeTopPlaylist.findViewById(R.id.tvPlaylistIntro);
         tvPlaySongCount = includeTopPlaylist.findViewById(R.id.tvPlaylistSongCount);
+        includeTopPlaylist.findViewById(R.id.btn_edit_name).setVisibility(View.GONE);
         tvPlaylistIntro.setVisibility(View.GONE);
         includeTopPlaylist.findViewById(R.id.btn_edit_name).setEnabled(false);
         tvPlaylistTitle.setEnabled(false);
@@ -187,7 +185,7 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
         ArtistHelper.getArtistById(artistId, new ArtistHelper.ArtistCallback() {
             @Override
             public void onSuccess(Artist artist) {
-                tvPlaylistTitle.setText(artist.getNickname());
+                edtPlaylistTitle.setText(artist.getNickname());
                 Glide.with(getApplicationContext()).load(artist.getAvatar()).into(coverPic);
                 GradientHelper.applyGradient(getApplicationContext(), includeTopPlaylist, String.valueOf(artist.getAvatar()));
             }
@@ -201,7 +199,7 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
         ArtistHelper.getSongCountByArtistId(artistId, new ArtistHelper.SongCountCallback() {
             @Override
             public void onSuccess(int songCount) {
-                tvPlaySongCount.setText(songCount + " bài hát");
+                tvPlaySongCount.setText(getString(R.string.label_songs, songCount));
             }
 
             @Override

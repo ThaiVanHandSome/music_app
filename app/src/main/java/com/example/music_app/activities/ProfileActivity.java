@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -28,6 +29,7 @@ import com.bumptech.glide.Glide;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.music_app.R;
 import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.UpdateProfileRequest;
 import com.example.music_app.models.User;
@@ -66,8 +68,10 @@ public class ProfileActivity extends AppCompatActivity {
     FrameLayout overlay;
     ProgressBar progressBar;
 
-    private Uri mUri;
-    private APIService apiService;
+    Uri mUri;
+    APIService apiService;
+
+    User userUpdated;
 
     private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -143,7 +147,7 @@ public class ProfileActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
     }
     void showInfo(){
-        title.setText("Trang cá nhân");
+        title.setText(getText(R.string.label_profile));
         ho.setText(user.getLastName());
         ten.setText(user.getFirstName());
         email.setText(user.getEmail());
@@ -153,6 +157,14 @@ public class ProfileActivity extends AppCompatActivity {
         }
         if(user.getGender() == 1){
             nu.setChecked(true);
+        }
+        if(!Objects.equals(user.getProvider(), "DATABASE")){
+            ho.setEnabled(false);
+            ten.setEnabled(false);
+            avatar.setEnabled(false);
+            gioiTinh.setEnabled(false);
+            nu.setEnabled(false);
+            nam.setEnabled(false);
         }
     }
     private void openGallery() {
@@ -164,29 +176,35 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void updateInfo() throws IOException, URISyntaxException {
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-
-        UpdateProfileRequest newInfoUser = new UpdateProfileRequest();
-
-        newInfoUser.setLastName(Objects.requireNonNull(ho.getText()).toString());
-        newInfoUser.setFirstName(Objects.requireNonNull(ten.getText()).toString());
-        newInfoUser.setGender(gender);
-        String id = String.valueOf(userId);
-        try {
-            uploadAvatar();
-        } catch (Exception ignored) {
-            Log.e("FailToUpload", "Code chay vao day");
+        MultipartBody.Part imagePart = null;
+        if(mUri != null) {
+            imagePart = MultipartUtil.createMultipartFromUri(this, mUri, "imageFile", "image_file.png");
         }
-        apiService.updateProfile(id, newInfoUser).enqueue(new Callback<ResponseMessage>() {
+
+        apiService.updateProfile( (long) userId, imagePart, Objects.requireNonNull(ten.getText()).toString(),Objects.requireNonNull(ho.getText()).toString(), gender).enqueue(new Callback<UserResponse>() {
             @Override
-            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if (response.isSuccessful()) {
+                    userUpdated = response.body().getData();
+                    Log.e("Thanh123445", String.valueOf(userUpdated));
+                    Log.e("Thanh12344522", String.valueOf(userUpdated.getFirstName()));
+                    SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("keyfirstname", userUpdated.getFirstName());
+                    editor.putString("keylastname", userUpdated.getLastName());
+                    editor.putString("keyimage", userUpdated.getAvatar());
+                    editor.putInt("keygender", userUpdated.getGender());
+                    editor.apply();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
                     hideOverlay();
+                    finish();
                     Toast.makeText(ProfileActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+            public void onFailure(Call<UserResponse> call, Throwable t) {
                 hideOverlay();
                 Log.e("ThatBai", "Code chay vao day1");
             }
@@ -194,25 +212,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void uploadAvatar() throws IOException, URISyntaxException {
-        apiService = RetrofitClient.getRetrofit().create(APIService.class);
-
-        MultipartBody.Part imagePart = MultipartUtil.createMultipartFromUri(this, mUri, "imageFile", "image_file.png");
-        String id = String.valueOf(userId);
-        Log.d("success_parse", imagePart.toString());
-        apiService.uploadAvatar(imagePart, id).enqueue(new Callback<ResponseMessage>() {
-            @Override
-            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
-                Log.d("success_parse", imagePart.toString());
-            }
-
-            @Override
-            public void onFailure(Call<ResponseMessage> call, Throwable t) {
-
-                Log.d("error", t.toString());
-            }
-        });
-    }
     private void hideOverlay() {
         overlay.setVisibility(View.INVISIBLE);
         overlay.setFocusable(false);

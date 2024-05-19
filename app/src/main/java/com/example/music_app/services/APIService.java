@@ -26,6 +26,8 @@ import com.example.music_app.models.SongLikedRequest;
 import com.example.music_app.models.SongLikedResponse;
 import com.example.music_app.models.SongResponse;
 import com.example.music_app.models.UpdateProfileRequest;
+import com.example.music_app.models.User;
+import com.example.music_app.models.UserResponse;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -105,15 +107,9 @@ public interface APIService {
     @PATCH("user/{id_user}/change-password")
     Call<ResponseMessage> changePasswordWithIdUser(@Path("id_user") int id_user, @Body ChangePasswordRequest changePasswordRequest);
 
-    @PATCH("user/{id_user}")
-    Call<ResponseMessage> updateProfile(@Path("id_user") String id_user, @Body UpdateProfileRequest updateProfileRequest);
-
     @Multipart
-    @POST("user/upload")
-    Call<ResponseMessage> uploadAvatar(@Part MultipartBody.Part imageFile, @Part("idUser") String idUser);
-    Call<ResponseMessage> updateProfile(@Part @Path("id_user") int id_user,
-                                        @Body UpdateProfileRequest updateProfileRequest,
-                                        @Part MultipartBody.Part imageFile);
+    @PATCH("user/update")
+    Call<UserResponse> updateProfile(@Part("idUser") Long idUser, @Part MultipartBody.Part imageFile, @Part("firstName") String firstName, @Part("lastName") String lastName, @Part("gender") int gender);
 
     @GET("songLiked/isUserLikedSong")
     Call<SongLikedResponse> isUserLikedSong(@Query("songId") Long songId, @Query("userId") Long userId);
@@ -138,6 +134,12 @@ public interface APIService {
   
     @POST("song/post-comment")
     Call<ResponseMessage> postComment(@Body SongCommentRequest songCommentRequest);
+
+    @GET("user/searchArtist")
+    Call<GenericResponse<List<Artist>>> searchArtist(@Query("query") String query);
+
+    @GET("songs/search")
+    Call<GenericResponse<List<Song>>> searchSong(@Query("query") String query);
 
     @GET("artists")
     Call<GenericResponse<ArtistResponse>> getAllArtists(@Query("page") int page, @Query("size") int size);
