@@ -1,5 +1,6 @@
 package com.example.music_app.activities;
 
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
+import com.example.music_app.adapters.AlbumAdapter;
 import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.decorations.BottomOffsetDecoration;
 import com.example.music_app.helpers.ArtistHelper;
@@ -22,6 +24,7 @@ import com.example.music_app.helpers.GradientHelper;
 import com.example.music_app.helpers.SongToMediaItemHelper;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.listeners.PaginationScrollListener;
+import com.example.music_app.models.Album;
 import com.example.music_app.models.Artist;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Song;
@@ -46,12 +49,14 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
     EditText tvPlaylistTitle;
     TextView tvPlaylistIntro;
     TextView tvPlaySongCount;
-    RecyclerView rvListSong;
+    RecyclerView rvListSong, rvListAlbum;
     View includeTopPlaylist, includeTopPlaylistOption, includeListSong, container;
     MaterialButton btnOption, btnShuffle;
     APIService apiService;
     List<Song> songList;
     SongAdapter songAdapter;
+    List<Album> albumList;
+    AlbumAdapter albumAdapter;
     int page = 0, totalPages;
     boolean isLoading = false, isLastPage = false, isShuffle = false;
     private ExoPlayerQueue exoPlayerQueue;
@@ -148,37 +153,71 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
             }
         });
 
+        rvListAlbum = findViewById(R.id.rvListAlbum);
+
         includeListSong = findViewById(R.id.included_list_song);
         rvListSong = includeListSong.findViewById(R.id.rvListSong);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         rvListSong.setLayoutManager(layoutManager);
         RecyclerView.ItemDecoration itemDecoration = new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset));
-        rvListSong.addItemDecoration(itemDecoration);
+
 
         setArtistInfo();
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         songList = new ArrayList<>();
         songAdapter = new SongAdapter(this, songList, this);
-        fetchSongs(apiService.getAllSongsByArtistId(artistId, page, 5));
+        fetchSongs(apiService.getAllSongsByArtistId(artistId, page, 10));
         rvListSong.setAdapter(songAdapter);
 
-        rvListSong.addOnScrollListener(new PaginationScrollListener(layoutManager) {
-            @Override
-            public void loadMoreItems() {
-                isLoading = true;
-                loadNextPage();
-            }
+//        rvListSong.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+//            @Override
+//            public void loadMoreItems() {
+//                isLoading = true;
+//                loadNextPage();
+//            }
+//
+//            @Override
+//            public boolean isLastPage() {
+//                return isLastPage;
+//            }
+//
+//            @Override
+//            public boolean isLoading() {
+//                return isLoading;
+//            }
+//        });
 
+        albumList = new ArrayList<>();
+        albumAdapter = new AlbumAdapter(this, albumList, new AlbumAdapter.OnAlbumClickListener() {
             @Override
-            public boolean isLastPage() {
-                return isLastPage;
-            }
-
-            @Override
-            public boolean isLoading() {
-                return isLoading;
+            public void onAlbumClick(Album album) {
+                exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(album.getSongs()));
+                exoPlayerQueue.setCurrentPosition(0);
+                Intent intent = new Intent(getApplicationContext(), TopicActivity.class);
+                intent.putExtra("albumId", String.valueOf(album.getIdAlbum()));
+                intent.putExtra("topic", "1");
+                startActivity(intent);
             }
         });
+        RecyclerView.LayoutManager layoutManagerAlbum = new GridLayoutManager(getApplicationContext(), 2);
+        rvListAlbum.setLayoutManager(layoutManagerAlbum);
+        rvListAlbum.addItemDecoration(itemDecoration);
+        apiService.getAlbumsByArtistId(artistId).enqueue(new Callback<GenericResponse<List<Album>>>() {
+            @Override
+            public void onResponse(Call<GenericResponse<List<Album>>> call, Response<GenericResponse<List<Album>>> response) {
+                if (response.isSuccessful()) {
+                    albumList.addAll(response.body().getData());
+                    albumAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GenericResponse<List<Album>>> call, Throwable t) {
+
+            }
+        });
+
+        rvListAlbum.setAdapter(albumAdapter);
     }
 
     private void setArtistInfo() {
