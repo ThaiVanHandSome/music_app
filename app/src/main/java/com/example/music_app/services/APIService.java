@@ -1,5 +1,6 @@
 package com.example.music_app.services;
 
+import com.example.music_app.models.Album;
 import com.example.music_app.models.Artist;
 import com.example.music_app.models.ArtistResponse;
 import com.example.music_app.models.ForgotPassword;
@@ -167,4 +168,13 @@ public interface APIService {
 
     @GET("song/comment/countLikes")
     Call<GenericResponse<Long>> countLikesOfComment(@Query("commentId") Long commentId);
+
+    @GET("albums/artist/{id_artist}")
+    Call<GenericResponse<List<Album>>> getAlbumsByArtistId(@Path("id_artist") int id_artist);
+
+    @GET("album/{id_album}/songs")
+    Call<GenericResponse<List<Song>>> getSongsByAlbumId(@Path("id_album") int id_album);
+
+    @GET("album/{id_album}")
+    Call<GenericResponse<Album>> getAlbumById(@Path("id_album") int id_album);
 }
