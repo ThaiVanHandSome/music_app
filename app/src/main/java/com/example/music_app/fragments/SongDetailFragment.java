@@ -1,9 +1,21 @@
 package com.example.music_app.fragments;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,25 +23,27 @@ import androidx.annotation.OptIn;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
 import androidx.media3.common.Player;
+import androidx.media3.common.util.Log;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.common.util.Util;
 import androidx.media3.exoplayer.ExoPlayer;
-
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
 import com.example.music_app.activities.BaseActivity;
-import com.example.music_app.activities.SongDetailActivity;
+import com.example.music_app.adapters.SongCommentAdapter;
+import com.example.music_app.decorations.BottomOffsetDecoration;
+import com.example.music_app.helpers.GradientHelper;
+import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.ResponseMessage;
+import com.example.music_app.models.SongComment;
+import com.example.music_app.models.SongCommentRequest;
+import com.example.music_app.models.SongCommentResponse;
+import com.example.music_app.models.User;
+import com.example.music_app.retrofit.RetrofitClient;
+import com.example.music_app.services.APIService;
 import com.example.music_app.services.ExoBuilderService;
 import com.example.music_app.services.ExoPlayerQueue;
 import com.example.music_app.services.ExoService;
@@ -38,11 +52,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SongDetailFragment extends BottomSheetDialogFragment {
@@ -50,13 +68,22 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     private ExoPlayer exoPlayer;
     SeekBar seekBar;
     TextView tvSongTitle, tvArtistName, tvCurrentTime, tvDuration;
-    MaterialButton btnRepeat, btnShuffle, btnPrevious, btnPlay, btnNext;
+    MaterialButton btnRepeat, btnShuffle, btnPrevious, btnPlay, btnNext, publishCommentBtn;
     CircleImageView imSongAvt;
+    EditText commentTxt;
+    private FrameLayout overlay;
+    private ProgressBar progressBar;
+    View view;
+    RecyclerView recyclerViewCmt;
 
     private ExoService exoService;
     private ExoBuilderService exoBuilderService;
+    private SongCommentAdapter songCommentAdapter;
+    private List<SongComment> songComments = new ArrayList<>();
     private ExoPlayerQueue exoPlayerQueue;
     private RotateAnimation rotateAnimation;
+    private APIService apiService;
+    private User user;
 
     public SongDetailFragment() {
 
@@ -77,7 +104,6 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        exoPlayerQueue = ExoPlayerQueue.getInstance();
 
         if (exoPlayerQueue.isShuffle()) {
             btnShuffle.setIconTint(getResources().getColorStateList(R.color.primary));
@@ -184,10 +210,25 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         super.onStop();
     }
 
+    private void hideOverlay() {
+        overlay.setVisibility(View.INVISIBLE);
+        overlay.setFocusable(false);
+        overlay.setClickable(false);
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void openOverlay() {
+        overlay.setBackgroundColor(Color.argb(89, 0, 0, 0));
+        overlay.setVisibility(View.VISIBLE);
+        overlay.setFocusable(true);
+        overlay.setClickable(true);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_song_detail, container, false);
+        view = inflater.inflate(R.layout.fragment_song_detail, container, false);
         tvSongTitle = view.findViewById(R.id.tvSongTitle);
         tvArtistName = view.findViewById(R.id.tvArtistName);
         tvCurrentTime = view.findViewById(R.id.tvSongCurrentTime);
@@ -199,6 +240,11 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         btnPrevious = view.findViewById(R.id.btnPrevious);
         btnPlay = view.findViewById(R.id.btnPlay);
         btnNext = view.findViewById(R.id.btnNext);
+        recyclerViewCmt = view.findViewById(R.id.recyclerViewCmt);
+        commentTxt = view.findViewById(R.id.commentTxt);
+        publishCommentBtn = view.findViewById(R.id.publishCommentBtn);
+        progressBar = view.findViewById(R.id.progressBar);
+        overlay = view.findViewById(R.id.overlay);
 
         handler = new Handler();
         if (getActivity() instanceof BaseActivity) {
@@ -206,8 +252,71 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
             playPlaylist();
         }
 
+        songCommentAdapter = new SongCommentAdapter(getContext(), songComments, null);
+        recyclerViewCmt.setAdapter(songCommentAdapter);
+        recyclerViewCmt.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+        recyclerViewCmt.addItemDecoration(new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset)));
+        getAllComments();
+
+        publishCommentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(String.valueOf(commentTxt.getText()).length() == 0) return;
+                System.out.println(String.valueOf(commentTxt.getText()).length());
+                openOverlay();
+                postComment();
+            }
+        });
 
         return view;
+    }
+
+    private void postComment() {
+        SongCommentRequest req = new SongCommentRequest();
+        req.setIdSong(exoPlayer.getCurrentMediaItem().mediaMetadata.extras.getLong("id"));
+        user = SharePrefManagerUser.getInstance(getContext()).getUser();
+        req.setIdUser((long) user.getId());
+        req.setContent(String.valueOf(commentTxt.getText()));
+        commentTxt.setText("");
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        apiService.postComment(req).enqueue(new Callback<ResponseMessage>() {
+            @Override
+            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                hideOverlay();
+                ResponseMessage res = response.body();
+                assert res != null;
+                getAllComments();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                hideOverlay();
+            }
+        });
+
+    }
+
+    private void getAllComments() {
+        Long idSong = exoPlayer.getCurrentMediaItem().mediaMetadata.extras.getLong("id");
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        apiService.getAllCommentsOfSong(idSong).enqueue(new Callback<SongCommentResponse>() {
+            @Override
+            public void onResponse(Call<SongCommentResponse> call, Response<SongCommentResponse> response) {
+                SongCommentResponse res = response.body();
+                assert res != null;
+                if(res.isSuccess()) {
+                    songComments = res.getData();
+                    songCommentAdapter = new SongCommentAdapter(getContext(), songComments, null);
+                    recyclerViewCmt.setAdapter(songCommentAdapter);
+                    songCommentAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SongCommentResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override
@@ -334,6 +443,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
                     .load(metadata.artworkUri)
                     .transform(new RoundedCornersTransformation(30, 0))
                     .into(imSongAvt);
+            GradientHelper.applyGradient(getContext(), view, String.valueOf(metadata.artworkUri));
 
             rotateAnimation = new RotateAnimation(
                     0, 360,

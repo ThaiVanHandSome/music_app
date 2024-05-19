@@ -2,7 +2,6 @@ package com.example.music_app.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -72,25 +71,24 @@ public class AddSongToPlaylistActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = getIntent();
-                Log.d("AddSongToPlaylist", "SongId: " + String.valueOf(intent.getLongExtra("SongId", 0)));
                 Long songId = intent.getLongExtra("SongId", 0);
                 for (int i = 0; i < adapter.getCheckedPlaylistIds().size(); i++) {
-                    Log.d("AddSongToPlaylist", "PlaylistId: " + String.valueOf(adapter.getCheckedPlaylistIds().get(i)));
                     apiService.addSongToPlaylist(adapter.getCheckedPlaylistIds().get(i), songId).enqueue(new Callback<ResponseMessage>() {
                         @Override
                         public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
-                            if (response.isSuccessful()) {
-                                Intent intent = new Intent(AddSongToPlaylistActivity.this, LibraryActivity.class);
-                                startActivity(intent);
-                                Toast.makeText(AddSongToPlaylistActivity.this, getText(R.string.toast_added_song_to_playlist), Toast.LENGTH_SHORT).show();
+                            if (response.isSuccessful() && response.body().getData().equals(Boolean.FALSE)) {
+                                Toast.makeText(AddSongToPlaylistActivity.this, getText(R.string.toast_song_already_in_playlist), Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<ResponseMessage> call, Throwable t) {
-
-                        }
+                        public void onFailure(Call<ResponseMessage> call, Throwable t) { }
                     });
+                    if (i == adapter.getCheckedPlaylistIds().size() - 1) {
+                        Intent intent1 = new Intent(AddSongToPlaylistActivity.this, LibraryActivity.class);
+                        startActivity(intent1);
+                        Toast.makeText(AddSongToPlaylistActivity.this, getText(R.string.toast_added_song_to_playlist), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

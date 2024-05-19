@@ -9,7 +9,8 @@
     <color name="neutral5">#FFFFFF</color>
     <color name="accent_verified">#3770E5</color>
     <color name="accent_error">#FFA7A9</color>
+    <color name="error">#E45B5F</color>
     <color name="black">#000000</color>
     <color name="overlay">#00000059</color>
-    <color name="dynamic">#0038AA</color>
+    <color name="primary_disabled">#224DA3</color>
 </resources>

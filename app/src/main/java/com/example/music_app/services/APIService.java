@@ -14,6 +14,8 @@ import com.example.music_app.models.PlaylistResponse;
 import com.example.music_app.models.RegisterRequest;
 import com.example.music_app.models.RegisterResponse;
 import com.example.music_app.models.Song;
+import com.example.music_app.models.SongCommentRequest;
+import com.example.music_app.models.SongCommentResponse;
 import com.example.music_app.models.SongResponse;
 
 import java.util.List;
@@ -119,8 +121,14 @@ public interface APIService {
     @POST("playlistSong/{id_playlist}/{id_song}")
     Call<ResponseMessage> addSongToPlaylist(@Path("id_playlist") Long id_playlist, @Path("id_song") Long id_song);
 
-    @GET("/playlist")
+    @GET("playlist")
     Call<ResponseMessage> isPlaylistNameExists(@Query("name") String name);
+
+    @GET("song/{id_song}/comments")
+    Call<SongCommentResponse> getAllCommentsOfSong(@Path("id_song") Long idSong);
+
+    @POST("song/post-comment")
+    Call<ResponseMessage> postComment(@Body SongCommentRequest songCommentRequest);
 
     @GET("user/searchArtist")
     Call<GenericResponse<List<Artist>>> searchArtist(@Query("query") String query);

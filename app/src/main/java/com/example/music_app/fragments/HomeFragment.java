@@ -19,16 +19,19 @@ import com.example.music_app.R;
 import com.example.music_app.activities.HomeActivity;
 import com.example.music_app.activities.HomeSongsActivity;
 import com.example.music_app.activities.LibraryActivity;
+import com.example.music_app.activities.SongDetailActivity;
 import com.example.music_app.activities.TopicActivity;
 import com.example.music_app.adapters.ArtistAdapter;
 import com.example.music_app.adapters.NewSongHomeAdapter;
 import com.example.music_app.adapters.SongHomeAdapter;
+import com.example.music_app.helpers.SongToMediaItemHelper;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.User;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
+import com.example.music_app.services.ExoPlayerQueue;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -48,9 +51,55 @@ public class HomeFragment extends Fragment {
     APIService apiService;
     List<Song> trendSongs, favoriteSongs, NewSongs;
     List<User> Artists;
-
     TextView title, xtt_topthinhhanh, xtt_moinguoiyeuthich, xtt_nghesihangdau, xtt_moiramat;
+    private ExoPlayerQueue exoPlayerQueue = ExoPlayerQueue.getInstance();
+    private final SongHomeAdapter.OnItemClickListener songTrendItemClick = new SongHomeAdapter.OnItemClickListener() {
+        @Override
+        public void onSongClick(int position) {
+            exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(trendSongs));
+            exoPlayerQueue.setCurrentPosition(position);
+            Log.d("HomeActivity", "onSongClick: position " + exoPlayerQueue.getCurrentPosition() + "Recycler view tag: trend");
+            Intent intent = new Intent(getContext(), SongDetailActivity.class);
+            startActivity(intent);
+        }
 
+        @Override
+        public void onPlayPlaylistClick(List<Song> songList) {
+
+        }
+    };
+
+    private final SongHomeAdapter.OnItemClickListener songFavoriteItemClick = new SongHomeAdapter.OnItemClickListener() {
+        @Override
+        public void onSongClick(int position) {
+            exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(favoriteSongs));
+            exoPlayerQueue.setCurrentPosition(position);
+            Log.d("HomeActivity", "onSongClick: position " + position + "Recycler view tag: favorite");
+            Intent intent = new Intent(getContext(), SongDetailActivity.class);
+            startActivity(intent);
+        }
+
+        @Override
+        public void onPlayPlaylistClick(List<Song> songList) {
+
+        }
+    };
+
+    private final NewSongHomeAdapter.OnItemClickListener songNewItemClick = new NewSongHomeAdapter.OnItemClickListener() {
+        @Override
+        public void onSongClick(int position, String tag) {
+            exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(NewSongs));
+            exoPlayerQueue.setCurrentPosition(position);
+            Log.d("HomeActivity", "onSongClick: position " + position + "Recycler view tag: newReleased");
+            Intent intent = new Intent(getContext(), SongDetailActivity.class);
+            startActivity(intent);
+        }
+
+        @Override
+        public void onPlayPlaylistClick(List<Song> songList) {
+
+        }
+    };
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -144,7 +193,7 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful() && isAdded()) {
                     Log.e("DataRes", "Code chay vao ham get Song Thinh Hanh Thanh Cong");
                     trendSongs = response.body().getData();
-                    songHomeAdapter = new SongHomeAdapter(requireContext(), trendSongs);
+                    songHomeAdapter = new SongHomeAdapter(requireContext(), trendSongs, songTrendItemClick);
                     rvTopTrend.setHasFixedSize(true);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL,false );
                     rvTopTrend.setLayoutManager(layoutManager);
@@ -169,7 +218,7 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
                 if (response.isSuccessful() && isAdded()) {
                     favoriteSongs = response.body().getData();
-                    songHomeAdapter = new SongHomeAdapter(requireContext(), favoriteSongs);
+                    songHomeAdapter = new SongHomeAdapter(requireContext(), favoriteSongs, songFavoriteItemClick);
                     rvFavoriteSong.setHasFixedSize(true);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL,false );
                     rvFavoriteSong.setLayoutManager(layoutManager);
@@ -217,7 +266,7 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<GenericResponse<List<Song>>> call, Response<GenericResponse<List<Song>>> response) {
                 if (response.isSuccessful() && isAdded()) {
                     NewSongs = response.body().getData();
-                    newSongHomeAdapter = new NewSongHomeAdapter(requireContext(), NewSongs);
+                    newSongHomeAdapter = new NewSongHomeAdapter(requireContext(), NewSongs, songNewItemClick);
                     rvNewSong.setHasFixedSize(true);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false );
                     rvNewSong.setLayoutManager(layoutManager);

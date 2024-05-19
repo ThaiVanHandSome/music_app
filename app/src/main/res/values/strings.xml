@@ -44,6 +44,8 @@
     <string name="button_create">Tạo</string>
     <string name="button_add">Thêm</string>
     <string name="button_delete_playlist">Xóa danh sách phát</string>
+    <string name="button_cancel">Hủy</string>
+    <string name="button_delete">Xóa</string>
 
     <string name="label_forget_password">Quên mật khẩu?</string>
     <string name="button_reset_password">Lấy lại mật khẩu</string>
@@ -82,7 +84,13 @@
 
     <string name="client_id">90467436569-ibtnp170t1rb3fhksb8nhp99b0garii8.apps.googleusercontent.com</string>
     <string name="toast_added_song_to_playlist">Thêm bài hát vào danh sách phát thành công!</string>
+    <string name="toast_song_already_in_playlist">Đã bỏ qua các bài hát có trong danh sách phát</string>
     <string name="error_playlist_name_exists">Danh sách phát này đã tồn tại!</string>
+
+    <!-- Dialog -->
+    <string name="dialog_title_confirm_delete">Xác nhận xóa</string>
+    <string name="dialog_message_confirm_delete">Bạn có chắc chắn muốn xóa danh sách phát này không?</string>
+
 
     // Notification
     <string name="channel_new_song">My Channel</string>
