@@ -77,9 +77,11 @@ public class UserPlaylistFragment extends Fragment {
 
         // Bind recyclerView and adapter
         recyclerView = binding.rvUserPlaylist;
-        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        recyclerView.addItemDecoration(new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset)));
+        RecyclerView.ItemDecoration itemDecoration = new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset));
+        recyclerView.addItemDecoration(itemDecoration);
+        recyclerView.setAdapter(adapter);
+
         getPlaylistByIdUser();
         refreshFavouriteSongsIfNeeded();
         return binding.getRoot();

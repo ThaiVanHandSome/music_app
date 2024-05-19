@@ -80,7 +80,8 @@ public class UserFavouriteFragment extends Fragment implements SongAdapter.OnIte
         songRecyclerView = binding.rvUserFavourites;
         songRecyclerView.setAdapter(songAdapter);
         songRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        songRecyclerView.addItemDecoration(new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset)));
+        RecyclerView.ItemDecoration itemDecoration = new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset));
+        songRecyclerView.addItemDecoration(itemDecoration);
 
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         getSongLikedByIdUser();

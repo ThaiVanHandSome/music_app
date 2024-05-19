@@ -6,13 +6,17 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.music_app.R;
 import com.example.music_app.adapters.SongAddToLibraryAdapter;
 import com.example.music_app.databinding.ActivityAddFavouriteSongsBinding;
+import com.example.music_app.databinding.FragmentLibraryBinding;
 import com.example.music_app.decorations.BottomOffsetDecoration;
+import com.example.music_app.fragments.LibraryFragment;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.ResponseMessage;
@@ -22,6 +26,7 @@ import com.example.music_app.models.SongResponse;
 import com.example.music_app.models.User;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +37,7 @@ import retrofit2.Response;
 
 public class AddFavouriteSongsActivity extends AppCompatActivity {
     ActivityAddFavouriteSongsBinding binding;
+    FragmentLibraryBinding libraryBinding;
     RecyclerView recyclerView;
     SongAddToLibraryAdapter adapter;
     List<Song> songs;
@@ -87,9 +93,17 @@ public class AddFavouriteSongsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
                         if (response.isSuccessful()) {
-                            Intent intent = new Intent(AddFavouriteSongsActivity.this, LibraryActivity.class);
+                            Intent intent = new Intent(AddFavouriteSongsActivity.this, MainActivity.class);
+                            intent.putExtra("fragmentId", R.id.fragment_library);
                             startActivity(intent);
-                            finish();
+
+                            libraryBinding = FragmentLibraryBinding.inflate(getLayoutInflater(), null, false);
+                            TabLayout tabLayout = libraryBinding.libraryTabLayout;
+                            int tabIndex = 1;
+                            TabLayout.Tab tab = tabLayout.getTabAt(tabIndex);
+                            if (tab != null) {
+                                tab.select();
+                            }
                             Toast.makeText(AddFavouriteSongsActivity.this, getText(R.string.toast_added_song_to_favourite), Toast.LENGTH_SHORT).show();
                         }
                     }

@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,8 +73,7 @@ public class AddSongToPlaylistActivity extends AppCompatActivity {
         binding.fabAddToPlaylist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = getIntent();
-                Long songId = intent.getLongExtra("SongId", 0);
+                Long songId = getIntent().getLongExtra("SongId", 0);
                 for (int i = 0; i < adapter.getCheckedPlaylistIds().size(); i++) {
                     apiService.addSongToPlaylist(adapter.getCheckedPlaylistIds().get(i), songId).enqueue(new Callback<ResponseMessage>() {
                         @Override
@@ -86,8 +87,9 @@ public class AddSongToPlaylistActivity extends AppCompatActivity {
                         public void onFailure(Call<ResponseMessage> call, Throwable t) { }
                     });
                     if (i == adapter.getCheckedPlaylistIds().size() - 1) {
-                        Intent intent1 = new Intent(AddSongToPlaylistActivity.this, LibraryActivity.class);
-                        startActivity(intent1);
+                        Intent intent = new Intent(AddSongToPlaylistActivity.this, MainActivity.class);
+                        intent.putExtra("fragmentId", R.id.fragment_library);
+                        startActivity(intent);
                         Toast.makeText(AddSongToPlaylistActivity.this, getText(R.string.toast_added_song_to_playlist), Toast.LENGTH_SHORT).show();
                     }
                 }

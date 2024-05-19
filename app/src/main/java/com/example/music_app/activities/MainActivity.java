@@ -29,6 +29,15 @@ public class MainActivity extends BaseActivity {
                 .replace(R.id.main_frame_layout, HomeFragment.newInstance())
                 .commit();
         navigationView = (BottomNavigationView) findViewById(R.id.main_navigation);
+
+        int fragmentId = getIntent().getIntExtra("fragmentId", -1);
+        if (fragmentId != -1) {
+            navigationView.setSelectedItemId(R.id.menu_item_library);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.main_frame_layout, LibraryFragment.newInstance())
+                    .commit();
+        }
+
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

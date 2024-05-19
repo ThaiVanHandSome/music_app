@@ -158,7 +158,7 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
         setArtistInfo();
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         songList = new ArrayList<>();
-        songAdapter = new SongAdapter(getApplicationContext(), songList, this);
+        songAdapter = new SongAdapter(this, songList, this);
         fetchSongs(apiService.getAllSongsByArtistId(artistId, page, 5));
         rvListSong.setAdapter(songAdapter);
 

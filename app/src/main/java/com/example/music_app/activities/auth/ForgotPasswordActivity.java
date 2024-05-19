@@ -58,10 +58,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 String inp = emailTxt.getText().toString();
                 if(inp.length() == 0) {
-                    emailLayout.setError("Vui lòng nhập trường này");
+                    emailLayout.setError(getText(R.string.error_required_field));
                 } else {
                     if(!validate.validateEmail(inp)) {
-                        emailLayout.setError("Vui lòng nhập email chính xác!");
+                        emailLayout.setError(getText(R.string.error_invalid_email));
                     } else {
                         emailLayout.setError(null);
                     }
@@ -74,13 +74,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 String inp = emailTxt.getText().toString();
                 if(b) {
                     if(inp.length() != 0 && !validate.validateEmail(inp)) {
-                        emailLayout.setError("Vui lòng nhập email chính xác!");
+                        emailLayout.setError(getText(R.string.error_invalid_email));
                         return;
                     }
                     emailLayout.setError(null);
                 } else {
                     if(inp.length() == 0) {
-                        emailLayout.setError("Vui lòng nhập trường này");
+                        emailLayout.setError(getText(R.string.error_required_field));
                     }
                 }
             }

@@ -42,7 +42,7 @@ public class SongHomeAdapter extends RecyclerView.Adapter<SongHomeAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Song song = songList.get(position);
         holder.tenBaiHat.setText(song.getName());
-        holder.tenNgheSi.setText(song.getName());
+        holder.tenNgheSi.setText(song.getArtistName());
         holder.position = position;
 
         Glide.with(context)

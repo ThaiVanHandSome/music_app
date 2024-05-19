@@ -7,7 +7,7 @@
     <string name="trending_title">Top thịnh hành</string>
     <string name="trending_intro">Khám phá các bài hát được nghe nhiều nhất</string>
     <string name="favorite_title">Bài hát yêu thích</string>
-    <string name="favorite_intro">Các bài hát được yêu thích nhất</string>
+    <string name="favorite_intro">Các bài hát được mọi người yêu thích nhất</string>
     <string name="topartist_title">Nghệ sĩ hàng đầu</string>
     <string name="topartist_intro">Danh sách các nghệ sĩ có lượt theo dõi cao nhất</string>
     <string name="newreleased_title">Mới phát hành</string>
@@ -106,6 +106,7 @@
     <string name="error_invalid_phone">Vui lòng nhập số điện thoại hợp lệ</string>
     <string name="error_invalid_password">Vui lòng nhập mật khẩu hợp lệ</string>
     <string name="error_password_not_match">Mật khẩu không khớp</string>
+    <string name="error_wrong_account_infor">Tên đăng nhập hoặc mật khẩu không đúng</string>
 
     <string name="radio_choice_male">Nam</string>
     <string name="radio_choice_female">Nữ</string>

@@ -265,6 +265,10 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
         btnPlay = view.findViewById(R.id.btnPlay);
         btnNext = view.findViewById(R.id.btnNext);
         recyclerViewCmt = view.findViewById(R.id.recyclerViewCmt);
+        user = SharePrefManagerUser.getInstance(getContext()).getUser();
+        Glide.with(view.findViewById(R.id.commentLayout))
+                .load(user.getAvatar())
+                .into((CircleImageView) view.findViewById(R.id.avatarImageView));
         commentTxt = view.findViewById(R.id.commentTxt);
         publishCommentBtn = view.findViewById(R.id.publishCommentBtn);
         progressBar = view.findViewById(R.id.progressBar);
