@@ -5,49 +5,49 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.example.music_app.activities.auth.LoginActivity;
+import com.example.music_app.utils.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
+
 public class SharePrefSearchHistory {
-    private static final String SHARED_PREF_NAME = "history_search";
 
-    private static final String KEY_SEARCH_HISTORY = "search_history";
-    private static SharePrefSearchHistory mInstance;
-    private static Context ctx;
+    private static final String SHARED_PREFS_NAME = "SearchHistory";
+    private static final String KEY_SEARCH_HISTORY = "searchHistory";
+    private static final int MAX_HISTORY_SIZE = 10;
 
-    private SharePrefSearchHistory(Context context) {
-        ctx = context;
+    private SharedPreferences preferences;
+
+    public SharePrefSearchHistory(Context context) {
+        preferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
     }
-    public static synchronized SharePrefSearchHistory getInstance(Context context) {
-        if(mInstance == null) {
-            mInstance = new SharePrefSearchHistory(context);
+
+    public void addSearchQuery(String newSearchQuery) {
+        Set<String> searchHistory = preferences.getStringSet(KEY_SEARCH_HISTORY, new HashSet<String>());
+        searchHistory.add(newSearchQuery);
+
+        if (searchHistory.size() > MAX_HISTORY_SIZE) {
+            Iterator<String> iterator = searchHistory.iterator();
+            iterator.next();
+            iterator.remove();
         }
-        return mInstance;
+        preferences.edit()
+                .putStringSet(KEY_SEARCH_HISTORY, searchHistory)
+                .apply();
     }
 
-    public static void saveSearchHistory(Context context, String searchTerm) {
-        SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        Set<String> history = preferences.getStringSet(KEY_SEARCH_HISTORY, new HashSet<String>());
-        history.add(searchTerm);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putStringSet(KEY_SEARCH_HISTORY, history);
-        editor.apply();
+    public Set<String> getSearchHistory() {
+        return preferences.getStringSet(KEY_SEARCH_HISTORY, new HashSet<String>());
     }
-
-    public static ArrayList<String> getSearchHistory(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        Set<String> history = preferences.getStringSet(KEY_SEARCH_HISTORY, new HashSet<String>());
-        return new ArrayList<>(history);
+    public void clearSearchHistory() {
+        preferences.edit()
+                .remove(KEY_SEARCH_HISTORY)
+                .apply();
     }
-
-
-    public static void clearSearchHistory(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(KEY_SEARCH_HISTORY);
-        editor.apply();
-    }
-
 }
