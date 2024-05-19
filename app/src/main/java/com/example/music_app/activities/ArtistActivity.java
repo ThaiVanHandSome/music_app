@@ -74,7 +74,7 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
 
         includeTopPlaylist = findViewById(R.id.included_top_playlist);
         coverPic = includeTopPlaylist.findViewById(R.id.imCoverPicture);
-        edtPlaylistTitle = includeTopPlaylist.findViewById(R.id.edtPlaylistTitle);
+        tvPlaylistTitle = includeTopPlaylist.findViewById(R.id.edtPlaylistTitle);
         tvPlaylistIntro = includeTopPlaylist.findViewById(R.id.tvPlaylistIntro);
         tvPlaySongCount = includeTopPlaylist.findViewById(R.id.tvPlaylistSongCount);
         includeTopPlaylist.findViewById(R.id.btn_edit_name).setVisibility(View.GONE);
@@ -185,7 +185,7 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
         ArtistHelper.getArtistById(artistId, new ArtistHelper.ArtistCallback() {
             @Override
             public void onSuccess(Artist artist) {
-                edtPlaylistTitle.setText(artist.getNickname());
+                tvPlaylistTitle.setText(artist.getNickname());
                 Glide.with(getApplicationContext()).load(artist.getAvatar()).into(coverPic);
                 GradientHelper.applyGradient(getApplicationContext(), includeTopPlaylist, String.valueOf(artist.getAvatar()));
             }

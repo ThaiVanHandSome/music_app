@@ -19,7 +19,7 @@ public class RetrofitClient {
     public static Retrofit getRetrofit() {
         if(retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://localhost:8989/api/v1/")
+                    .baseUrl("http://192.168.52.28:8989/api/v1/")
                     .client(getClient())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
@@ -33,7 +33,10 @@ public class RetrofitClient {
                     .addHeader("Authorization", " Bearer " + Const.getAccessToken())
                     .build();
             return chain.proceed(newRequest);
-        }).build();
+        })
+                .connectTimeout(100, TimeUnit.SECONDS)
+                .readTimeout(100,TimeUnit.SECONDS)
+                .build();
         return client;
     }
 }

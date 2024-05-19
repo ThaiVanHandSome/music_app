@@ -326,8 +326,9 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
 
     }
 
-    private void getAllComments() {
+    @OptIn(markerClass = UnstableApi.class) private void getAllComments() {
         Long idSong = exoPlayer.getCurrentMediaItem().mediaMetadata.extras.getLong("id");
+        Log.d("Thanh122223", String.valueOf(idSong));
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.getAllCommentsOfSong(idSong).enqueue(new Callback<SongCommentResponse>() {
             @Override
