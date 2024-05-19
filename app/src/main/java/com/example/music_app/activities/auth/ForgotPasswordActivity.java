@@ -1,7 +1,5 @@
 package com.example.music_app.activities.auth;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,9 +10,10 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.music_app.R;
 import com.example.music_app.models.ForgotPassword;
-import com.example.music_app.models.RegisterResponse;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
@@ -59,10 +58,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 String inp = emailTxt.getText().toString();
                 if(inp.length() == 0) {
-                    emailLayout.setError("Vui lòng nhập trường này");
+                    emailLayout.setError(getText(R.string.error_required_field));
                 } else {
                     if(!validate.validateEmail(inp)) {
-                        emailLayout.setError("Vui lòng nhập email chính xác!");
+                        emailLayout.setError(getText(R.string.error_invalid_email));
                     } else {
                         emailLayout.setError(null);
                     }
@@ -75,13 +74,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 String inp = emailTxt.getText().toString();
                 if(b) {
                     if(inp.length() != 0 && !validate.validateEmail(inp)) {
-                        emailLayout.setError("Vui lòng nhập email chính xác!");
+                        emailLayout.setError(getText(R.string.error_invalid_email));
                         return;
                     }
                     emailLayout.setError(null);
                 } else {
                     if(inp.length() == 0) {
-                        emailLayout.setError("Vui lòng nhập trường này");
+                        emailLayout.setError(getText(R.string.error_required_field));
                     }
                 }
             }

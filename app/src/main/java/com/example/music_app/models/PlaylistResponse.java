@@ -12,12 +12,12 @@ public class PlaylistResponse {
     @SerializedName("message")
     private String message;
     @SerializedName("data")
-    private List<Playlist> data;
+    private Playlist data;
 
     public PlaylistResponse() {
     }
 
-    public PlaylistResponse(Boolean success, Boolean error, String message, List<Playlist> data) {
+    public PlaylistResponse(Boolean success, Boolean error, String message, Playlist data) {
         this.success = success;
         this.error = error;
         this.message = message;
@@ -48,11 +48,11 @@ public class PlaylistResponse {
         this.message = message;
     }
 
-    public List<Playlist> getData() {
+    public Playlist getData() {
         return data;
     }
 
-    public void setData(List<Playlist> data) {
+    public void setData(Playlist data) {
         this.data = data;
     }
 }

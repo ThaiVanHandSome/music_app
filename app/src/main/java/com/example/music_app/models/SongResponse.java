@@ -1,48 +1,41 @@
 package com.example.music_app.models;
-
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 public class SongResponse {
-    @SerializedName("success")
-    private Boolean success;
-    @SerializedName("error")
-    private Boolean error;
-    @SerializedName("message")
-    private String message;
-    @SerializedName("data")
-    private List<Song> data;
+    private List<Song> content;
+    private int totalElements;
+    private int totalPages;
+    private boolean last;
 
-    public Boolean getSuccess() {
-        return success;
+    public List<Song> getContent() {
+        return content;
     }
 
-    public void setSuccess(Boolean success) {
-        this.success = success;
+    public void setContent(List<Song> content) {
+        this.content = content;
     }
 
-    public Boolean getError() {
-        return error;
+    public int getTotalElements() {
+        return totalElements;
     }
 
-    public void setError(Boolean error) {
-        this.error = error;
+    public void setTotalElements(int totalElements) {
+        this.totalElements = totalElements;
     }
 
-    public String getMessage() {
-        return message;
+    public int getTotalPages() {
+        return totalPages;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
     }
 
-    public List<Song> getData() {
-        return data;
+    public boolean isLast() {
+        return last;
     }
 
-    public void setData(List<Song> data) {
-        this.data = data;
+    public void setLast(boolean last) {
+        this.last = last;
     }
 }

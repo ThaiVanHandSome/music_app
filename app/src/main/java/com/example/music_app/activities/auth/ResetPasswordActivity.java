@@ -1,7 +1,5 @@
 package com.example.music_app.activities.auth;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,9 +11,10 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.music_app.R;
-import com.example.music_app.models.LoginRequest;
-import com.example.music_app.models.RegisterResponse;
+import com.example.music_app.models.ResetPasswordRequest;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
@@ -65,7 +64,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     private void changePassword() {
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        LoginRequest req = new LoginRequest();
+        ResetPasswordRequest req = new ResetPasswordRequest();
         Intent intent = getIntent();
         String email = intent.getStringExtra("email");
         Log.d("email", email);
@@ -120,12 +119,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 String inp = textInput.getText().toString();
                 if(inp.length() == 0) {
-                    textInputLayout.setError("Vui lòng nhập trường này");
+                    textInputLayout.setError(getText(R.string.error_required_field));
                 } else {
                     if(type.equals("password") && !validate.validatePassword(inp)) {
-                        textInputLayout.setError("Vui lòng nhập mật khẩu chính xác!");
+                        textInputLayout.setError(getText(R.string.error_invalid_password));
                     } else if(type.equals("passwordAgain") && !passwordTxt.getText().toString().equals(inp)) {
-                        textInputLayout.setError("Mật khẩu không khớp");
+                        textInputLayout.setError(getText(R.string.error_password_not_match));
                     } else {
                         textInputLayout.setError(null);
                     }
@@ -140,16 +139,16 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 if(b) {
                     if(inp.length() != 0) {
                         if(type.equals("password") && !validate.validatePassword(inp)) {
-                            textInputLayout.setError("Vui lòng nhập mật khẩu chính xác!");
+                            textInputLayout.setError(getText(R.string.error_invalid_password));
                         } else if(type.equals("passwordAgain") && !passwordTxt.getText().toString().equals(inp)) {
-                            textInputLayout.setError("Mật khẩu không khớp");
+                            textInputLayout.setError(getText(R.string.error_password_not_match));
                         }
                         return;
                     }
                     textInputLayout.setError(null);
                 } else {
                     if(inp.length() == 0) {
-                        textInputLayout.setError("Vui lòng nhập trường này");
+                        textInputLayout.setError(getText(R.string.error_required_field));
                     }
                 }
             }

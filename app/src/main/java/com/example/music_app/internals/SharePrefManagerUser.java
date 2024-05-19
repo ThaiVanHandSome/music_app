@@ -19,6 +19,8 @@ public class SharePrefManagerUser {
     private static final String KEY_ACCESS_TOKEN = "keyaccess";
     private static final String KEY_REFRESH_TOKEN = "keyrefresh";
 
+    private static final String KEY_PROVIDER = "keyprovider";
+
     private static SharePrefManagerUser mInstance;
     private static Context ctx;
 
@@ -45,6 +47,7 @@ public class SharePrefManagerUser {
         editor.putString(KEY_PHONENUMBER, user.getPhoneNumber());
         editor.putString(KEY_ACCESS_TOKEN, user.getAccessToken());
         editor.putString(KEY_REFRESH_TOKEN, user.getRefreshToken());
+        editor.putString(KEY_PROVIDER,user.getProvider());
         editor.apply();
     }
 
@@ -65,6 +68,7 @@ public class SharePrefManagerUser {
         user.setLastName(sharedPreferences.getString(KEY_LAST_NAME, null));
         user.setAccessToken(sharedPreferences.getString(KEY_ACCESS_TOKEN, null));
         user.setRefreshToken(sharedPreferences.getString(KEY_REFRESH_TOKEN, null));
+        user.setProvider(sharedPreferences.getString(KEY_PROVIDER,null));
         return user;
     }
 
@@ -73,7 +77,7 @@ public class SharePrefManagerUser {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
-        ctx.startActivity(new Intent(ctx, LoginActivity.class));
+        /*ctx.startActivity(new Intent(ctx, LoginActivity.class));*/
     }
 
 }

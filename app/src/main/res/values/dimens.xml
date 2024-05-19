@@ -28,9 +28,11 @@
 
     <!-- Use for image size -->
     <dimen name="image_300dp">300dp</dimen>
+    <dimen name="image_240dp">240dp</dimen>
     <dimen name="image_120dp">120dp</dimen>
     <dimen name="image_56dp">56dp</dimen>
     <dimen name="image_48dp">48dp</dimen>
+    <dimen name="image_40dp">40dp</dimen>
     <dimen name="image_32dp">32dp</dimen>
 
     <!-- Use for button size -->
@@ -59,5 +61,8 @@
     <dimen name="card_height_48dp">48dp</dimen>
     <dimen name="card_height_56dp">56dp</dimen>
     <dimen name="card_height_72dp">72dp</dimen>
+
+    <dimen name="bottom_offset">160dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

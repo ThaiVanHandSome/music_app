@@ -4,26 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        style="@style/TextAppearance.App.DisplaySmall"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:id="@+id/main_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="-40dp"
+        app:layout_constraintBottom_toTopOf="@id/main_navigation"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+        <include
+            android:id="@+id/miniplayer"
+            layout="@layout/miniplayer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            />
+
+    </FrameLayout>
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/main_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/navigation"
+        android:paddingTop="@dimen/spacing_40dp"
+        app:itemActiveIndicatorStyle="@color/navigation_ripple_color_selector"
+        app:itemIconSize="@dimen/icon_32dp"
+        app:itemIconTint="@color/navigation_icon_tint_selector"
+        app:itemTextAppearanceActive="@style/TextAppearance.App.LabelLarge"
+        app:itemTextAppearanceInactive="@style/TextAppearance.App.LabelLarge"
+        app:itemTextColor="@color/navigation_label_tint_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:layout_width="@dimen/icon_32dp"
-        android:layout_height="@dimen/icon_32dp"
-        android:src="@drawable/ic_32dp_outline_home"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-
+        app:menu="@menu/menu_navigation" />
 </androidx.constraintlayout.widget.ConstraintLayout>

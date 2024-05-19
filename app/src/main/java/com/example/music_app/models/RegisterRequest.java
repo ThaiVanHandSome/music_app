@@ -1,13 +1,26 @@
 package com.example.music_app.models;
 
 public class RegisterRequest {
+
+    private String nickName;
     private String email;
     private String password;
     private String firstName;
     private String lastName;
     private String phoneNumber;
-
     private int gender;
+    private String avatar;
+
+    public RegisterRequest() {
+        firstName = "";
+        lastName = "";
+        nickName = "";
+        phoneNumber = "";
+        email = "";
+        password = "";
+        gender = 1;
+        avatar = "";
+    }
 
     public String getEmail() {
         return email;
@@ -55,5 +68,21 @@ public class RegisterRequest {
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
