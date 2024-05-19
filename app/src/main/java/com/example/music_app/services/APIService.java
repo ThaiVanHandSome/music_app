@@ -156,4 +156,13 @@ public interface APIService {
 
     @POST("user/{id_user}/follow-artist")
     Call<GenericResponse<Boolean>> followArtist(@Path("id_user") int id_user, @Query("id_artist") int id_artist);
+
+    @GET("/song/isUserLikedComment")
+    Call<GenericResponse<Boolean>> isUserLikedComment(@Query("commentId") Long commentId, @Query("userId") Long userId);
+
+    @POST("song/comment/like")
+    Call<GenericResponse<Boolean>> likeComment(@Query("commentId") Long commentId, @Query("userId") Long userId);
+
+    @GET("song/comment/countLikes")
+    Call<GenericResponse<Long>> countLikesOfComment(@Query("commentId") Long commentId);
 }
