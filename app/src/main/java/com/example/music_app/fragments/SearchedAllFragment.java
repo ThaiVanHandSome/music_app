@@ -16,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.music_app.R;
+import com.example.music_app.activities.ArtistActivity;
 import com.example.music_app.activities.SongDetailActivity;
+import com.example.music_app.adapters.ArtistAdapter;
 import com.example.music_app.adapters.ArtistSearchAdapter;
 import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.adapters.SongAddToLibraryAdapter;
@@ -31,6 +33,7 @@ import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
 import com.example.music_app.services.ExoPlayerQueue;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -145,15 +148,32 @@ public class SearchedAllFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null && isAdded()) {
                     artists = response.body().getData();
                     Log.e("Thanh1234", artists.toString());
-                    if (artists.isEmpty()){
+
+                    if (artists.isEmpty()) {
                         tv_artist.setVisibility(View.GONE);
-                    }
-                    else {
-                        artistSearchAdapter = new ArtistSearchAdapter(requireContext(), artists);
-                        rv_artist.setHasFixedSize(true);
-                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false );
-                        rv_artist.setLayoutManager(layoutManager);
-                        rv_artist.setAdapter(artistSearchAdapter);
+                    } else {
+                        // Initialize the adapter only if it's not already initialized
+                        if (artistSearchAdapter == null) {
+                            artistSearchAdapter = new ArtistSearchAdapter(getContext(), artists);
+                            artistSearchAdapter.setOnItemClickListener(new ArtistSearchAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(Artist artist) {
+                                    Intent intent = new Intent(getContext(), ArtistActivity.class);
+                                    intent.putExtra("artistId", artist.getIdUser());
+                                    startActivity(intent);
+                                }
+                            });
+
+                            rv_artist.setHasFixedSize(true);
+                            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+                            rv_artist.setLayoutManager(layoutManager);
+                            rv_artist.setAdapter(artistSearchAdapter);
+                        } else {
+                            // Update the existing adapter with the new data
+                            artistSearchAdapter.updateArtists(artists);
+                        }
+
+                        tv_artist.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -165,4 +185,5 @@ public class SearchedAllFragment extends Fragment {
             }
         });
     }
+
 }
