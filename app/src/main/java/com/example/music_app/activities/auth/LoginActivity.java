@@ -219,9 +219,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-                else {
-                    Toast.makeText(LoginActivity.this, res.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(LoginActivity.this, getText(R.string.toast_loged_in), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -295,7 +293,7 @@ public class LoginActivity extends AppCompatActivity {
                 hideOverlay();
                 LoginResponse res = response.body();
                 if(res == null) {
-                    Toast.makeText(LoginActivity.this, "Username Or Password Wrong!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getText(R.string.error_wrong_account_infor), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(res.isSuccess()) {
@@ -316,7 +314,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-                Toast.makeText(LoginActivity.this, res.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, getText(R.string.toast_loged_in), Toast.LENGTH_SHORT).show();
                 if(res.getType() != null && res.getType().equals("confirm")) {
                     btnGetOtp.setVisibility(View.VISIBLE);
                     email = res.getEmail();

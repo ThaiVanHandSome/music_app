@@ -1,6 +1,8 @@
 package com.example.music_app.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +19,7 @@ import com.example.music_app.R;
 import com.example.music_app.adapters.SongAddToLibraryAdapter;
 import com.example.music_app.databinding.ActivityCreatePlaylistBinding;
 import com.example.music_app.decorations.BottomOffsetDecoration;
+import com.example.music_app.fragments.LibraryFragment;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Playlist;
@@ -133,9 +136,7 @@ public class CreatePlaylistActivity extends AppCompatActivity {
                                     if (response.isSuccessful()) {
                                         if (response.body().getData().equals(Boolean.valueOf(true))) {
                                             fabCreatePlaylist.setEnabled(false);
-                                            Log.d("CreatePlaylistActivity", "Before setting error");
                                             playlistNameLayout.setError(getText(R.string.error_playlist_name_exists));
-                                            Log.d("CreatePlaylistActivity", "After setting error");
                                         } else {
                                             fabCreatePlaylist.setEnabled(true);
                                             playlistNameLayout.setError(null);
@@ -156,40 +157,6 @@ public class CreatePlaylistActivity extends AppCompatActivity {
         });
     }
 
-    /*private void checkPlaylistName() {
-        edtPlaylistName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    String playlistName = edtPlaylistName.getText().toString();
-                    if (playlistName.isEmpty()) {
-                        playlistNameLayout.setError(getText(R.string.error_required_field));
-                    } else {
-                        playlistNameLayout.setError(null);
-                    }
-                }
-            }
-        });
-
-        String playlistName = edtPlaylistName.getText().toString();
-        apiService.isPlaylistNameExists(playlistName).enqueue(new Callback<APIResponse>() {
-            @Override
-            public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
-                if (response.isSuccessful()) {
-                    if ((boolean) response.body().getData()) {
-                        playlistNameLayout.setError(getText(R.string.error_playlist_name_exists));
-                    } else {
-                        playlistNameLayout.setError(null);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<APIResponse> call, Throwable t) {
-
-            }
-        });
-    }*/
     private void createPlaylist() {
             fabCreatePlaylist.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -204,7 +171,8 @@ public class CreatePlaylistActivity extends AppCompatActivity {
                         public void onResponse(Call<PlaylistResponse> call, Response<PlaylistResponse> response) {
                             if (response.isSuccessful()) {
                                 Playlist playlist = response.body().getData();
-                                Intent intent = new Intent(CreatePlaylistActivity.this, LibraryActivity.class);
+                                Intent intent = new Intent(CreatePlaylistActivity.this, MainActivity.class);
+                                intent.putExtra("fragmentId", R.id.fragment_library);
                                 startActivity(intent);
                                 Toast.makeText(CreatePlaylistActivity.this, getText(R.string.toast_created_playlist), Toast.LENGTH_SHORT).show();
                             }

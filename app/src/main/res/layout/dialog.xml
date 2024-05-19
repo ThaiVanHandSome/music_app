@@ -16,6 +16,7 @@
             android:id="@+id/tv_dialog_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_16dp"
             android:gravity="center"
             style="@style/TextAppearance.App.TitleLarge"
             android:textColor="@color/neutral5"/>

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
 import com.example.music_app.models.Song;
+import com.example.music_app.utils.Util;
 
 import java.util.List;
 
@@ -44,8 +45,8 @@ public class NewSongHomeAdapter extends RecyclerView.Adapter<NewSongHomeAdapter.
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Song song = songList.get(position);
         holder.tenBaiHat.setText(song.getName());
-        holder.tenNgheSi.setText(song.getName());
-        holder.tenNgheSi.setText(song.getName());
+        holder.tenNgheSi.setText(song.getArtistName());
+        holder.thoiGian.setText(Util.covertToDate(song.getDayCreated()));
         holder.position = position;
         Glide.with(context)
                 .load(song.getImage())

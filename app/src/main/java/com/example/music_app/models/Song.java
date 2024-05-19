@@ -64,15 +64,8 @@ public class Song {
         this.views = views;
     }
 
-    public LocalDateTime getDayCreated() {
-        LocalDateTime dateTime = LocalDateTime.of(
-                dayCreated.get(0),
-                dayCreated.get(1),
-                dayCreated.get(2),
-                dayCreated.get(3),
-                dayCreated.get(4),
-                dayCreated.get(5));
-        return dateTime;
+    public List<Integer> getDayCreated() {
+        return dayCreated;
     }
 
     public void setDayCreated(List<Integer> dayCreated) {

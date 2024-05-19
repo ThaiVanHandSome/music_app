@@ -23,7 +23,7 @@
         android:textColor="@color/neutral5"
         android:text="@string/menu_item_library"
         android:paddingHorizontal="@dimen/spacing_8dp"
-        style="@style/TextAppearance.App.TitleMedium"/>
+        style="@style/TextAppearance.AppCompat.Medium.Inverse" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_notification"

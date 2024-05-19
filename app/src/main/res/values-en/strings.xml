@@ -8,7 +8,7 @@
     <string name="trending_title">Top trending</string>
     <string name="trending_intro">Discover the most listened songs</string>
     <string name="favorite_title">Favorite songs</string>
-    <string name="favorite_intro">Most loved songs</string>
+    <string name="favorite_intro">The most loved songs</string>
     <string name="topartist_title">Top artists</string>
     <string name="topartist_intro">Artists with the highest number of followers</string>
     <string name="newreleased_title">New released</string>
@@ -105,6 +105,7 @@
     <string name="error_invalid_password">Please enter a valid password</string>
     <string name="error_password_not_match">Password not matched</string>
 
+    <string name="error_wrong_account_infor">Username or password is incorrect</string>
     <string name="radio_choice_male">Male</string>
     <string name="radio_choice_female">Female</string>
     <string name="playlist_name_placeholder">New playlist</string>

@@ -20,7 +20,6 @@ import com.bumptech.glide.Glide;
 import com.example.music_app.R;
 import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.decorations.BottomOffsetDecoration;
-import com.example.music_app.fragments.LibraryFragment;
 import com.example.music_app.fragments.SongDetailFragment;
 import com.example.music_app.helpers.DialogHelper;
 import com.example.music_app.helpers.GradientHelper;
@@ -93,8 +92,6 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
         rvListSong = includeListSong.findViewById(R.id.rvListSong);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         rvListSong.setLayoutManager(layoutManager);
-        RecyclerView.ItemDecoration itemDecoration = new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset));
-        rvListSong.addItemDecoration(itemDecoration);
 //        RecyclerView.ItemDecoration itemDecoration = new VerticalSpaceItemDecoration(R.dimen.spacing_4dp);
 //        rvListSong.addItemDecoration(itemDecoration);
         rvListSong.addOnScrollListener(new PaginationScrollListener(layoutManager) {
@@ -130,6 +127,8 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                 deletePlaylistButton.setVisibility(View.GONE);
 
                 fetchSongs(apiService.getMostViewSong(page, size));
+                RecyclerView.ItemDecoration itemDecoration = new BottomOffsetDecoration(120);
+                rvListSong.addItemDecoration(itemDecoration);
                 rvListSong.setAdapter(songAdapter);
                 break;
             case "favorite":
@@ -381,7 +380,6 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                                             if (response.isSuccessful()) {
                                                 if (response.body().getData().equals(Boolean.TRUE)) {
                                                     editPlaylistNameButton.setEnabled(false);
-                                                    /*edtPlaylistTitle.setError(getText(R.string.error_playlist_name_exists));*/
                                                     tvPlaylistIntro.setVisibility(View.VISIBLE);
                                                     tvPlaylistIntro.setText(getText(R.string.error_playlist_name_exists));
                                                     tvPlaylistIntro.setTextColor(getColor(R.color.accent_error));
@@ -438,10 +436,10 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
                             @Override
                             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
                                 if (response.isSuccessful()) {
-                                    Log.d("API Response", "Delete playlist successful");
-                                    Intent intent = new Intent(TopicActivity.this, LibraryFragment.class);
-                                    startActivity(intent);
                                     Toast.makeText(TopicActivity.this, getText(R.string.toast_deleted_playlist), Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(TopicActivity.this, MainActivity.class);
+                                    intent.putExtra("fragmentId", R.id.fragment_library);
+                                    startActivity(intent);
                                 }
                             }
 
