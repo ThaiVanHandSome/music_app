@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.music_app.R;
+import com.example.music_app.internals.SharePrefSearchHistory;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.models.User;
 
@@ -20,6 +21,7 @@ public class SearchFragment extends Fragment {
 
     SearchView searchView;
     FragmentManager fragmentManager;
+    private SharePrefSearchHistory sharePrefSearchHistory;
     TextView title;
     public SearchFragment() {
         // Required empty public constructor
@@ -38,36 +40,44 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        // Ánh xạ các view
         initView(view);
+        sharePrefSearchHistory = new SharePrefSearchHistory(requireContext());
         User user = SharePrefManagerUser.getInstance(requireContext()).getUser();
         title.setText(getContext().getString(R.string.label_hello_user, user.getLastName()));
         searchView.clearFocus();
         fragmentManager.beginTransaction()
                 .replace(R.id.search_frame_layout, SearchInitFragment.newInstance())
                 .commit();
+
+//        searchView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                fragmentManager.beginTransaction()
+//                        .replace(R.id.search_frame_layout, SearchingFragment.newInstance())
+//                        .commit();
+//            }
+//        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.e("onCreateView", "Code chay vao day 3");
+                Log.e("onCreateView", "Code chạy vào đây 3");
+                SearchedFragment searchedFragment = SearchedFragment.newInstance(query);
                 fragmentManager.beginTransaction()
-                        .replace(R.id.search_frame_layout, SearchedFragment.newInstance())
+                        .replace(R.id.search_frame_layout, searchedFragment)
                         .commit();
+
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.e("onCreateView", "Code chay vao day 4");
-                fragmentManager.beginTransaction()
-                        .replace(R.id.search_frame_layout, SearchingFragment.newInstance())
-                        .commit();
                 return false;
             }
         });
+
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {

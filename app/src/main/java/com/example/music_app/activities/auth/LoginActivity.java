@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cloudinary.api.exceptions.ApiException;
 import com.example.music_app.R;
-import com.example.music_app.activities.HomeActivity;
 import com.example.music_app.activities.LibraryActivity;
 import com.example.music_app.activities.MainActivity;
 import com.example.music_app.internals.SharePrefManagerAccount;

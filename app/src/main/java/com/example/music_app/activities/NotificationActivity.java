@@ -84,8 +84,8 @@ public class NotificationActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // firebaseNotification = new FirebaseNotification();
-               // firebaseNotification.sendNotificationToUser("Thanh đã thêm bài hát mới","eNcJJzs9RUynriEUPmtAZ9:APA91bEBTpcDnI_r1Br-P1Crtv_otYLOI9E5lwZB7P-run8URHTbieAMsXjXtEKrzMzVD8uAZyZwkz5t6d_lsiOHb083eefMiuEx9MuYvXcxUgqFvbGjW5qRatX4wfkXEzvkrhH_ue55");
+                firebaseNotification = new FirebaseNotification();
+                firebaseNotification.sendNotificationToUser("Thanh đã thêm bài hát mới","dJzHRo5XTnqwgN1QRfrWHT:APA91bFkS0DPQBRIEZ-Z-a5z3AjaPWqymHhEIJG-rQce7XS3fbCxsFfqGxb96X1K0vJMY3iJGXLkslNW_chZTP5HlEpm7RU152szTMZoRAZDVG2uQbxCT9jnJ0mOfnBIkwwdpOptylhq");
             }
         });
     }

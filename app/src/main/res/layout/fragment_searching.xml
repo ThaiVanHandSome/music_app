@@ -7,10 +7,12 @@
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_lichsutimkiem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_8dp"/>
     <TextView
+        android:id="@+id/txt_xoalichsutimkiem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColorHint="@color/neutral5"

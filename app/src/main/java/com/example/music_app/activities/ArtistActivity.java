@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,7 +43,7 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
 
     private int artistId;
     ImageView coverPic;
-    EditText edtPlaylistTitle;
+    EditText tvPlaylistTitle;
     TextView tvPlaylistIntro;
     TextView tvPlaySongCount;
     RecyclerView rvListSong;
@@ -78,9 +79,8 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
         tvPlaySongCount = includeTopPlaylist.findViewById(R.id.tvPlaylistSongCount);
         includeTopPlaylist.findViewById(R.id.btn_edit_name).setVisibility(View.GONE);
         tvPlaylistIntro.setVisibility(View.GONE);
-        edtPlaylistTitle.setEnabled(false);
-
-
+        includeTopPlaylist.findViewById(R.id.btn_edit_name).setEnabled(false);
+        tvPlaylistTitle.setEnabled(false);
         includeTopPlaylistOption = findViewById(R.id.included_top_playlist_option);
         btnOption = includeTopPlaylistOption.findViewById(R.id.btn_delete_playlist);
 

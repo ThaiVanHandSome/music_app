@@ -59,10 +59,11 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLikeComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.Material3.Button.IconButton"
-                app:icon="@drawable/ic_24dp_filled_favorite"
+                app:icon="@drawable/ic_24dp_outline_favorite"
                 app:iconSize="@dimen/icon_24dp"
                 />
             <TextView

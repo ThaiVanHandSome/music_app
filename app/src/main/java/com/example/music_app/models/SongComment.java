@@ -7,6 +7,7 @@ public class SongComment {
     private String content;
     private int likes;
     private User user;
+    private List<Long> listUserLike;
 
     private List<Integer> dayCommented;
 
@@ -48,5 +49,13 @@ public class SongComment {
 
     public void setDayCommented(List<Integer> dayCommented) {
         this.dayCommented = dayCommented;
+    }
+
+    public List<Long> getListUserLike() {
+        return listUserLike;
+    }
+
+    public void setListUserLike(List<Long> listUserLike) {
+        this.listUserLike = listUserLike;
     }
 }

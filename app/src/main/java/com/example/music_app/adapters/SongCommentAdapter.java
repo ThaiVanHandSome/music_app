@@ -1,6 +1,7 @@
 package com.example.music_app.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,21 +13,33 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
+import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.SongComment;
+import com.example.music_app.models.User;
+import com.example.music_app.retrofit.RetrofitClient;
+import com.example.music_app.services.APIService;
+import com.example.music_app.services.ExoPlayerQueue;
 import com.example.music_app.utils.Util;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SongCommentAdapter extends RecyclerView.Adapter<SongCommentAdapter.SongCommentViewHolder> {
 
     private final Context context;
+    private List<Long> listUserLike;
 
     private List<SongComment> songComments;
-
     private final OnItemClickListener onItemClickListener;
+    private User user;
+    APIService apiService;
 
     public SongCommentAdapter(Context context, List<SongComment> songComments, SongCommentAdapter.OnItemClickListener onItemClickListener) {
         this.context = context;
@@ -55,6 +68,21 @@ public class SongCommentAdapter extends RecyclerView.Adapter<SongCommentAdapter.
         holder.contentTxt.setText(songComment.getContent());
         holder.likeCntTxt.setText(String.valueOf(songComment.getLikes()));
         holder.timeTxt.setText(Util.covertToDate(songComment.getDayCommented()));
+
+        Log.d("SongCommentAdapter", "onBindViewHolder: " + songComment.getListUserLike().size());
+        boolean isLiked = false;
+        for (Long i : songComment.getListUserLike()) {
+            if (user.getId() == i) {
+                isLiked = true;
+
+                break;
+            }
+        }
+        if (isLiked) {
+            holder.btnLike.setIconResource(R.drawable.ic_24dp_filled_favorite);
+        } else {
+            holder.btnLike.setIconResource(R.drawable.ic_24dp_outline_favorite);
+        }
     }
 
     @Override
@@ -65,6 +93,7 @@ public class SongCommentAdapter extends RecyclerView.Adapter<SongCommentAdapter.
     public class SongCommentViewHolder extends RecyclerView.ViewHolder {
         CircleImageView avatarImageView;
         TextView nameTxt, contentTxt, likeCntTxt, timeTxt;
+        MaterialButton btnLike;
 
         public SongCommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,8 +102,48 @@ public class SongCommentAdapter extends RecyclerView.Adapter<SongCommentAdapter.
             contentTxt = itemView.findViewById(R.id.contentTxt);
             likeCntTxt = itemView.findViewById(R.id.likeCntTxt);
             timeTxt = itemView.findViewById(R.id.timeTxt);
+            btnLike = itemView.findViewById(R.id.btnLikeComment);
+
+            apiService = RetrofitClient.getRetrofit().create(APIService.class);
+            user = SharePrefManagerUser.getInstance(context).getUser();
+
+            btnLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    apiService.likeComment(songComments.get(getAdapterPosition()).getIdComment(), (long) user.getId()).enqueue(new Callback<GenericResponse<Boolean>>() {
+                        @Override
+                        public void onResponse(Call<GenericResponse<Boolean>> call, Response<GenericResponse<Boolean>> response) {
+                            if (response.isSuccessful()) {
+                                boolean isLiked = response.body().getData();
+                                if (isLiked) {
+                                    btnLike.setIconResource(R.drawable.ic_24dp_filled_favorite);
+                                    songComments.get(getAdapterPosition()).setLikes(songComments.get(getAdapterPosition()).getLikes() + 1);
+                                    likeCntTxt.setText(String.valueOf(songComments.get(getAdapterPosition()).getLikes()));
+                                } else {
+                                    btnLike.setIconResource(R.drawable.ic_24dp_outline_favorite);
+                                    songComments.get(getAdapterPosition()).setLikes(songComments.get(getAdapterPosition()).getLikes() - 1);
+                                    likeCntTxt.setText(String.valueOf(songComments.get(getAdapterPosition()).getLikes()));
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<GenericResponse<Boolean>> call, Throwable t) {
+
+                        }
+                    });
+                }
+            });
         }
 
+    }
+
+    public List<Long> getListUserLike() {
+        return listUserLike;
+    }
+
+    public void setListUserLike(List<Long> listUserLike) {
+        this.listUserLike = listUserLike;
     }
 
     public interface OnItemClickListener {

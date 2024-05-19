@@ -158,14 +158,7 @@ public class HomeFragment extends Fragment {
         GetTopArtist();
         GetNewSong();
 
-        xtt_topthinhhanh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), TopicActivity.class);
-                intent.putExtra("topic", "trending");
-                startActivity(intent);
-            }
-        });
+
         xtt_topthinhhanh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
