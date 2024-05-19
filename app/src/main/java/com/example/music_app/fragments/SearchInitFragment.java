@@ -11,9 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.music_app.R;
 import com.example.music_app.activities.SongDetailActivity;
+import com.example.music_app.activities.TopicActivity;
 import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.adapters.SongAddToLibraryAdapter;
 import com.example.music_app.decorations.BottomOffsetDecoration;
@@ -38,6 +40,8 @@ public class SearchInitFragment extends Fragment {
     RecyclerView rvDeXuat;
     ExoPlayerQueue exoPlayerQueue;
 
+    ImageView img_thinhhanh, img_yeuthich, img_baihatmoi, img_nghesihangdau;
+
     public SearchInitFragment() {
         // Required empty public constructor
     }
@@ -60,13 +64,47 @@ public class SearchInitFragment extends Fragment {
         initView(view);
         exoPlayerQueue = ExoPlayerQueue.getInstance();
         getAllSongs();
-
+        img_thinhhanh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireContext(), TopicActivity.class);
+                intent.putExtra("topic", "trending");
+                startActivity(intent);
+            }
+        });
+        img_yeuthich.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireContext(), TopicActivity.class);
+                intent.putExtra("topic", "favorite");
+                startActivity(intent);
+            }
+        });
+        img_baihatmoi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireContext(), TopicActivity.class);
+                intent.putExtra("topic", "newReleased");
+                startActivity(intent);
+            }
+        });
+        img_nghesihangdau.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireContext(), TopicActivity.class);
+                intent.putExtra("topic", "topArtist");
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
     private void initView(View view) {
         rvDeXuat = view.findViewById(R.id.rc_dexuat_seach);
-
+        img_thinhhanh = view.findViewById(R.id.img_thinhhanh_search_int);
+        img_yeuthich = view.findViewById(R.id.img_yeuthich_search_int);
+        img_baihatmoi = view.findViewById(R.id.img_baihatmoi_search_int);
+        img_nghesihangdau = view.findViewById(R.id.img_nghesihangdau_search_int);
     }
     private void getAllSongs() {
         apiService = RetrofitClient.getRetrofit().create(APIService.class);

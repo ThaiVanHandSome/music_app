@@ -71,6 +71,7 @@ public class SearchedSongsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_searched_songs, container, false);
         initView(view);
+        exoPlayerQueue = ExoPlayerQueue.getInstance();
         searchSong(query);
         return view;
     }
@@ -87,19 +88,17 @@ public class SearchedSongsFragment extends Fragment {
                     songs = response.body().getData();
                     Log.e("Thanh1234", songs.toString());
                     if (songs.isEmpty()){
-
                     }
                     else {
                         songAdapter = new SongAdapter(requireContext(), songs, new SongAdapter.OnItemClickListener() {
                             @Override
                             public void onSongClick(int position) {
-                                if (exoPlayerQueue != null) {
-                                    exoPlayerQueue.clear();
-                                    exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songs));
-                                    exoPlayerQueue.setCurrentPosition(position);
-                                    Intent intent = new Intent(getContext(), SongDetailActivity.class);
-                                    startActivity(intent);
-                                }
+                                exoPlayerQueue.clear();
+                                exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songs));
+                                exoPlayerQueue.setCurrentPosition(position);
+                                Intent intent = new Intent(getContext(), SongDetailActivity.class);
+                                startActivity(intent);
+
                             }
 
                             @Override

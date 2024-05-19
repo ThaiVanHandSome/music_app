@@ -1,5 +1,6 @@
 package com.example.music_app.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.music_app.R;
+import com.example.music_app.activities.ArtistActivity;
 import com.example.music_app.adapters.ArtistSearchAdapter;
 import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.models.Artist;
@@ -77,15 +79,31 @@ public class SearchedArtistsFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null && isAdded()) {
                     artists = response.body().getData();
                     Log.e("Thanh1234", artists.toString());
-                    if (artists.isEmpty()){
 
-                    }
-                    else {
-                        artistSearchAdapter = new ArtistSearchAdapter(requireContext(), artists);
-                        rv_artist.setHasFixedSize(true);
-                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false );
-                        rv_artist.setLayoutManager(layoutManager);
-                        rv_artist.setAdapter(artistSearchAdapter);
+                    if (artists.isEmpty()) {
+
+                    } else {
+                        // Initialize the adapter only if it's not already initialized
+                        if (artistSearchAdapter == null) {
+                            artistSearchAdapter = new ArtistSearchAdapter(getContext(), artists);
+                            artistSearchAdapter.setOnItemClickListener(new ArtistSearchAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(Artist artist) {
+                                    Intent intent = new Intent(getContext(), ArtistActivity.class);
+                                    intent.putExtra("artistId", artist.getIdUser());
+                                    startActivity(intent);
+                                }
+                            });
+
+                            rv_artist.setHasFixedSize(true);
+                            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+                            rv_artist.setLayoutManager(layoutManager);
+                            rv_artist.setAdapter(artistSearchAdapter);
+                        } else {
+                            // Update the existing adapter with the new data
+                            artistSearchAdapter.updateArtists(artists);
+                        }
+
                     }
                 }
             }

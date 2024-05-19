@@ -219,7 +219,9 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-                Toast.makeText(LoginActivity.this, res.getMessage(), Toast.LENGTH_SHORT).show();
+                else {
+                    Toast.makeText(LoginActivity.this, res.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

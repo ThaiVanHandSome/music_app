@@ -21,12 +21,23 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ArtistSearchAdapter extends RecyclerView.Adapter<ArtistSearchAdapter.MyViewHolder> {
     private final Context context;
-    private final List<Artist> artists;
+    private List<Artist> artists;
+    private OnItemClickListener onItemClickListener;
 
     public ArtistSearchAdapter(Context context, List<Artist> artists) {
         this.context = context;
         this.artists = artists;
     }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
+    public void updateArtists(List<Artist> newArtists) {
+        this.artists = newArtists;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ArtistSearchAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,25 +56,34 @@ public class ArtistSearchAdapter extends RecyclerView.Adapter<ArtistSearchAdapte
 
     @Override
     public int getItemCount() {
-        return   artists.size();
+        return artists.size();
     }
-    public class MyViewHolder extends RecyclerView.ViewHolder  {
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textView;
         public CircleImageView circleImageView;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.tv_notification);
             circleImageView = itemView.findViewById(R.id.img_notification);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Artist artist = artists.get(getAdapterPosition());
-                    Toast.makeText(context.getApplicationContext(), "Bạn đã click vào bài hát" + artist, Toast.LENGTH_SHORT).show();
-
+                    if (onItemClickListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            Artist artist = artists.get(position);
+                            onItemClickListener.onItemClick(artist);
+                        }
+                    }
                 }
             });
-
-
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Artist artist);
     }
 }
