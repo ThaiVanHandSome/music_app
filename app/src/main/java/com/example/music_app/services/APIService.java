@@ -23,6 +23,7 @@ import com.example.music_app.models.SongLikedRequest;
 import com.example.music_app.models.SongLikedResponse;
 import com.example.music_app.models.SongResponse;
 import com.example.music_app.models.UpdateProfileRequest;
+import com.example.music_app.models.User;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -120,4 +121,10 @@ public interface APIService {
 
     @GET("/playlist")
     Call<ResponseMessage> isPlaylistNameExists(@Query("name") String name);
+
+    @GET("user/searchArtist")
+    Call<GenericResponse<List<Artist>>> searchArtist(@Query("query") String query);
+
+    @GET("songs/search")
+    Call<GenericResponse<List<Song>>> searchSong(@Query("query") String query);
 }

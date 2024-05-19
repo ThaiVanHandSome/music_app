@@ -87,16 +87,13 @@
             android:name=".activities.auth.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.SearchActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.LibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.auth.LoginActivity"
+            android:name=".activities.NotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.NotificationActivity"
+            android:name=".activities.auth.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
