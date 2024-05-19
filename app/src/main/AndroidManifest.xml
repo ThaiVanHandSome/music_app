@@ -59,7 +59,7 @@
             android:name=".activities.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.auth.GetStartedActivity"
+            android:name=".activities.auth.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".activities.auth.ResetPasswordActivity"
@@ -92,7 +92,7 @@
             android:name=".activities.NotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.auth.LoginActivity"
+            android:name=".activities.auth.GetStartedActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
