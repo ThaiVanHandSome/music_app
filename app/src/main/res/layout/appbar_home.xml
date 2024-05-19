@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_12dp"
             android:layout_centerVertical="true"
-            android:text="Chào Chi Thanh 👋"
+            android:text="@string/label_hello_user"
             android:textColor="@color/neutral5" />
     </RelativeLayout>
 </RelativeLayout>

@@ -17,6 +17,7 @@ import com.example.music_app.R;
 import com.example.music_app.activities.AddSongToPlaylistActivity;
 import com.example.music_app.databinding.BottomSheetBinding;
 import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.SongLikedResponse;
 import com.example.music_app.models.User;
 import com.example.music_app.retrofit.RetrofitClient;
@@ -36,6 +37,11 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     private String artistName;
     private APIService apiService;
     private User user;
+    private OnSongDeletedListener onSongDeletedListener;
+
+    public void setOnSongDeletedListener(OnSongDeletedListener listener) {
+        this.onSongDeletedListener = listener;
+    }
 
     public BottomSheetDialog() { }
 
@@ -62,9 +68,9 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                     .into(binding.itemSong.imSongAvt);
             binding.itemSong.tvSongTitle.setText(songName);
             binding.itemSong.tvSongArtist.setText(artistName);
-            apiService = RetrofitClient.getRetrofit().create(APIService.class);
 
             // Change menu item favourite for navigation view if song liked
+            apiService = RetrofitClient.getRetrofit().create(APIService.class);
             apiService.isUserLikedSong(songId, (long) user.getId()).enqueue(new Callback<SongLikedResponse>() {
                 @Override
                 public void onResponse(Call<SongLikedResponse> call, Response<SongLikedResponse> response) {
@@ -118,6 +124,36 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                             intent.putExtra("SongId", songId);
                             startActivity(intent);
                             break;
+                        case R.id.menu_item_remove_playlist:
+                            Intent topicIntent = getActivity().getIntent();
+                            String topic = topicIntent.getStringExtra("topic");
+                            try {
+                                int number = Integer.parseInt(topic);
+                                apiService.deleteSongFromPlaylist((long) Integer.parseInt(topic), songId).enqueue(new Callback<ResponseMessage>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                                        if (response.isSuccessful()) {
+                                            if (onSongDeletedListener != null) {
+                                                onSongDeletedListener.onSongDeleted(songId);
+                                            }
+                                            Toast.makeText(getContext(), getText(R.string.toast_removed_song_from_playlist), Toast.LENGTH_SHORT).show();
+                                            BottomSheetDialog.this.dismiss();
+
+                                            Intent intent = getActivity().getIntent();
+                                            getActivity().finish();
+                                            startActivity(intent);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseMessage> call, Throwable t) { }
+                                });
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                                Toast.makeText(getContext(), getText(R.string.toast_forbiden), Toast.LENGTH_SHORT).show();
+                                BottomSheetDialog.this.dismiss();
+                            }
+                            break;
                     }
                     return false;
                 }
@@ -126,5 +162,8 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         }
 
         return view;
+    }
+    public interface OnSongDeletedListener {
+        void onSongDeleted(Long songId);
     }
 }

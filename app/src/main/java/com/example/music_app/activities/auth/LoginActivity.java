@@ -35,6 +35,7 @@ import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.User;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
+import com.example.music_app.utils.Const;
 import com.example.music_app.utils.Validate;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -206,6 +207,7 @@ public class LoginActivity extends AppCompatActivity {
                     user.setGender(res.getGender());
                     user.setId(res.getId());
                     user.setAccessToken(res.getAccessToken());
+                    Const.setAccessToken(res.getAccessToken());
                     user.setRefreshToken(res.getRefreshToken());
                     user.setProvider(res.getProvider());
                     // Handle data for realtime
@@ -303,6 +305,7 @@ public class LoginActivity extends AppCompatActivity {
                     user.setGender(res.getGender());
                     user.setId(res.getId());
                     user.setAccessToken(res.getAccessToken());
+                    Const.setAccessToken(res.getAccessToken());
                     user.setRefreshToken(res.getRefreshToken());
                     user.setProvider(res.getProvider());
                     SharePrefManagerUser.getInstance(getApplicationContext()).loginSuccess(user);

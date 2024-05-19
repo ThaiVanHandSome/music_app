@@ -10,16 +10,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.music_app.R;
 import com.example.music_app.internals.SharePrefSearchHistory;
+import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.User;
 
 public class SearchFragment extends Fragment {
 
     SearchView searchView;
     FragmentManager fragmentManager;
-
     private SharePrefSearchHistory sharePrefSearchHistory;
+    TextView title;
     public SearchFragment() {
         // Required empty public constructor
     }
@@ -40,6 +43,8 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         initView(view);
         sharePrefSearchHistory = new SharePrefSearchHistory(requireContext());
+        User user = SharePrefManagerUser.getInstance(requireContext()).getUser();
+        title.setText(getContext().getString(R.string.label_hello_user, user.getLastName()));
         searchView.clearFocus();
         fragmentManager.beginTransaction()
                 .replace(R.id.search_frame_layout, SearchInitFragment.newInstance())
@@ -87,5 +92,6 @@ public class SearchFragment extends Fragment {
     private void initView(View view) {
         searchView = (SearchView) view.findViewById(R.id.searchView);
         fragmentManager = getChildFragmentManager();
+        title = view.findViewById(R.id.title_appbar_home);
     }
 }

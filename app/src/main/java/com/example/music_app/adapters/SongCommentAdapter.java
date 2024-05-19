@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.music_app.R;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.SongComment;
+import com.example.music_app.utils.Util;
 
 import java.util.List;
 
@@ -33,6 +34,11 @@ public class SongCommentAdapter extends RecyclerView.Adapter<SongCommentAdapter.
         this.onItemClickListener = onItemClickListener;
     }
 
+    public void setSongComments(List<SongComment> songComments) {
+        this.songComments = songComments;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public SongCommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -48,6 +54,7 @@ public class SongCommentAdapter extends RecyclerView.Adapter<SongCommentAdapter.
         Glide.with(context).load(songComment.getUser().getAvatar()).into(holder.avatarImageView);
         holder.contentTxt.setText(songComment.getContent());
         holder.likeCntTxt.setText(String.valueOf(songComment.getLikes()));
+        holder.timeTxt.setText(Util.covertToDate(songComment.getDayCommented()));
     }
 
     @Override
@@ -57,7 +64,7 @@ public class SongCommentAdapter extends RecyclerView.Adapter<SongCommentAdapter.
 
     public class SongCommentViewHolder extends RecyclerView.ViewHolder {
         CircleImageView avatarImageView;
-        TextView nameTxt, contentTxt, likeCntTxt;
+        TextView nameTxt, contentTxt, likeCntTxt, timeTxt;
 
         public SongCommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,6 +72,7 @@ public class SongCommentAdapter extends RecyclerView.Adapter<SongCommentAdapter.
             nameTxt = itemView.findViewById(R.id.nameTxt);
             contentTxt = itemView.findViewById(R.id.contentTxt);
             likeCntTxt = itemView.findViewById(R.id.likeCntTxt);
+            timeTxt = itemView.findViewById(R.id.timeTxt);
         }
 
     }

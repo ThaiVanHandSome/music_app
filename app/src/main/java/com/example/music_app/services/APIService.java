@@ -1,6 +1,7 @@
 package com.example.music_app.services;
 
 import com.example.music_app.models.Artist;
+import com.example.music_app.models.ArtistResponse;
 import com.example.music_app.models.ForgotPassword;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.ChangePasswordRequest;
@@ -69,9 +70,13 @@ public interface APIService {
     @GET("song/new-released")
     Call<GenericResponse<SongResponse>> getSongNewReleased(@Query("page") int page, @Query("size") int size);
 
+    @PATCH("song/{id}/view")
+    Call<GenericResponse<Song>> increaseViewOfSongBySongId(@Path("id") Long songId);
+
     @GET("song/{songId}/artists")
     Call<GenericResponse<List<Artist>>> getArtistsBySongId(@Path("songId") Long songId);
 
+    @PATCH("user/forgot-password")
     Call<ResponseMessage> changePassword(@Body ResetPasswordRequest resetPasswordRequest);
 
     @GET("user/{id_user}/playlists")
@@ -106,8 +111,7 @@ public interface APIService {
 
     @Multipart
     @POST("user/upload")
-    Call<ResponseMessage> uploadAvatar(@Part MultipartBody.Part imageFile, @Part("idUser") String idUser
-    );
+    Call<ResponseMessage> uploadAvatar(@Part MultipartBody.Part imageFile, @Part("idUser") String idUser);
     Call<ResponseMessage> updateProfile(@Part @Path("id_user") int id_user,
                                         @Body UpdateProfileRequest updateProfileRequest,
                                         @Part MultipartBody.Part imageFile);
@@ -127,6 +131,12 @@ public interface APIService {
     @GET("song/{id_song}/comments")
     Call<SongCommentResponse> getAllCommentsOfSong(@Path("id_song") Long idSong);
 
+    @POST("playlist/{id_playlist}")
+    Call<ResponseMessage> updatePlaylistName(@Path("id_playlist") int i, @Query("name") String name);
+
+    @DELETE("playlistSong/{id_playlist}/{id_song}")
+    Call<ResponseMessage> deleteSongFromPlaylist(@Path("id_playlist") Long id_playlist, @Path("id_song") Long id_song);
+  
     @POST("song/post-comment")
     Call<ResponseMessage> postComment(@Body SongCommentRequest songCommentRequest);
 
@@ -135,4 +145,22 @@ public interface APIService {
 
     @GET("songs/search")
     Call<GenericResponse<List<Song>>> searchSong(@Query("query") String query);
+
+    @GET("artists")
+    Call<GenericResponse<ArtistResponse>> getAllArtists(@Query("page") int page, @Query("size") int size);
+
+    @GET("artist/{id}")
+    Call<GenericResponse<Artist>> getArtistById(@Path("id") int id);
+
+    @GET("artist/{idArtist}/songs/count")
+    Call<GenericResponse<Integer>> getSongCountByArtistId(@Path("idArtist") int idArtist);
+
+    @GET("artist/{artistId}/songs")
+    Call<GenericResponse<SongResponse>> getAllSongsByArtistId(@Path("artistId") int artistId, @Query("page") int page, @Query("size") int size);
+
+    @GET("user/{id_user}/is-followed-artist")
+    Call<GenericResponse<Boolean>> isFollowedArtist(@Path("id_user") int id_user, @Query("id_artist") int id_artist);
+
+    @POST("user/{id_user}/follow-artist")
+    Call<GenericResponse<Boolean>> followArtist(@Path("id_user") int id_user, @Query("id_artist") int id_artist);
 }

@@ -1,23 +1,20 @@
 package com.example.music_app.activities;
 
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-
 import com.example.music_app.R;
 import com.example.music_app.fragments.HomeFragment;
+import com.example.music_app.fragments.LibraryFragment;
 import com.example.music_app.fragments.SearchFragment;
-import com.example.music_app.fragments.SearchInitFragment;
-import com.example.music_app.fragments.SearchedFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     FragmentManager fragmentManager;
     BottomNavigationView navigationView;
@@ -26,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initMiniPlayer();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.main_frame_layout, HomeFragment.newInstance())
@@ -46,7 +44,10 @@ public class MainActivity extends AppCompatActivity {
                                 .commit();
                         return true;
                     case R.id.menu_item_library:
-                        break;
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.main_frame_layout, LibraryFragment.newInstance())
+                                .commit();
+                        return true;
                 }
                 return false;
             }

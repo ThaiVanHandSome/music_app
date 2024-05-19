@@ -22,7 +22,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appbar_home"
-        app:queryHint="Tìm bài hát..." />
+        app:queryHint="@string/hint_search" />
 
     <FrameLayout
         android:id="@+id/search_frame_layout"

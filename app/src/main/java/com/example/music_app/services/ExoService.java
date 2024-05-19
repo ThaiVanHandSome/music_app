@@ -35,27 +35,31 @@ public class ExoService extends Service {
 
     private ExoPlayer exoPlayer;
     private ExoPlayerQueue exoPlayerQueue;
-//    private ExoPlayerQueue exoPlayerQueue;
+    //    private ExoPlayerQueue exoPlayerQueue;
     private static final int NOTIFICATION_ID = 1;
     private static final String CHANNEL_ID = "com.example.music_app.services.ExoService";
     private static final String CHANNEL_NAME = "ExoService";
 
     private final IBinder iBinder = new MusicBinder();
     private MediaSession mediaSession;
-
+    private SongViewManager songViewManager;
     @Override
     public void onCreate() {
         super.onCreate();
         exoPlayerQueue = ExoPlayerQueue.getInstance();
         exoPlayer = new ExoPlayer.Builder(this).build();
+        songViewManager = SongViewManager.getInstance();
         mediaSession = new MediaSession.Builder(this, exoPlayer).build();
         createNotificationChannel();
         exoPlayer.addListener(new Player.Listener() {
             @Override
             public void onPlaybackStateChanged(int playbackState) {
                 if (playbackState == Player.STATE_READY && exoPlayer.getPlayWhenReady()) {
+                    songViewManager.startCount(exoPlayer.getCurrentMediaItem());
                     updateNotification();
+
                 } else if (playbackState == Player.STATE_IDLE) {
+                    songViewManager.stopCount();
                     stopForeground(true);
                 }
             }
@@ -63,14 +67,15 @@ public class ExoService extends Service {
             @Override
             public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
                 if (mediaItem != null) {
-                    Log.d("Notification", "onMediaItemTransition: positon " + mediaItem.mediaMetadata.extras.getInt("position"));
                     exoPlayerQueue.setCurrentPosition(mediaItem.mediaMetadata.extras.getInt("position"));
+                    updateNotification();
                 }
             }
+
         });
 
 
-        
+
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
