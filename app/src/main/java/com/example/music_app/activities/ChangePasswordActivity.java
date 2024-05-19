@@ -51,7 +51,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
         mapping();
-        title.setText("Đổi Mật Khẩu");
+        title.setText(getText(R.string.label_change_password));
         sharedPref = getSharedPreferences("user",MODE_PRIVATE);
         String provider = sharedPref.getString("keyprovider","");
         Log.d("provider_user", provider);

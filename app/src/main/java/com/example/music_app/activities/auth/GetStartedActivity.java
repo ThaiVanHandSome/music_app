@@ -3,11 +3,15 @@ package com.example.music_app.activities.auth;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 
 import com.example.music_app.R;
+import com.example.music_app.internals.SharedPrefManagerLanguage;
 import com.google.android.material.button.MaterialButton;
+
+import java.util.Locale;
 
 public class GetStartedActivity extends AppCompatActivity {
 
@@ -15,6 +19,9 @@ public class GetStartedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String language = SharedPrefManagerLanguage.getInstance(getApplicationContext()).getLanguage();
+        setLocale(language);
+
         setContentView(R.layout.activity_get_started);
 
         signUpBtn = (MaterialButton) findViewById(R.id.signUpBtn);
@@ -37,5 +44,13 @@ public class GetStartedActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void setLocale(String language) {
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 }
