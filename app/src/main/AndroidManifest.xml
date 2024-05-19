@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
@@ -47,9 +46,6 @@
 
         <activity
             android:name=".activities.HomeSongsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.SplashActivity"
             android:exported="false" />
         <activity
             android:name=".activities.AddFavouriteSongsActivity"

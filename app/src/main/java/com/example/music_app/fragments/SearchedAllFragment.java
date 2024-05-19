@@ -81,6 +81,7 @@ public class SearchedAllFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_searched_all, container, false);
         initView(view);
+        exoPlayerQueue = ExoPlayerQueue.getInstance();
         searchSong(query);
         searchArtist(query);
         return view;
@@ -108,13 +109,12 @@ public class SearchedAllFragment extends Fragment {
                         songAdapter = new SongAdapter(requireContext(), songs, new SongAdapter.OnItemClickListener() {
                             @Override
                             public void onSongClick(int position) {
-                                if (exoPlayerQueue != null) {
                                     exoPlayerQueue.clear();
                                     exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songs));
                                     exoPlayerQueue.setCurrentPosition(position);
                                     Intent intent = new Intent(getContext(), SongDetailActivity.class);
                                     startActivity(intent);
-                                }
+
                             }
 
                             @Override
