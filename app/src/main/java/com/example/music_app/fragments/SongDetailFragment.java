@@ -37,6 +37,7 @@ import com.example.music_app.adapters.SongCommentAdapter;
 import com.example.music_app.decorations.BottomOffsetDecoration;
 import com.example.music_app.helpers.GradientHelper;
 import com.example.music_app.internals.SharePrefManagerUser;
+import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.ResponseMessage;
 import com.example.music_app.models.Song;
 import com.example.music_app.models.SongComment;
@@ -340,6 +341,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
 
             }
         });
+
     }
 
     @Override
