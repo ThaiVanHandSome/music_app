@@ -20,12 +20,11 @@
             android:padding="@dimen/spacing_8dp">
 
             <TextView
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.App.TitleMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_8dp"
-                android:textColorHint="@color/neutral5"
-                android:hint="🎧 Chủ đề"/>
+                android:text="@string/label_topic"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -98,13 +97,11 @@
             </LinearLayout>
 
             <TextView
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.App.TitleMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/spacing_8dp"
                 android:layout_marginVertical="@dimen/spacing_8dp"
-                android:textColorHint="@color/neutral5"
-                android:hint="🌟 Đề xuất cho bạn"/>
+                android:text="@string/label_recommended"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_dexuat_seach"

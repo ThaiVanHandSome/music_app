@@ -32,7 +32,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/label_your_playlist"
-                    android:textColor="@color/neutral5"
                     style="@style/TextAppearance.App.TitleMedium"/>
 
                 <TextView

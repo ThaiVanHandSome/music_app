@@ -20,6 +20,5 @@
         android:ellipsize="end"
         android:gravity="center"
         android:layout_marginBottom="@dimen/spacing_4dp"
-        android:textColor="@color/neutral5"
         style="@style/TextAppearance.App.TitleMedium"/>
 </LinearLayout>

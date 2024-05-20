@@ -315,9 +315,9 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
     }
 
     private void loadPlaylistSongs(List<Song> songs) {
-        songAdapter = new SongAdapter(this, songs, null);
+        songList.addAll(songs);
         rvListSong.setAdapter(songAdapter);
-        rvListSong.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        songAdapter.notifyDataSetChanged();
     }
 
 

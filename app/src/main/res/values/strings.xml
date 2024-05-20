@@ -116,6 +116,8 @@
     <string name="toast_created_playlist">Tạo danh sách phát thành công</string>
     <string name="toast_deleted_playlist">Xóa danh sách phát thành công</string>
     <string name="toast_loged_in">Đăng nhập thành công</string>
+    <string name="toast_followed">Đã theo dõi %d</string>
+    <string name="toast_unfollowed">Đã bỏ theo dõi %d</string>
 
     <string name="client_id">90467436569-ibtnp170t1rb3fhksb8nhp99b0garii8.apps.googleusercontent.com</string>
     <string name="toast_added_song_to_playlist">Thêm bài hát vào danh sách phát thành công</string>
@@ -126,7 +128,8 @@
     <string name="dialog_title_confirm_delete">Xác nhận xóa</string>
     <string name="dialog_message_confirm_delete">Bạn có chắc chắn muốn xóa danh sách phát này không?</string>
     <string name="dialog_title_confirm_restart">Khởi động lại ứng dụng</string>
-    <string name="dialog_message_confirm_restart">Vui lòng khởi động lại ứng dụng để cập nhật ngôn ngữ</string>
+    <string name="dialog_message_language_confirm_restart">Vui lòng khởi động lại ứng dụng để cập nhật ngôn ngữ</string>
+    <string name="dialog_message_theme_confirm_restart">Vui lòng khởi động lại ứng dụng để cập nhật giao diện</string>
 
 
     <!--Notification-->
@@ -181,4 +184,8 @@
     <string name="followed">Đã theo dõi</string>
     <string name="follow">Theo dõi</string>
     <string name="view_more">Xem thêm</string>
+    <string name="label_artist">Nghệ sĩ</string>
+    <string name="tab_all">Tất cả</string>
+    <string name="tab_songs">Bài hát</string>
+    <string name="tab_artist">Nghệ sĩ</string>
 </resources>

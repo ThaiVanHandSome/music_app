@@ -31,26 +31,26 @@
             >
             <TextView
                 android:id="@+id/nameTxt"
+                style="@style/TextAppearance.App.BodyMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/font_title"
-                android:textColor="@color/neutral5"
                 android:layout_marginEnd="@dimen/spacing_8dp"
                 android:text="Tên"
                 />
             <TextView
                 android:id="@+id/timeTxt"
+                style="@style/TextAppearance.App.BodySmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/font_body"
-                android:textColor="@color/neutral4"
+                android:textColor="@color/neutral3"
                 android:text="Thời gian" />
         </LinearLayout>
         <TextView
             android:id="@+id/contentTxt"
+            style="@style/TextAppearance.App.BodySmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/neutral5"
             android:layout_marginBottom="@dimen/spacing_4dp"
             android:text="asddddddddddddddddddddddddddddddddd"
             />
@@ -68,9 +68,9 @@
                 />
             <TextView
                 android:id="@+id/likeCntTxt"
+                style="@style/TextAppearance.App.BodySmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/neutral5"
                 android:text="99" />
         </LinearLayout>
     </LinearLayout>

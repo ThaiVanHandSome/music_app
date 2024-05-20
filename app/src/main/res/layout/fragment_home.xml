@@ -31,13 +31,12 @@
 
                 <TextView
                     android:id="@+id/textView3"
-                    style="@style/TextAppearance.AppCompat.Medium"
+                    style="@style/TextAppearance.App.TitleMedium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_16dp"
                     android:layout_weight="1"
-                    android:text="@string/label_top_trending"
-                    android:textColor="@color/neutral5" />
+                    android:text="@string/label_top_trending"/>
 
                 <TextView
                     android:id="@+id/xemtatca_topthinhhanh"
@@ -60,13 +59,12 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    style="@style/TextAppearance.AppCompat.Medium"
+                    style="@style/TextAppearance.App.TitleMedium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_16dp"
                     android:layout_weight="1"
-                    android:text="@string/label_top_favorite"
-                    android:textColor="@color/neutral5" />
+                    android:text="@string/label_top_favorite"/>
 
                 <TextView
                     android:id="@+id/xemtatca_moinguoiyeuthich"
@@ -90,13 +88,12 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    style="@style/TextAppearance.AppCompat.Medium"
+                    style="@style/TextAppearance.App.TitleMedium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_16dp"
                     android:layout_weight="1"
-                    android:text="@string/label_top_artist"
-                    android:textColor="@color/neutral5" />
+                    android:text="@string/label_top_artist"/>
 
                 <TextView
                     android:id="@+id/xemtatca_nghesihangdau"
@@ -119,13 +116,12 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    style="@style/TextAppearance.AppCompat.Medium"
+                    style="@style/TextAppearance.App.TitleMedium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_16dp"
                     android:layout_weight="1"
-                    android:text="@string/label_new_released"
-                    android:textColor="@color/neutral5" />
+                    android:text="@string/label_new_released"/>
 
                 <TextView
                     android:id="@+id/xemtatca_moiramat"

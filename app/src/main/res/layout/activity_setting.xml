@@ -28,14 +28,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_system"
-            android:textColor="@color/neutral5"
             android:layout_marginBottom="@dimen/spacing_16dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/label_language"
-            android:textColor="@color/neutral5" />
+            android:text="@string/label_language"/>
 
 
             <RadioGroup
@@ -50,7 +48,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_language_vietnamese"
-                    android:textColor="@color/neutral5"
                     android:checked="true"/>
 
 
@@ -58,8 +55,7 @@
                     android:id="@+id/rad_english"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/label_language_english"
-                    android:textColor="@color/neutral5" />
+                    android:text="@string/label_language_english"/>
 
             </RadioGroup>
 
@@ -74,10 +70,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/label_dark_mode"
-                android:textColor="@color/neutral5"
                 android:layout_marginBottom="@dimen/spacing_16dp"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switch_dark_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/spacing_8dp"
@@ -90,7 +86,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_account"
-            android:textColor="@color/neutral5"
             android:layout_marginBottom="@dimen/spacing_16dp"/>
 
         <TextView
@@ -98,7 +93,6 @@
             android:layout_height="wrap_content"
             android:text="@string/label_change_password"
             android:id="@+id/ChangePasswordTxt"
-            android:textColor="@color/neutral5"
             android:layout_marginBottom="@dimen/spacing_16dp"/>
 
         <TextView
@@ -106,7 +100,6 @@
             android:layout_height="wrap_content"
             android:text="@string/label_logout"
             android:id="@+id/LogoutTxt"
-            android:textColor="@color/neutral5"
             android:layout_marginBottom="@dimen/spacing_16dp"/>
     </LinearLayout>
 

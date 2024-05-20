@@ -65,9 +65,7 @@
 
                     <TextView
                         android:id="@+id/tvSongTitle"
-                        android:textSize="@dimen/font_title"
-                        android:fontFamily="@font/lexend_bold"
-                        android:textColor="@color/neutral5"
+                        style="@style/TextAppearance.App.TitleMedium"
                         android:layout_gravity="center_vertical"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
@@ -75,12 +73,11 @@
 
                     <TextView
                         android:id="@+id/tvSongArtist"
-                        android:fontFamily="@font/lexend_medium"
-                        android:textSize="@dimen/font_label"
+                        style="@style/TextAppearance.App.LabelMedium"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="0.8"
-                        android:textColor="@color/neutral4"/>
+                        android:textColor="@color/neutral3"/>
 
                 </LinearLayout>
 
@@ -91,7 +88,7 @@
                     android:layout_height="48dp"
                     app:icon="@drawable/ic_24dp_outline_more_vert"
                     app:iconSize="24dp"
-                    app:iconTint="@color/neutral5"
+                    app:iconTint="@color/neutral3"
                     android:layout_gravity="center_vertical"
                     app:layout_constraintDimensionRatio="H,1:1"
                     app:layout_constraintTop_toTopOf="parent"

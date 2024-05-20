@@ -37,8 +37,7 @@
                     android:id="@+id/firstNameTxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textColor="@color/neutral5"/>
+                    android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -53,8 +52,7 @@
                     android:id="@+id/lastNameTxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textColor="@color/neutral5"/>
+                    android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -68,8 +66,7 @@
                 android:id="@+id/phoneNumberTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textColor="@color/neutral5"/>
+                android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -83,8 +80,7 @@
                 android:id="@+id/emailTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/neutral5" />
+                android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -100,8 +96,7 @@
                 android:id="@+id/passwordTxt"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/neutral5"/>
+                android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -116,16 +111,13 @@
                 android:id="@+id/passwordAgainTxt"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/neutral5"
-                />
+                android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_gender"
-            android:textColor="@color/neutral5"
             style="@style/TextAppearance.App.TitleMedium"/>
 
         <RadioGroup
@@ -139,7 +131,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/radio_choice_male"
                 android:layout_marginEnd="@dimen/spacing_16dp"
-                android:textColor="@color/neutral5"
                 android:tag="1"
                 android:checked="true" />
             <RadioButton
@@ -147,8 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/radio_choice_female"
-                android:tag="0"
-                android:textColor="@color/neutral5" />
+                android:tag="0"/>
         </RadioGroup>
 
 
@@ -170,7 +160,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_have_account"
-                android:textColor="@color/neutral5"
                 android:layout_marginEnd="4dp" />
             <TextView
                 android:id="@+id/loginText"

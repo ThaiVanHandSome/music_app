@@ -3,33 +3,39 @@ package com.example.music_app.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.music_app.R;
 import com.example.music_app.activities.auth.LoginActivity;
 import com.example.music_app.helpers.DialogHelper;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.internals.SharedPrefManagerLanguage;
+import com.example.music_app.internals.SharedPrefManagerTheme;
 import com.example.music_app.listeners.DialogClickListener;
 import com.example.music_app.models.User;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SettingActivity extends AppCompatActivity {
     TextView changePassword, logout;
     RadioButton english, vietnamese;
-    SharedPrefManagerLanguage sharedPrefManagerLanguage;
 
+    SwitchMaterial darkModeSwitch;
     User user;
+    private CompoundButton.OnCheckedChangeListener listener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         user = SharePrefManagerUser.getInstance(this).getUser();
         String language = SharedPrefManagerLanguage.getInstance(getApplicationContext()).getLanguage();
+        boolean isDarkMode = SharedPrefManagerTheme.getInstance(this).loadNightModeState();
         setContentView(R.layout.activity_setting);
         mapping();
 
@@ -40,6 +46,46 @@ public class SettingActivity extends AppCompatActivity {
             vietnamese.setChecked(false);
             english.setChecked(true);
         }
+
+        darkModeSwitch.setChecked(isDarkMode);
+
+        int nightMode = AppCompatDelegate.getDefaultNightMode();
+        darkModeSwitch.setChecked(nightMode == AppCompatDelegate.MODE_NIGHT_YES);
+        listener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                DialogHelper dialog = new DialogHelper(SettingActivity.this, new DialogClickListener() {
+                    @Override
+                    public void onPositiveButtonClick() {
+                        restartApplication();
+                        SharedPrefManagerTheme.getInstance(getApplicationContext()).setNightModeState(isChecked);
+                    }
+
+                    @Override
+                    public void onNegativeButtonClick() {
+                        // Temporarily remove the listener
+                        darkModeSwitch.setOnCheckedChangeListener(null);
+
+                        // Set the switch to unchecked
+                        darkModeSwitch.setChecked(!isChecked);
+                        // Add the listener back
+                        darkModeSwitch.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                darkModeSwitch.setOnCheckedChangeListener(listener);
+                            }
+                        });
+                    }
+                });
+                dialog.show();
+                dialog.setTitle(getString(R.string.dialog_title_confirm_restart));
+                dialog.setMessage(getString(R.string.dialog_message_theme_confirm_restart));
+                dialog.setPositiveButtonContent(getString(R.string.button_ok));
+                dialog.setNegativeButtonContent(getString(R.string.button_cancel));
+            }
+        };
+        darkModeSwitch.setOnCheckedChangeListener(listener);
+
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +123,7 @@ public class SettingActivity extends AppCompatActivity {
                 });
                 dialog.show();
                 dialog.setTitle(getString(R.string.dialog_title_confirm_restart));
-                dialog.setMessage(getString(R.string.dialog_message_confirm_restart));
+                dialog.setMessage(getString(R.string.dialog_message_language_confirm_restart));
                 dialog.setPositiveButtonContent(getString(R.string.button_ok));
                 dialog.setNegativeButtonContent(getString(R.string.button_cancel));
             }
@@ -101,7 +147,7 @@ public class SettingActivity extends AppCompatActivity {
                 });
                 dialog.show();
                 dialog.setTitle(getString(R.string.dialog_title_confirm_restart));
-                dialog.setMessage(getString(R.string.dialog_message_confirm_restart));
+                dialog.setMessage(getString(R.string.dialog_message_language_confirm_restart));
                 dialog.setPositiveButtonContent(getString(R.string.button_ok));
                 dialog.setNegativeButtonContent(getString(R.string.button_cancel));
             }
@@ -119,6 +165,7 @@ public class SettingActivity extends AppCompatActivity {
         logout = (TextView) findViewById(R.id.LogoutTxt);
         english = (RadioButton) findViewById(R.id.rad_english);
         vietnamese = (RadioButton) findViewById(R.id.rad_vietnamese);
+        darkModeSwitch = (SwitchMaterial) findViewById(R.id.switch_dark_mode);
     }
 
     void removeToken(int id) {
