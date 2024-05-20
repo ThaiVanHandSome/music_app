@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.auth.LoginActivity"
-    android:paddingStart="@dimen/spacing_16dp"
-    android:paddingEnd="@dimen/spacing_16dp" >
+    tools:context=".activities.auth.LoginActivity">
 
     <LinearLayout
         android:id="@+id/ln1"
@@ -14,6 +12,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/spacing_40dp"
+        android:paddingStart="@dimen/spacing_16dp"
+        android:paddingEnd="@dimen/spacing_16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" >

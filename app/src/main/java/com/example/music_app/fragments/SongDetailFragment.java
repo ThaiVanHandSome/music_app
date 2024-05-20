@@ -327,6 +327,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
     }
 
     @OptIn(markerClass = UnstableApi.class) private void getAllComments() {
+        if(exoPlayer == null) return;
         Long idSong = exoPlayer.getCurrentMediaItem().mediaMetadata.extras.getLong("id");
         Log.d("Thanh122223", String.valueOf(idSong));
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
@@ -370,6 +371,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
             exoPlayerQueue = ExoPlayerQueue.getInstance();
         }
         long currentSongId = -1;
+        if(exoPlayer == null) return;
         if (exoPlayer.getCurrentMediaItem() != null && exoPlayer.getCurrentMediaItem().mediaMetadata.extras != null) {
             currentSongId = exoPlayer.getCurrentMediaItem().mediaMetadata.extras.getLong("id");
         }

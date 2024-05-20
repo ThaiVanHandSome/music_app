@@ -6,14 +6,14 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/top_app_bar_height">
 
-        <!--<ImageView
+        <ImageView
             android:id="@+id/back_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/spacing_12dp"
             android:src="@drawable/baseline_arrow_back_24"
-            />-->
+            />
 
         <TextView
             android:id="@+id/title_appbar_with_back_icon"
