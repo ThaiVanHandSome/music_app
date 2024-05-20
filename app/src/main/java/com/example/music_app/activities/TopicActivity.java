@@ -26,6 +26,7 @@ import com.example.music_app.helpers.GradientHelper;
 import com.example.music_app.helpers.SongToMediaItemHelper;
 import com.example.music_app.listeners.DialogClickListener;
 import com.example.music_app.listeners.PaginationScrollListener;
+import com.example.music_app.models.Album;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Playlist;
 import com.example.music_app.models.PlaylistResponse;
@@ -44,7 +45,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TopicActivity extends BaseActivity implements SongAdapter.OnItemClickListener {
+public class TopicActivity extends BaseActivity {
     private String topic;
     private List<Song> songList;
     private SongAdapter songAdapter;
@@ -114,7 +115,38 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
 
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         songList = new ArrayList<>();
-        songAdapter = new SongAdapter(this, songList, this);
+        songAdapter = new SongAdapter(this, songList, new SongAdapter.OnItemClickListener() {
+            @Override
+            public void onSongClick(int position) {
+                exoPlayerQueue.clear();
+                exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songList));
+                exoPlayerQueue.setCurrentPosition(position);
+                if (isShuffle) {
+                    exoPlayerQueue.setShuffle(true);
+                } else {
+                    exoPlayerQueue.setShuffle(false);
+                }
+                Log.d("SongClicked", "onSongClick: " + songList.get(position).getName() + " " + songList.get(position).getIdSong());
+                Intent intent = new Intent(getApplicationContext(), SongDetailActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onPlayPlaylistClick(List<Song> songList) {
+                exoPlayerQueue.clear();
+                exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songList));
+                exoPlayerQueue.setCurrentPosition(0);
+                if (isShuffle) {
+                    exoPlayerQueue.setShuffle(true);
+                } else {
+                    exoPlayerQueue.setShuffle(false);
+                }
+
+                Intent intent = new Intent(getApplicationContext(), SongDetailActivity.class);
+                startActivity(intent);
+
+            }
+        });
         switch (topic) {
             case "trending":
                 songList.clear();
@@ -167,11 +199,19 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
             default:
                 tvPlaylistSongCount.setVisibility(View.VISIBLE);
                 editPlaylistNameButton.setVisibility(View.VISIBLE);
-                getPlaylistById(Integer.parseInt(topic));
+                Log.d("TopicActivity", "onCreate: " + getIntent().getStringExtra("albumId"));
+                if (getIntent().getStringExtra("albumId") != null) {
+                    int albumId = Integer.parseInt(getIntent().getStringExtra("albumId"));
+                    getIntent().removeExtra("albumId");
+                    getPlaylistByAlbumId(albumId);
+                }
+                else {
+                    getPlaylistById(Integer.parseInt(topic));
+                    renamePlaylistIfNeeded(Integer.parseInt(topic));
+                    deletePlaylistIfNeeded(Integer.parseInt(topic));
+                }
                 rvListSong.setAdapter(songAdapter);
                 invalidateOptionsMenu();
-                renamePlaylistIfNeeded(Integer.parseInt(topic));
-                deletePlaylistIfNeeded(Integer.parseInt(topic));
                 break;
         }
 
@@ -193,7 +233,36 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
         btnPlayAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onPlayPlaylistClick(songList);
+                exoPlayerQueue.clear();
+                exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songList));
+                exoPlayerQueue.setCurrentPosition(0);
+                if (isShuffle) {
+                    exoPlayerQueue.setShuffle(true);
+                } else {
+                    exoPlayerQueue.setShuffle(false);
+                }
+
+                Intent intent = new Intent(getApplicationContext(), SongDetailActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void getPlaylistByAlbumId(int albumId) {
+        apiService.getAlbumById(albumId).enqueue(new Callback<GenericResponse<Album>>() {
+            @Override
+            public void onResponse(Call<GenericResponse<Album>> call, Response<GenericResponse<Album>> response) {
+                if (response.isSuccessful()) {
+                    Album album = response.body().getData();
+                    if (album != null) {
+                        loadAlbumTop(album);
+                        loadAlbumSongs(album.getSongs());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GenericResponse<Album>> call, Throwable t) {
             }
         });
     }
@@ -273,36 +342,6 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
         Log.d("TopicActivity", "updateMiniplayer: updated");
     }
 
-    @Override
-    public void onSongClick(int position) {
-        exoPlayerQueue.clear();
-        exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songList));
-        exoPlayerQueue.setCurrentPosition(position);
-        if (isShuffle) {
-            exoPlayerQueue.setShuffle(true);
-        } else {
-            exoPlayerQueue.setShuffle(false);
-        }
-        Log.d("SongClicked", "onSongClick: " + songList.get(position).getName() + " " + songList.get(position).getIdSong());
-        Intent intent = new Intent(this, SongDetailActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onPlayPlaylistClick(List<Song> songList) {
-        exoPlayerQueue.clear();
-        exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songList));
-        exoPlayerQueue.setCurrentPosition(0);
-        if (isShuffle) {
-            exoPlayerQueue.setShuffle(true);
-        } else {
-            exoPlayerQueue.setShuffle(false);
-        }
-
-        Intent intent = new Intent(this, SongDetailActivity.class);
-        startActivity(intent);
-
-    }
     private void loadTopPlaylist(Playlist playlist) {
         tvPlaylistIntro.setVisibility(View.GONE);
         Glide.with(TopicActivity.this)
@@ -313,6 +352,23 @@ public class TopicActivity extends BaseActivity implements SongAdapter.OnItemCli
 
         GradientHelper.applyGradient(this, includeTopPlaylist, playlist.getImage());
     }
+
+    private void loadAlbumTop(Album album) {
+        tvPlaylistIntro.setVisibility(View.GONE);
+        Glide.with(TopicActivity.this)
+                .load(album.getImage())
+                .into(coverPic);
+        edtPlaylistTitle.setText(album.getName());
+        tvPlaylistSongCount.setText(getString(R.string.label_songs, album.getSongs().size()));
+
+        GradientHelper.applyGradient(this, includeTopPlaylist, album.getImage());
+    }
+
+    private void loadAlbumSongs(List<Song> songs) {
+        songList.addAll(songs);
+        songAdapter.notifyDataSetChanged();
+    }
+
 
     private void loadPlaylistSongs(List<Song> songs) {
         songList.addAll(songs);
