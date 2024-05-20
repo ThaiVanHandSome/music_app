@@ -33,7 +33,10 @@ public class RetrofitClient {
                     .addHeader("Authorization", " Bearer " + Const.getAccessToken())
                     .build();
             return chain.proceed(newRequest);
-        }).build();
+        })
+                .connectTimeout(100, TimeUnit.SECONDS)
+                .readTimeout(100,TimeUnit.SECONDS)
+                .build();
         return client;
     }
 }

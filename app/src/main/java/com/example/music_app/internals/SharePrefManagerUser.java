@@ -77,7 +77,7 @@ public class SharePrefManagerUser {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
-        ctx.startActivity(new Intent(ctx, LoginActivity.class));
+        /*ctx.startActivity(new Intent(ctx, LoginActivity.class));*/
     }
 
 }

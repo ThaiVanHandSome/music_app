@@ -14,6 +14,7 @@ import com.example.music_app.helpers.DialogHelper;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.internals.SharedPrefManagerLanguage;
 import com.example.music_app.listeners.DialogClickListener;
+import com.example.music_app.models.User;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -22,9 +23,12 @@ public class SettingActivity extends AppCompatActivity {
     RadioButton english, vietnamese;
     SharedPrefManagerLanguage sharedPrefManagerLanguage;
 
+    User user;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = SharePrefManagerUser.getInstance(this).getUser();
         String language = SharedPrefManagerLanguage.getInstance(getApplicationContext()).getLanguage();
         setContentView(R.layout.activity_setting);
         mapping();
@@ -47,7 +51,9 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                removeToken(user.getId());
                 SharePrefManagerUser.getInstance(getApplicationContext()).logout();
                 finish();
             }
