@@ -53,7 +53,7 @@ public class ArtistActivity extends BaseActivity{
     TextView tvPlaySongCount;
     RecyclerView rvListSong, rvListAlbum;
     View includeTopPlaylist, includeTopPlaylistOption, includeListSong, container;
-    MaterialButton btnOption, btnShuffle;
+    MaterialButton btnOption, btnShuffle, btnLoadMore;
     APIService apiService;
     List<Song> songList;
     SongAdapter songAdapter;
@@ -78,6 +78,20 @@ public class ArtistActivity extends BaseActivity{
         exoPlayerQueue = ExoPlayerQueue.getInstance();
 
         container = findViewById(R.id.layout_container);
+        btnLoadMore = findViewById(R.id.btn_viewmore_newsongs);
+        btnLoadMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isLoading) {
+                    isLoading = true;
+                    loadNextPage();
+                }
+                isLoading = false;
+                if (isLastPage) {
+                    btnLoadMore.setVisibility(View.GONE);
+                }
+            }
+        });
 
         includeTopPlaylist = findViewById(R.id.included_top_playlist);
         coverPic = includeTopPlaylist.findViewById(R.id.imCoverPicture);
@@ -214,7 +228,7 @@ public class ArtistActivity extends BaseActivity{
                 startActivity(intent);
             }
         });
-        fetchSongs(apiService.getAllSongsByArtistId(artistId, page, 10));
+        fetchSongs(apiService.getAllSongsByArtistId(artistId, page, 5));
         rvListSong.setAdapter(songAdapter);
 
 //        rvListSong.addOnScrollListener(new PaginationScrollListener(layoutManager) {
