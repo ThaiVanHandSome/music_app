@@ -19,7 +19,6 @@
         android:maxLines="2"
         android:ellipsize="end"
         android:layout_marginBottom="@dimen/spacing_4dp"
-        android:textColor="@color/neutral5"
         style="@style/TextAppearance.App.TitleMedium"/>
 
     <TextView

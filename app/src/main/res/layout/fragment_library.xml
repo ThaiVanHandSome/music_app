@@ -5,8 +5,7 @@
     android:id="@+id/fragment_library"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.LibraryFragment"
-    android:background="@color/neutral0">
+    tools:context=".fragments.LibraryFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -24,7 +23,7 @@
                 android:id="@+id/library_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/neutral0"
+                android:background="?attr/colorOnPrimaryContainer"
                 app:tabTextAppearance="@style/TextAppearance.App.LabelLarge">
 
                 <com.google.android.material.tabs.TabItem

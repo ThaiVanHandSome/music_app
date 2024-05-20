@@ -34,7 +34,7 @@
                     android:textColor="@color/neutral5"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.App.HeadlineMedium"
-                    android:backgroundTint="@color/neutral0"
+                    android:backgroundTint="?attr/colorSurfaceContainerHighest"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -51,7 +51,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:text="@string/label_recomendation"
-                    android:textColor="@color/neutral5"
                     style="@style/TextAppearance.App.TitleMedium"/>
 
                 <TextView

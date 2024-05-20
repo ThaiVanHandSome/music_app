@@ -66,10 +66,7 @@
                     android:paddingEnd="0dp"
                     android:thumbOffset="0dp"
                     android:progress="0"
-                    android:thumb="@drawable/seekbar_white_dot"
-                    android:progressBackgroundTint="@color/neutral3"
-                    android:progressTint="@color/neutral5"
-                    />
+                    style="@style/SeekBar"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -131,7 +128,7 @@
                             style="?attr/materialIconButtonStyle"
                             app:icon="@drawable/ic_32dp_filled_skip_previous"
                             app:iconSize="@dimen/image_48dp"
-                            app:iconTint="@color/neutral5"
+                            app:iconTint="@color/neutral4"
                             android:layout_gravity="center_vertical"
                             android:paddingLeft="0dp"
                             android:paddingRight="0dp"/>
@@ -144,7 +141,7 @@
                             app:icon="@drawable/ic_32dp_filled_play"
                             app:iconSize="@dimen/image_48dp"
                             app:iconTint="@color/pure_color"
-                            android:backgroundTint="@color/neutral5"
+                            android:backgroundTint="@color/neutral4"
                             android:insetLeft="0dp"
                             android:insetRight="0dp"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -157,7 +154,7 @@
                             style="?attr/materialIconButtonStyle"
                             app:icon="@drawable/ic_32dp_filled_skip_next"
                             app:iconSize="@dimen/image_48dp"
-                            app:iconTint="@color/neutral5"
+                            app:iconTint="@color/neutral4"
                             android:layout_gravity="center_vertical"
                             android:paddingLeft="0dp"
                             android:paddingRight="0dp"/>
@@ -171,7 +168,7 @@
                         style="?attr/materialIconButtonStyle"
                         app:icon="@drawable/ic_24dp_outline_repeat_off"
                         app:iconSize="@dimen/icon_24dp"
-                        app:iconTint="@color/neutral5"
+                        app:iconTint="@color/neutral4"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:paddingLeft="0dp"
@@ -195,9 +192,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_comment"
-                    android:textSize="@dimen/font_heading1"
-                    android:textColor="@color/neutral5"
-                    />
+                    style="@style/TextAppearance.App.TitleMedium"
+                    android:textColor="@color/neutral3"/>
                 <LinearLayout
                     android:id="@+id/commentLayout"
                     android:layout_width="match_parent"

@@ -11,23 +11,22 @@
         android:id="@+id/search_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/neutral0"
         app:tabTextAppearance="@style/TextAppearance.App.LabelLarge">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tất cả" />
+            android:text="@string/tab_all" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bài hát" />
+            android:text="@string/tab_songs" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nghệ sĩ" />
+            android:text="@string/tab_artist" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2

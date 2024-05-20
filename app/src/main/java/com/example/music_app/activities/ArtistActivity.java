@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
@@ -98,9 +100,15 @@ public class ArtistActivity extends BaseActivity{
             public void onResponse(Call<GenericResponse<Boolean>> call, Response<GenericResponse<Boolean>> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getData()) {
+                        btnOption.setBackgroundColor(getResources().getColor(R.color.transparent));
+                        btnOption.setTextColor(getResources().getColor(R.color.neutral0));
+                        btnOption.setStrokeWidth(4);
                         btnOption.setText(R.string.followed);
                         isUserFollowedArtist = true;
                     } else {
+                        btnOption.setBackgroundColor(getResources().getColor(R.color.primary));
+                        btnOption.setTextColor(getResources().getColor(R.color.neutral5));
+                        btnOption.setStrokeWidth(0);
                         btnOption.setText(R.string.follow);
                         isUserFollowedArtist = false;
                     }
@@ -122,11 +130,21 @@ public class ArtistActivity extends BaseActivity{
                     public void onResponse(Call<GenericResponse<Boolean>> call, Response<GenericResponse<Boolean>> response) {
                         if (response.isSuccessful()) {
                             if (response.body().getData()) {
+                                btnOption.setBackgroundColor(getResources().getColor(R.color.transparent));
+                                btnOption.setTextColor(getResources().getColor(R.color.neutral0));
+                                btnOption.setStrokeWidth(4);
                                 btnOption.setText(R.string.followed);
                                 isUserFollowedArtist = true;
+                                Toast.makeText(ArtistActivity.this, getString(R.string.toast_followed), Toast.LENGTH_SHORT).show();
+
                             } else {
+                                btnOption.setBackgroundColor(getResources().getColor(R.color.primary));
+                                btnOption.setTextColor(getResources().getColor(R.color.neutral5));
+                                btnOption.setStrokeWidth(0);
                                 btnOption.setText(R.string.follow);
                                 isUserFollowedArtist = false;
+                                Toast.makeText(ArtistActivity.this, getString(R.string.toast_unfollowed), Toast.LENGTH_SHORT).show();
+
                             }
                         }
                     }

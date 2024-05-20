@@ -8,6 +8,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.palette.graphics.Palette;
 
 import com.bumptech.glide.Glide;
@@ -27,12 +28,31 @@ public class GradientHelper {
                         Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
                             @Override
                             public void onGenerated(@Nullable Palette palette) {
-                                int mutedColor = palette.getMutedColor(context.getColor(R.color.neutral2));
-                                int darkVibrant = palette.getDarkVibrantColor(context.getColor(R.color.neutral2));
-                                if (mutedColor == context.getColor(R.color.neutral2))
-                                    gradientDrawable.setColors(new int[]{context.getColor(R.color.neutral0), darkVibrant});
-                                else
-                                    gradientDrawable.setColors(new int[]{context.getColor(R.color.neutral0), mutedColor});
+                                int defaultColorId = 0;
+                                int firstColor = 0;
+                                int mutedColor = 0;
+                                int vibrantColor = 0;
+                                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                                    defaultColorId = R.color.neutral2;
+                                    firstColor = R.color.neutral0;
+                                    mutedColor = palette.getMutedColor(context.getColor(defaultColorId));
+                                    vibrantColor = palette.getDarkVibrantColor(context.getColor(defaultColorId));
+                                    if (mutedColor == context.getColor(defaultColorId))
+                                        gradientDrawable.setColors(new int[]{context.getColor(firstColor), vibrantColor});
+                                    else
+                                        gradientDrawable.setColors(new int[]{context.getColor(firstColor), mutedColor});
+                                }
+                                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
+                                    defaultColorId = R.color.primary_light_1;
+                                    firstColor = R.color.neutral5;
+                                    mutedColor = palette.getMutedColor(context.getColor(defaultColorId));
+                                    vibrantColor = palette.getVibrantColor(context.getColor(defaultColorId));
+                                    if (mutedColor == context.getColor(defaultColorId))
+                                        gradientDrawable.setColors(new int[]{context.getColor(firstColor), context.getColor(firstColor), vibrantColor});
+                                    else
+                                        gradientDrawable.setColors(new int[]{context.getColor(firstColor), context.getColor(firstColor), mutedColor});
+                                }
+
                             }
                         });
                         if (view != null) {
@@ -58,12 +78,30 @@ public class GradientHelper {
                         Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
                             @Override
                             public void onGenerated(@Nullable Palette palette) {
-                                int mutedColor = palette.getMutedColor(context.getColor(R.color.neutral2));
-                                int darkVibrant = palette.getDarkVibrantColor(context.getColor(R.color.neutral2));
-                                if (mutedColor == context.getColor(R.color.neutral2))
-                                    gradientDrawable.setColors(new int[]{context.getColor(R.color.neutral0), darkVibrant});
-                                else
-                                    gradientDrawable.setColors(new int[]{context.getColor(R.color.neutral0), mutedColor});
+                                int defaultColorId = 0;
+                                int firstColor = 0;
+                                int mutedColor = 0;
+                                int vibrantColor = 0;
+                                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                                    defaultColorId = R.color.neutral2;
+                                    firstColor = R.color.neutral0;
+                                    mutedColor = palette.getMutedColor(context.getColor(defaultColorId));
+                                    vibrantColor = palette.getDarkVibrantColor(context.getColor(defaultColorId));
+                                    if (mutedColor == context.getColor(defaultColorId))
+                                        gradientDrawable.setColors(new int[]{context.getColor(firstColor), vibrantColor});
+                                    else
+                                        gradientDrawable.setColors(new int[]{context.getColor(firstColor), mutedColor});
+                                }
+                                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
+                                    defaultColorId = R.color.primary_light_1;
+                                    firstColor = R.color.neutral5;
+                                    mutedColor = palette.getMutedColor(context.getColor(defaultColorId));
+                                    vibrantColor = palette.getVibrantColor(context.getColor(defaultColorId));
+                                    if (mutedColor == context.getColor(defaultColorId))
+                                        gradientDrawable.setColors(new int[]{context.getColor(firstColor), context.getColor(firstColor), vibrantColor});
+                                    else
+                                        gradientDrawable.setColors(new int[]{context.getColor(firstColor), context.getColor(firstColor), mutedColor});
+                                }
                             }
                         });
                         if (view != null) {

@@ -19,14 +19,13 @@
 
         <TextView
             android:id="@+id/title_appbar_library"
-            style="@style/TextAppearance.AppCompat.Medium.Inverse"
+            style="@style/TextAppearance.App.TitleMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/spacing_8dp"
             android:layout_toEndOf="@+id/profile_image"
-            android:text="Thư viện"
-            android:textColor="@color/neutral5" />
+            android:text="Thư viện"/>
 
         <ImageView
             android:id="@+id/ic_notification"
