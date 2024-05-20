@@ -62,8 +62,8 @@ public class SettingActivity extends AppCompatActivity {
                 DialogHelper dialog = new DialogHelper(SettingActivity.this, new DialogClickListener() {
                     @Override
                     public void onPositiveButtonClick() {
-                        restartApplication();
-                        SharedPrefManagerTheme.getInstance(getApplicationContext()).setNightModeState(isChecked);
+                       restartApplication();
+                       SharedPrefManagerTheme.getInstance(getApplicationContext()).setNightModeState(isChecked);
                     }
 
                     @Override
@@ -169,6 +169,7 @@ public class SettingActivity extends AppCompatActivity {
         final Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        finish();
     }
 
     void mapping() {
