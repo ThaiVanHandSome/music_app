@@ -1,9 +1,11 @@
 package com.example.music_app.activities;
 
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,9 +14,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.music_app.R;
+import com.example.music_app.adapters.AlbumAdapter;
 import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.decorations.BottomOffsetDecoration;
 import com.example.music_app.helpers.ArtistHelper;
@@ -22,6 +26,7 @@ import com.example.music_app.helpers.GradientHelper;
 import com.example.music_app.helpers.SongToMediaItemHelper;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.listeners.PaginationScrollListener;
+import com.example.music_app.models.Album;
 import com.example.music_app.models.Artist;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.Song;
@@ -39,19 +44,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemClickListener{
+public class ArtistActivity extends BaseActivity{
 
     private int artistId;
     ImageView coverPic;
     EditText tvPlaylistTitle;
     TextView tvPlaylistIntro;
     TextView tvPlaySongCount;
-    RecyclerView rvListSong;
+    RecyclerView rvListSong, rvListAlbum;
     View includeTopPlaylist, includeTopPlaylistOption, includeListSong, container;
     MaterialButton btnOption, btnShuffle;
     APIService apiService;
     List<Song> songList;
     SongAdapter songAdapter;
+    List<Album> albumList;
+    AlbumAdapter albumAdapter;
     int page = 0, totalPages;
     boolean isLoading = false, isLastPage = false, isShuffle = false;
     private ExoPlayerQueue exoPlayerQueue;
@@ -93,9 +100,15 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
             public void onResponse(Call<GenericResponse<Boolean>> call, Response<GenericResponse<Boolean>> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getData()) {
+                        btnOption.setBackgroundColor(getResources().getColor(R.color.transparent));
+                        btnOption.setTextColor(getResources().getColor(R.color.neutral0));
+                        btnOption.setStrokeWidth(4);
                         btnOption.setText(R.string.followed);
                         isUserFollowedArtist = true;
                     } else {
+                        btnOption.setBackgroundColor(getResources().getColor(R.color.primary));
+                        btnOption.setTextColor(getResources().getColor(R.color.neutral5));
+                        btnOption.setStrokeWidth(0);
                         btnOption.setText(R.string.follow);
                         isUserFollowedArtist = false;
                     }
@@ -117,11 +130,21 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
                     public void onResponse(Call<GenericResponse<Boolean>> call, Response<GenericResponse<Boolean>> response) {
                         if (response.isSuccessful()) {
                             if (response.body().getData()) {
+                                btnOption.setBackgroundColor(getResources().getColor(R.color.transparent));
+                                btnOption.setTextColor(getResources().getColor(R.color.neutral0));
+                                btnOption.setStrokeWidth(4);
                                 btnOption.setText(R.string.followed);
                                 isUserFollowedArtist = true;
+                                Toast.makeText(ArtistActivity.this, getString(R.string.toast_followed), Toast.LENGTH_SHORT).show();
+
                             } else {
+                                btnOption.setBackgroundColor(getResources().getColor(R.color.primary));
+                                btnOption.setTextColor(getResources().getColor(R.color.neutral5));
+                                btnOption.setStrokeWidth(0);
                                 btnOption.setText(R.string.follow);
                                 isUserFollowedArtist = false;
+                                Toast.makeText(ArtistActivity.this, getString(R.string.toast_unfollowed), Toast.LENGTH_SHORT).show();
+
                             }
                         }
                     }
@@ -148,37 +171,99 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
             }
         });
 
+        rvListAlbum = findViewById(R.id.rvListAlbum);
+
         includeListSong = findViewById(R.id.included_list_song);
         rvListSong = includeListSong.findViewById(R.id.rvListSong);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         rvListSong.setLayoutManager(layoutManager);
         RecyclerView.ItemDecoration itemDecoration = new BottomOffsetDecoration(getResources().getDimensionPixelSize(R.dimen.bottom_offset));
-        rvListSong.addItemDecoration(itemDecoration);
+
 
         setArtistInfo();
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         songList = new ArrayList<>();
-        songAdapter = new SongAdapter(this, songList, this);
-        fetchSongs(apiService.getAllSongsByArtistId(artistId, page, 5));
-        rvListSong.setAdapter(songAdapter);
-
-        rvListSong.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+        songAdapter = new SongAdapter(this, songList, new SongAdapter.OnItemClickListener() {
             @Override
-            public void loadMoreItems() {
-                isLoading = true;
-                loadNextPage();
+            public void onSongClick(int position) {
+                exoPlayerQueue.clear();
+                exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songList));
+                exoPlayerQueue.setCurrentPosition(position);
+                if (isShuffle) {
+                    exoPlayerQueue.setShuffle(true);
+                } else {
+                    exoPlayerQueue.setShuffle(false);
+                }
+                Log.d("SongClicked", "onSongClick: " + songList.get(position).getName() + " " + songList.get(position).getIdSong());
+                Intent intent = new Intent(getApplicationContext(), SongDetailActivity.class);
+                startActivity(intent);
             }
 
             @Override
-            public boolean isLastPage() {
-                return isLastPage;
-            }
+            public void onPlayPlaylistClick(List<Song> songList) {
+                exoPlayerQueue.clear();
+                exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songList));
+                exoPlayerQueue.setCurrentPosition(0);
+                if (isShuffle) {
+                    exoPlayerQueue.setShuffle(true);
+                } else {
+                    exoPlayerQueue.setShuffle(false);
+                }
 
-            @Override
-            public boolean isLoading() {
-                return isLoading;
+                Intent intent = new Intent(getApplicationContext(), SongDetailActivity.class);
+                startActivity(intent);
             }
         });
+        fetchSongs(apiService.getAllSongsByArtistId(artistId, page, 10));
+        rvListSong.setAdapter(songAdapter);
+
+//        rvListSong.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+//            @Override
+//            public void loadMoreItems() {
+//                isLoading = true;
+//                loadNextPage();
+//            }
+//
+//            @Override
+//            public boolean isLastPage() {
+//                return isLastPage;
+//            }
+//
+//            @Override
+//            public boolean isLoading() {
+//                return isLoading;
+//            }
+//        });
+
+        albumList = new ArrayList<>();
+        albumAdapter = new AlbumAdapter(this, albumList, new AlbumAdapter.OnAlbumClickListener() {
+            @Override
+            public void onAlbumClick(Album album) {
+                Intent intent = new Intent(getApplicationContext(), TopicActivity.class);
+                intent.putExtra("albumId", String.valueOf(album.getIdAlbum()));
+                intent.putExtra("topic", "1");
+                startActivity(intent);
+            }
+        });
+        RecyclerView.LayoutManager layoutManagerAlbum = new GridLayoutManager(getApplicationContext(), 2);
+        rvListAlbum.setLayoutManager(layoutManagerAlbum);
+        rvListAlbum.addItemDecoration(itemDecoration);
+        apiService.getAlbumsByArtistId(artistId).enqueue(new Callback<GenericResponse<List<Album>>>() {
+            @Override
+            public void onResponse(Call<GenericResponse<List<Album>>> call, Response<GenericResponse<List<Album>>> response) {
+                if (response.isSuccessful()) {
+                    albumList.addAll(response.body().getData());
+                    albumAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GenericResponse<List<Album>>> call, Throwable t) {
+
+            }
+        });
+
+        rvListAlbum.setAdapter(albumAdapter);
     }
 
     private void setArtistInfo() {
@@ -219,12 +304,12 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
                     songList.addAll(newList);
                     page++;
                     songAdapter.notifyDataSetChanged();
-                    Log.d("TopicFragment", "Total pages: " + response.body().getData().getTotalPages());
+
                 }
             }
             @Override
             public void onFailure(Call<GenericResponse<SongResponse>> call, Throwable t) {
-                Log.d("TopicFragment", "onFailure: " + t.getMessage());
+                Log.d("ArtistActivity", "onFailure: " + t.getMessage());
             }
         });
     }
@@ -246,33 +331,5 @@ public class ArtistActivity extends BaseActivity implements SongAdapter.OnItemCl
         }, 500);
     }
 
-    @Override
-    public void onSongClick(int position) {
-        exoPlayerQueue.clear();
-        exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songList));
-        exoPlayerQueue.setCurrentPosition(position);
-        if (isShuffle) {
-            exoPlayerQueue.setShuffle(true);
-        } else {
-            exoPlayerQueue.setShuffle(false);
-        }
-        Log.d("SongClicked", "onSongClick: " + songList.get(position).getName() + " " + songList.get(position).getIdSong());
-        Intent intent = new Intent(this, SongDetailActivity.class);
-        startActivity(intent);
-    }
 
-    @Override
-    public void onPlayPlaylistClick(List<Song> songList) {
-        exoPlayerQueue.clear();
-        exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songList));
-        exoPlayerQueue.setCurrentPosition(0);
-        if (isShuffle) {
-            exoPlayerQueue.setShuffle(true);
-        } else {
-            exoPlayerQueue.setShuffle(false);
-        }
-
-        Intent intent = new Intent(this, SongDetailActivity.class);
-        startActivity(intent);
-    }
 }

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,6 @@ import androidx.annotation.OptIn;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
 import androidx.media3.common.Player;
-import androidx.media3.common.util.Log;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.common.util.Util;
 import androidx.media3.exoplayer.ExoPlayer;
@@ -374,6 +374,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
             currentSongId = exoPlayer.getCurrentMediaItem().mediaMetadata.extras.getLong("id");
         }
         long newSongId = exoPlayerQueue.getCurrentMediaItem().mediaMetadata.extras.getLong("id");
+        Log.d("Compare", "playPlaylist: " + currentSongId + " " + newSongId);
         if (currentSongId != newSongId) {
             exoPlayer.clearMediaItems();
             if (exoPlayerQueue.isShuffle()) exoPlayerQueue.shuffle();
@@ -384,10 +385,10 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
             exoPlayer.prepare();
             exoPlayer.seekTo(currentPos, 0);
             exoPlayer.play();
+            updateSongAsset(exoPlayerQueue.getCurrentMediaItem().mediaMetadata);
         } else {
             if (!exoPlayer.isPlaying()) exoPlayer.play();
         }
-        updateSongAsset(exoPlayerQueue.getCurrentMediaItem().mediaMetadata);
 
         exoPlayer.addListener(new Player.Listener() {
             @Override

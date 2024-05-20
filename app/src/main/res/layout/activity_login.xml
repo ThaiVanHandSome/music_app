@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/neutral5" />
+                android:textColor="?attr/colorOnSurfaceVariant" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textColor="@color/neutral5" />
+                android:textColor="?attr/colorOnSurfaceVariant" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
@@ -56,8 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="@string/check_box_remember"
-            android:textColor="@color/neutral4" />
+            android:text="@string/check_box_remember"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogin"
@@ -92,7 +91,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_forget_password"
-                android:textColor="@color/neutral5"
                 android:layout_marginEnd="@dimen/spacing_4dp" />
             <TextView
                 android:id="@+id/forgotPasswordText"
@@ -115,7 +113,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_not_have_account"
-                android:textColor="@color/neutral5"
                 android:layout_marginEnd="@dimen/spacing_4dp" />
             <TextView
                 android:id="@+id/signUpText"

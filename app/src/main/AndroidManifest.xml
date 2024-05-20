@@ -39,7 +39,9 @@
         <activity
             android:name=".activities.BaseActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".activities.AddSongToPlaylistActivity"
+            android:exported="false" />
         <service
             android:name=".services.ExoService"
             android:enabled="true"

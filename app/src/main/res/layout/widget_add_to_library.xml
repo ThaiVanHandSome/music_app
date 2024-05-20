@@ -11,10 +11,10 @@
         android:src="@drawable/add_image_holder" />
 
     <TextView
+        style="@style/TextAppearance.App.TitleSmall"
         android:id="@+id/tv_add_to_library"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/neutral4"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/spacing_8dp" />
 

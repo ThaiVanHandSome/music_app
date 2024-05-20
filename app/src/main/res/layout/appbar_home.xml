@@ -9,12 +9,11 @@
 
         <TextView
             android:id="@+id/title_appbar_home"
-            style="@style/TextAppearance.AppCompat.Medium.Inverse"
+            style="@style/TextAppearance.App.TitleMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_12dp"
             android:layout_centerVertical="true"
-            android:text="@string/label_hello_user"
-            android:textColor="@color/neutral5" />
+            android:text="@string/label_hello_user"/>
     </RelativeLayout>
 </RelativeLayout>

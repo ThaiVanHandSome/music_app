@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/spacing_8dp"
     tools:context=".fragments.SearchedAllFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -25,10 +26,10 @@
                 android:id="@+id/tv_nghesi_search_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nghệ sĩ"
-                android:textColor="@color/neutral5"
+                android:text="@string/tab_artist"
                 style="@style/TextAppearance.App.TitleMedium"
-                android:layout_marginBottom="@dimen/spacing_8dp"/>
+                android:layout_marginBottom="@dimen/spacing_8dp"
+                android:layout_marginStart="@dimen/spacing_8dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_artists_all"
@@ -40,10 +41,10 @@
                 android:id="@+id/tv_baihat_search_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bài hát"
-                android:textColor="@color/neutral5"
+                android:text="@string/tab_songs"
                 style="@style/TextAppearance.App.TitleMedium"
-                android:layout_marginBottom="@dimen/spacing_8dp"/>
+                android:layout_marginBottom="@dimen/spacing_8dp"
+                android:layout_marginStart="@dimen/spacing_8dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_songs_all"

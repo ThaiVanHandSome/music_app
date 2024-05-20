@@ -314,7 +314,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-                Toast.makeText(LoginActivity.this, getText(R.string.toast_loged_in), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, res.getMessage(), Toast.LENGTH_SHORT).show();
                 if(res.getType() != null && res.getType().equals("confirm")) {
                     btnGetOtp.setVisibility(View.VISIBLE);
                     email = res.getEmail();

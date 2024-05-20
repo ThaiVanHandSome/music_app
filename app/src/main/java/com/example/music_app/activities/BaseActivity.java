@@ -127,6 +127,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (metadata == null) {
             return;
         }
+
         Log.d("BaseActivity", "updateMiniplayer: " + metadata.title);
         tvSongTitle.setText(metadata.title);
         tvSongArtist.setText(metadata.extras.getString("artist"));
