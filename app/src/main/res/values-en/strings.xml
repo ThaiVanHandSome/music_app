@@ -114,8 +114,8 @@
     <string name="toast_created_playlist">Created playlist successfully</string>
     <string name="toast_deleted_playlist">Delete playlist successfully</string>
     <string name="toast_loged_in">Logged in successfully</string>
-    <string name="toast_followed">Following %d</string>
-    <string name="toast_unfollowed">Unfollowed %d</string>
+    <string name="toast_followed">You already follow this artist</string>
+    <string name="toast_unfollowed">You have unfollowed this artist</string>
 
     <string name="client_id">90467436569-ibtnp170t1rb3fhksb8nhp99b0garii8.apps.googleusercontent.com</string>
     <string name="toast_added_song_to_playlist">Added song to playlist successfully</string>
