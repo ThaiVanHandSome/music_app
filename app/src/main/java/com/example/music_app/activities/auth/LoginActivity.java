@@ -409,12 +409,11 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 String token = task.getResult();
-
+                Log.e("saveTokenToServer", token);
                 String userId = String.valueOf(id);
                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://music-app-967da-default-rtdb.asia-southeast1.firebasedatabase.app/");
                 DatabaseReference tokenRef = database.getReference("tokenPhone");
-                tokenRef.child(String.valueOf(id)).setValue(token);
-
+                tokenRef.child(userId).setValue(token);
             }
         });
     }

@@ -169,6 +169,9 @@ public interface APIService {
     @GET("song/comment/countLikes")
     Call<GenericResponse<Long>> countLikesOfComment(@Query("commentId") Long commentId);
 
+    @GET("song/{id}")
+    Call<GenericResponse<Song>> getSongById(@Path("id") Long id);
+  
     @GET("albums/artist/{id_artist}")
     Call<GenericResponse<List<Album>>> getAlbumsByArtistId(@Path("id_artist") int id_artist);
 
