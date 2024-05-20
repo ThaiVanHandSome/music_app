@@ -1,8 +1,11 @@
 package com.example.music_app.activities;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -25,6 +28,7 @@ public class SettingActivity extends AppCompatActivity {
 
     User user;
 
+    ImageView imageView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +110,12 @@ public class SettingActivity extends AppCompatActivity {
                 dialog.setNegativeButtonContent(getString(R.string.button_cancel));
             }
         });
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backActivity();
+            }
+        });
     }
 
     private void restartApplication() {
@@ -119,12 +129,17 @@ public class SettingActivity extends AppCompatActivity {
         logout = (TextView) findViewById(R.id.LogoutTxt);
         english = (RadioButton) findViewById(R.id.rad_english);
         vietnamese = (RadioButton) findViewById(R.id.rad_vietnamese);
+        imageView = (ImageView) findViewById(R.id.back_icon);
     }
 
     void removeToken(int id) {
         String userId = String.valueOf(id);
+        Log.e("removeToken", userId);
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://music-app-967da-default-rtdb.asia-southeast1.firebasedatabase.app/");
         DatabaseReference tokenRef = database.getReference("tokenPhone");
-        tokenRef.child(String.valueOf(id)).removeValue();
+        tokenRef.child((userId)).removeValue();
+    }
+    private void backActivity(){
+        finish();
     }
 }

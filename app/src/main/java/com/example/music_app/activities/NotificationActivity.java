@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -24,7 +25,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.example.music_app.R;
 import com.example.music_app.adapters.NotificationAdapter;
+import com.example.music_app.adapters.SongAdapter;
 import com.example.music_app.adapters.SongHomeAdapter;
+import com.example.music_app.helpers.SongToMediaItemHelper;
 import com.example.music_app.internals.SharePrefManagerUser;
 import com.example.music_app.models.GenericResponse;
 import com.example.music_app.models.NotificationFirebase;
@@ -33,6 +36,7 @@ import com.example.music_app.models.User;
 import com.example.music_app.models.UserFirebase;
 import com.example.music_app.retrofit.RetrofitClient;
 import com.example.music_app.services.APIService;
+import com.example.music_app.services.ExoPlayerQueue;
 import com.example.music_app.services.FirebaseNotification;
 import com.example.music_app.services.NotificationService;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -58,8 +62,6 @@ public class NotificationActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     APIService apiService;
 
-    List<Song> listSong;
-
     NotificationAdapter adapter;
 
     TextView title;
@@ -69,6 +71,8 @@ public class NotificationActivity extends AppCompatActivity {
     private boolean isFirstLoad = true;
 
     Button button;
+    ExoPlayerQueue exoPlayerQueue;
+    List<Song> songList = new ArrayList<>();
 
     FirebaseNotification firebaseNotification;
 
@@ -78,16 +82,19 @@ public class NotificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notification);
         recyclerView = (RecyclerView) findViewById(R.id.rv_notification);
         title = (TextView) findViewById(R.id.title_appbar_home);
-        button = (Button) findViewById(R.id.button) ;
+//        button = (Button) findViewById(R.id.button) ;
         user = SharePrefManagerUser.getInstance(this).getUser();
+        title.setText("Thông báo");
+        exoPlayerQueue = ExoPlayerQueue.getInstance();
         getNotification();
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseNotification = new FirebaseNotification();
-                firebaseNotification.sendNotificationToUser("Thanh đã thêm bài hát mới","dJzHRo5XTnqwgN1QRfrWHT:APA91bFkS0DPQBRIEZ-Z-a5z3AjaPWqymHhEIJG-rQce7XS3fbCxsFfqGxb96X1K0vJMY3iJGXLkslNW_chZTP5HlEpm7RU152szTMZoRAZDVG2uQbxCT9jnJ0mOfnBIkwwdpOptylhq");
-            }
-        });
+
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                firebaseNotification = new FirebaseNotification();
+//                firebaseNotification.sendNotificationToUser("Thanh đã thêm bài hát mới","dJzHRo5XTnqwgN1QRfrWHT:APA91bFkS0DPQBRIEZ-Z-a5z3AjaPWqymHhEIJG-rQce7XS3fbCxsFfqGxb96X1K0vJMY3iJGXLkslNW_chZTP5HlEpm7RU152szTMZoRAZDVG2uQbxCT9jnJ0mOfnBIkwwdpOptylhq");
+//            }
+//        });
     }
 
 
@@ -133,14 +140,50 @@ public class NotificationActivity extends AppCompatActivity {
 
         // Khởi tạo adapter với một danh sách trống
         notificationList = new ArrayList<>();
-        adapter = new NotificationAdapter(getApplicationContext(), notificationList);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        adapter = new NotificationAdapter(this, notificationList, new NotificationAdapter.OnItemClickListener() {
+            @Override
+            public void onSongClick(int position) {
+                exoPlayerQueue.clear();
+                Long songId = (long) notificationList.get(position).getSongId();
+                Log.e("exoPlayerQueueId: ", String.valueOf(songId));
+
+                apiService.getSongById(songId).enqueue(new Callback<GenericResponse<Song>>() {
+                    @Override
+                    public void onResponse(Call<GenericResponse<Song>> call, Response<GenericResponse<Song>> response) {
+                        if (response.isSuccessful()) {
+                            Log.e("exoPlayerQueueId2: ","Code chay vao day");
+                            Log.e("exoPlayerQueueId3: ",response.body().getData().getName());
+
+
+                            songList.add(response.body().getData());
+                            exoPlayerQueue.setCurrentQueue(SongToMediaItemHelper.convertToMediaItem(songList));
+                            exoPlayerQueue.setCurrentPosition(0);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<GenericResponse<Song>> call, Throwable t) {
+
+                    }
+                });
+
+                Intent intent = new Intent(NotificationActivity.this, SongDetailActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onPlayPlaylistClick(List<Song> songList) {
+
+            }
+        });
+
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
 
-        // Lấy dữ liệu ban đầu và tất cả dữ liệu mới
         notiRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

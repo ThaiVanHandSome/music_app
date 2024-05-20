@@ -20,11 +20,19 @@ import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
     private final Context context;
-    private final List<NotificationFirebase> notiList;
+    private List<NotificationFirebase> notiList;
 
-    public NotificationAdapter(Context context, List<NotificationFirebase> notiList) {
+    private final OnItemClickListener onItemClickListener;
+
+    public NotificationAdapter(Context context, List<NotificationFirebase> notiList, OnItemClickListener onItemClickListener) {
         this.context = context;
         this.notiList = notiList;
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public void setData(List<NotificationFirebase> notiList) {
+        this.notiList = notiList;
+        notifyDataSetChanged();
     }
     @NonNull
     @Override
@@ -59,12 +67,19 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 @Override
                 public void onClick(View v) {
                     NotificationFirebase noti = notiList.get(getAdapterPosition());
-                    Toast.makeText(context.getApplicationContext(), "Bạn đã click vào bài hát" + noti.getSongId(), Toast.LENGTH_SHORT).show();
-
+                    int position = getBindingAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        onItemClickListener.onSongClick(position);
+                    }
                 }
             });
 
 
         }
+    }
+
+    public interface OnItemClickListener {
+        void onSongClick(int position);
+        void onPlayPlaylistClick(List<Song> songList);
     }
 }

@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -72,6 +73,8 @@ public class ProfileActivity extends AppCompatActivity {
     APIService apiService;
 
     User userUpdated;
+
+    ImageView imageView;
 
     private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -131,6 +134,12 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backActivity();
+            }
+        });
     }
 
     void mapping(){
@@ -145,6 +154,7 @@ public class ProfileActivity extends AppCompatActivity {
         btnSubmit = (MaterialButton) findViewById(R.id.btnSubmit_profile);
         overlay = (FrameLayout) findViewById(R.id.overlay);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        imageView = (ImageView) findViewById(R.id.back_icon);
     }
     void showInfo(){
         title.setText(getText(R.string.label_profile));
@@ -225,5 +235,8 @@ public class ProfileActivity extends AppCompatActivity {
         overlay.setFocusable(true);
         overlay.setClickable(true);
         progressBar.setVisibility(View.VISIBLE);
+    }
+    private void backActivity(){
+        finish();
     }
 }
