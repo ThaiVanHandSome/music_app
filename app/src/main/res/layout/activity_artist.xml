@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/layout_container"
     tools:context=".activities.ArtistActivity">
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -20,22 +21,6 @@
                 layout="@layout/top_playlist"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_popular_song"
-            style="@style/TextAppearance.App.TitleMedium"
-            android:layout_marginLeft="@dimen/spacing_8dp"
-            android:layout_marginTop="@dimen/spacing_12dp"
-            android:layout_marginBottom="@dimen/spacing_8dp"/>
-
-        <include layout="@layout/list_song"
-            android:id="@+id/included_list_song"
-            app:layout_constraintTop_toBottomOf="@id/included_top_playlist_option"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_10dp"/>
-    </LinearLayout>
             <include
                 android:id="@+id/included_top_playlist_option"
                 layout="@layout/top_playlist_option"
@@ -47,7 +32,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/label_popular_song"
                 style="@style/TextAppearance.App.TitleMedium"
-                android:textColor="@color/neutral5"
                 android:layout_marginLeft="@dimen/spacing_8dp"
                 android:layout_marginTop="@dimen/spacing_12dp"
                 android:layout_marginBottom="@dimen/spacing_8dp"/>

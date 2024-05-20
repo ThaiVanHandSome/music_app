@@ -121,7 +121,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
                 if (exoPlayerQueue.isShuffle()) {
                     btnShuffle.setIconTint(getResources().getColorStateList(R.color.primary));
                 } else {
-                    btnShuffle.setIconTint(getResources().getColorStateList(R.color.neutral5));
+                    btnShuffle.setIconTint(getResources().getColorStateList(R.color.neutral3));
                 }
             }
         });
@@ -198,7 +198,7 @@ public class SongDetailFragment extends BottomSheetDialogFragment {
                 } else {
                     exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
                     btnRepeat.setIcon(getResources().getDrawable(R.drawable.ic_24dp_outline_repeat_off));
-                    btnRepeat.setIconTint(getResources().getColorStateList(R.color.neutral5));
+                    btnRepeat.setIconTint(getResources().getColorStateList(R.color.neutral3));
                 }
             }
         });
