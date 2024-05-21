@@ -2,7 +2,7 @@
 
 ## Giới thiệu
 
-App Nghe Nhạc CisnW là một ứng dụng di động cho phép người dùng nghe nhạc trực tuyến, tạo playlist,... Ứng dụng hỗ trợ các nền tảng Android và iOS.
+App Nghe Nhạc CisnW là một ứng dụng di động cho phép người dùng nghe nhạc trực tuyến, tạo playlist,... Ứng dụng hỗ trợ các nền tảng Android.
 
 ## Tính năng
 
